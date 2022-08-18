@@ -1,0 +1,6 @@
+#goHomeButton {
+    border: solid 1px gray;
+    position: absolute;
+    right: 0;
+    top: 1rem;
+}
