@@ -15,7 +15,7 @@
         "eject": "react-scripts eject",
         "lint": "eslint --ext .ts --ext .tsx src --max-warnings=0",
         "typecheck": "tsc --noEmit",
-        "check-all": "yarn lint && yarn typecheck"
+        "check-all": "yarn lint && yarn typecheck && yarn test"
     },
     "dependencies": {
         "@emotion/react": "^11.10.0",
