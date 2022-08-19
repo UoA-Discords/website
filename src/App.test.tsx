@@ -1,10 +1,11 @@
+/* eslint-disable testing-library/prefer-screen-queries */
 import React from 'react';
 import { render } from '@testing-library/react';
 import App from './App';
 
 test(`renders the home page`, () => {
-    const { getByText } = render(<App />);
+    const { getAllByText } = render(<App />);
 
-    // eslint-disable-next-line testing-library/prefer-screen-queries
-    expect(getByText(/uoa discords/i)).toBeInTheDocument();
+    expect(getAllByText(/uoa discords/i).length > 0).toBe(true);
+    // expect(getByText(/discords/i)).toBeInTheDocument();
 });
