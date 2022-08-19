@@ -1,5 +1,6 @@
 import { Fade, Grow, Paper, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
-import React from 'react';
+import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 import './Header.css';
 
 import tempLogo from '../../images/tempLogo.png';
@@ -12,16 +13,24 @@ const Header = () => {
     const hideLogo = useMediaQuery(theme.breakpoints.down(`md`));
     const hideText = useMediaQuery(theme.breakpoints.down(`sm`));
 
+    const [logoHover, setLogoHover] = useState(false);
+
     return (
         <Paper id="header" elevation={0} square>
             <Stack direction="row" alignItems="center" spacing={3} sx={{ ml: `1rem`, mr: `1rem` }}>
-                <div id="siteName">
+                <Link to="/" id="siteName">
                     <Typography>UOA</Typography>
                     <Typography>DISCORDS</Typography>
                     <Typography>.COM</Typography>
-                </div>
+                </Link>
                 <div style={{ flexGrow: 1 }}>
-                    {!hideText && <Typography variant="h3">UoA Discords</Typography>}
+                    {!hideText && (
+                        <Link to="/" style={{ textDecoration: `none`, color: `inherit` }}>
+                            <Typography variant="h3" id="siteTitle">
+                                UoA Discords
+                            </Typography>
+                        </Link>
+                    )}
                     {!hideText && (
                         <Fade in timeout={{ enter: theme.transitions.duration.enteringScreen * 4 }}>
                             <Typography sx={{ color: `gray` }}>
@@ -33,8 +42,14 @@ const Header = () => {
                 <DiscordLoginButton />
             </Stack>
             {!hideLogo && (
-                <Grow in>
-                    <img id="logo" src={tempLogo} alt="Site logo" />
+                <Grow in={!logoHover}>
+                    <img
+                        id="logo"
+                        src={tempLogo}
+                        alt="Site logo"
+                        onMouseOver={() => setLogoHover(true)}
+                        onMouseLeave={() => setLogoHover(false)}
+                    />
                 </Grow>
             )}
         </Paper>
