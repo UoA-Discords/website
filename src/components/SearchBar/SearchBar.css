@@ -1,0 +1,17 @@
+#searchInput {
+    background-color: #1b1b1b;
+    font-size: 14pt;
+    border-radius: 0.3em;
+    margin: 0.3em;
+    padding: 0.3em;
+    outline: none;
+    color: white;
+    width: 100%;
+    border: solid 2px transparent;
+    transition: border 0.1s linear;
+    text-overflow: ellipsis;
+}
+
+#searchInput:hover {
+    border-color: gray;
+}

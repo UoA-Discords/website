@@ -5,16 +5,18 @@ import Footer from './components/Footer';
 import { Container, Typography } from '@mui/material';
 import AboutPage from './components/AboutPage';
 import Header from './components/Header';
+import SearchBar from './components/SearchBar';
 
 const App = () => {
     return (
         <BrowserRouter>
+            <Header />
             <Routes>
                 <Route
                     index
                     element={
                         <>
-                            <Header />
+                            <SearchBar />
                             <Container maxWidth="xl" id="app">
                                 <Typography variant="h2">hi</Typography>
                             </Container>
