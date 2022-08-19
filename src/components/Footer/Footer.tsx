@@ -1,7 +1,16 @@
 import { Grid, Paper, Typography } from '@mui/material';
+import React, { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { config } from '../../config';
 import './Footer.css';
+
+const ForceHashLink = ({ to, hash, children }: { to: string; hash: string; children: ReactNode }) => {
+    return (
+        <Link to={`${to}#${hash}`} onClick={() => window.location.replace(`#${hash}`)}>
+            {children}
+        </Link>
+    );
+};
 
 const Footer = () => {
     return (
@@ -27,9 +36,9 @@ const Footer = () => {
                     </Link>
                 </Grid>
                 <Grid item>
-                    <Link to="/about#faq">
+                    <ForceHashLink to="/about" hash="faq">
                         <Typography variant="h6">FAQ</Typography>
-                    </Link>
+                    </ForceHashLink>
                 </Grid>
                 <Grid item>
                     <Link to={`${config.serverUrl}/api-docs`} target="_blank" rel="noreferrer noopener">
@@ -37,14 +46,14 @@ const Footer = () => {
                     </Link>
                 </Grid>
                 <Grid item>
-                    <Link to="/about#our-team">
+                    <ForceHashLink to="/about" hash="our-team">
                         <Typography variant="h6">Our Team</Typography>
-                    </Link>
+                    </ForceHashLink>
                 </Grid>
                 <Grid item>
-                    <Link to="/about#site-policy">
+                    <ForceHashLink to="/about" hash="site-policy">
                         <Typography variant="h6">Site Policy</Typography>
-                    </Link>
+                    </ForceHashLink>
                 </Grid>
             </Grid>
         </Paper>
