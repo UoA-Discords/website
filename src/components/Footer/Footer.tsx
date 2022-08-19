@@ -1,5 +1,5 @@
-import { Grid, Link, Paper, Typography } from '@mui/material';
-import React from 'react';
+import { Grid, Paper, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 import { config } from '../../config';
 import './Footer.css';
 
@@ -15,32 +15,32 @@ const Footer = () => {
             </Typography>
             <Grid container spacing={2} justifyContent="space-evenly" sx={{ pl: 1, pr: 1 }}>
                 <Grid item>
-                    <Link href="/">
+                    <Link to="/">
                         <Typography variant="h6">Home</Typography>
                     </Link>
                 </Grid>
                 <Grid item>
-                    <Link href="/about">
+                    <Link to="/about">
                         <Typography variant="h6">About</Typography>
                     </Link>
                 </Grid>
                 <Grid item>
-                    <Link href="/about#faq">
+                    <Link to="/about#faq">
                         <Typography variant="h6">FAQ</Typography>
                     </Link>
                 </Grid>
                 <Grid item>
-                    <Link href={`${config.serverUrl}/api-docs`} target="_blank" rel="noreferrer noopener">
+                    <Link to={`${config.serverUrl}/api-docs`} target="_blank" rel="noreferrer noopener">
                         <Typography variant="h6">API</Typography>
                     </Link>
                 </Grid>
                 <Grid item>
-                    <Link href="/about#our-team">
+                    <Link to="/about#our-team">
                         <Typography variant="h6">Our Team</Typography>
                     </Link>
                 </Grid>
                 <Grid item>
-                    <Link href="/about#site-policy">
+                    <Link to="/about#site-policy">
                         <Typography variant="h6">Site Policy</Typography>
                     </Link>
                 </Grid>
