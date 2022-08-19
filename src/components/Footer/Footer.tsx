@@ -4,9 +4,13 @@ import { Link } from 'react-router-dom';
 import { config } from '../../config';
 import './Footer.css';
 
-const ForceHashLink = ({ to, hash, children }: { to: string; hash: string; children: ReactNode }) => {
+export const ForceHashLink = ({ to, hash, children }: { to: string; hash: string; children: ReactNode }) => {
     return (
-        <Link to={`${to}#${hash}`} onClick={() => window.location.replace(`#${hash}`)}>
+        <Link
+            style={{ color: `inherit`, textDecoration: `inherit` }}
+            to={`${to}#${hash}`}
+            onClick={() => window.location.replace(`#${hash}`)}
+        >
             {children}
         </Link>
     );
