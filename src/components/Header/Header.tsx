@@ -6,8 +6,12 @@ import './Header.css';
 import tempLogo from '../../images/tempLogo.png';
 
 import DiscordLoginButton from '../DiscordLoginButton';
+import { useSiteLogin } from '../../hooks/useSiteLogin';
+import DiscordAccountButton from '../DiscordAccountButton';
 
 const Header = () => {
+    const { loginResponse } = useSiteLogin();
+
     const theme = useTheme();
 
     const hideLogo = useMediaQuery(theme.breakpoints.down(`md`));
@@ -23,7 +27,7 @@ const Header = () => {
                     <Typography>DISCORDS</Typography>
                     <Typography>.COM</Typography>
                 </Link>
-                <div style={{ flexGrow: 1 }}>
+                <div style={{ flexGrow: loginResponse ? `unset` : 1 }}>
                     {!hideText && (
                         <Link to="/" style={{ textDecoration: `none`, color: `inherit` }}>
                             <Typography variant="h3" id="siteTitle">
@@ -39,7 +43,7 @@ const Header = () => {
                         </Fade>
                     )}
                 </div>
-                <DiscordLoginButton />
+                {loginResponse ? <DiscordAccountButton loginResponse={loginResponse} /> : <DiscordLoginButton />}
             </Stack>
             {!hideLogo && (
                 <Grow in={!logoHover}>
