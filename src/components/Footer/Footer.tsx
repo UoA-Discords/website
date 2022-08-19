@@ -46,13 +46,13 @@ const Footer = () => {
                     </a>
                 </Grid>
                 <Grid item>
-                    <ForceHashLink to="/about" hash="our-team">
-                        <Typography variant="h6">Our Team</Typography>
+                    <ForceHashLink to="/about" hash="site-policy">
+                        <Typography variant="h6">Site Policy</Typography>
                     </ForceHashLink>
                 </Grid>
                 <Grid item>
-                    <ForceHashLink to="/about" hash="site-policy">
-                        <Typography variant="h6">Site Policy</Typography>
+                    <ForceHashLink to="/about" hash="contact">
+                        <Typography variant="h6">Contact</Typography>
                     </ForceHashLink>
                 </Grid>
             </Grid>
