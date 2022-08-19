@@ -1,6 +1,5 @@
 import { Box, Paper, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import GoHomeButton from '../GoHomeButton';
 import MakeLinkButton from '../MakeLinkButton';
 
 const AboutPage = () => {
@@ -19,8 +18,7 @@ const AboutPage = () => {
     }, []);
 
     return (
-        <Box sx={{ position: `relative` }}>
-            <GoHomeButton />
+        <Box>
             <Typography variant="h2" gutterBottom>
                 {text} Us
             </Typography>
