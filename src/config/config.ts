@@ -12,5 +12,6 @@ function getServerLocation() {
 }
 
 export const config = {
+    /** Endpoint for the UoA Discords API. */
     serverUrl: `${window.location.protocol}//${getServerLocation()}`,
 };

@@ -41,9 +41,9 @@ const Footer = () => {
                     </ForceHashLink>
                 </Grid>
                 <Grid item>
-                    <Link to={`${config.serverUrl}/api-docs`} target="_blank" rel="noreferrer noopener">
+                    <a href={`${config.serverUrl}/api-docs`} target="_blank" rel="noreferrer noopener">
                         <Typography variant="h6">API</Typography>
-                    </Link>
+                    </a>
                 </Grid>
                 <Grid item>
                     <ForceHashLink to="/about" hash="our-team">
