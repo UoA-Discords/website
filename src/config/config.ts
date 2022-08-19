@@ -14,4 +14,7 @@ function getServerLocation() {
 export const config = {
     /** Endpoint for the UoA Discords API. */
     serverUrl: `${window.location.protocol}//${getServerLocation()}`,
+
+    discordClientID: `958568584349618227`,
+    redirectURI: `${window.location.origin}/login`,
 };
