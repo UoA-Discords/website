@@ -6,14 +6,16 @@ import './Footer.css';
 const Footer = () => {
     return (
         <Paper id="footer" elevation={0} square>
-            <Typography
-                textAlign="center"
-                title="This doesn't mean anything, it just looks official."
-                sx={{ pl: 1, pr: 1 }}
-            >
-                UoA Discords 2022 © NachoToast
-            </Typography>
             <Grid container spacing={2} justifyContent="space-evenly" sx={{ pl: 1, pr: 1 }}>
+                <Grid item xs={12}>
+                    <Typography
+                        textAlign="center"
+                        title="This doesn't mean anything, it just looks official."
+                        sx={{ pl: 1, pr: 1 }}
+                    >
+                        UoA Discords {new Date().getFullYear()} © NachoToast
+                    </Typography>
+                </Grid>
                 <Grid item>
                     <Link to="/">
                         <Typography variant="h6">Home</Typography>
