@@ -30,6 +30,7 @@
         "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
         "camelcase": "off",
         "require-await": "error",
+        "no-constant-condition": "warn",
         "@typescript-eslint/no-dupe-class-members": ["error"],
         "@typescript-eslint/explicit-member-accessibility": ["error", { "accessibility": "explicit" }],
         "@typescript-eslint/no-inferrable-types": ["error", { "ignoreParameters": true }],
