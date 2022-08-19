@@ -1,5 +1,4 @@
 import { Chip, Grid, GridProps } from '@mui/material';
-import React from 'react';
 import { EntryFacultyTags } from '../../shared/Types/Entries';
 
 const AllTags: EntryFacultyTags[] = [

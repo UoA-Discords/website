@@ -1,6 +1,6 @@
 import { Fade, Grow, Paper, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './Header.css';
 
 import tempLogo from '../../images/tempLogo.png';
