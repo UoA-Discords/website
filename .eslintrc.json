@@ -12,11 +12,11 @@
     },
     "plugins": ["@typescript-eslint"],
     "rules": {
-        "no-unused-vars": "error",
+        "no-unused-vars": "warn",
         "linebreak-style": "off",
         "quotes": ["error", "backtick", { "avoidEscape": true }],
         "semi": "off",
-        "no-var": "error",
+        "no-var": "warn",
         "default-case-last": "error",
         "max-len": [
             "error",
