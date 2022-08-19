@@ -13,7 +13,7 @@ const Footer = () => {
             >
                 UoA Discords 2022 © NachoToast
             </Typography>
-            <Grid container spacing={1} justifyContent="space-evenly" sx={{ pl: 1, pr: 1 }}>
+            <Grid container spacing={2} justifyContent="space-evenly" sx={{ pl: 1, pr: 1 }}>
                 <Grid item>
                     <Link href="/">
                         <Typography variant="h6">Home</Typography>
