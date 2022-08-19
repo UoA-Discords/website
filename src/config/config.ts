@@ -1,7 +1,3 @@
-export const config = {
-    serverUrl: `${window.location.protocol}//${getServerLocation()}`,
-};
-
 function getServerLocation() {
     switch (window.location.host) {
         case `localhost:3000`:
@@ -14,3 +10,7 @@ function getServerLocation() {
             return `${window.location.host}`;
     }
 }
+
+export const config = {
+    serverUrl: `${window.location.protocol}//${getServerLocation()}`,
+};
