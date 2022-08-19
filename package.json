@@ -14,7 +14,7 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "lint": "eslint --ext .ts --ext .tsx src --max-warnings=0",
-        "typecheck": "tsc --noEmit",
+        "typecheck": "tsc -p tsconfig.strict.json --noEmit",
         "check-all": "yarn lint && yarn typecheck && yarn test"
     },
     "dependencies": {
