@@ -1,6 +1,7 @@
 #header {
     margin: 0;
     padding: 0.5em 0;
+    position: relative;
 }
 
 a#siteName {
@@ -38,13 +39,4 @@ a#siteName > p:nth-child(2) {
 
 #siteTitle:hover {
     color: #7289da
-}
-
-img#logo {
-    height: 256px;
-    width: 256px;
-    position: absolute;
-    right: 3rem;
-    top: 5rem;
-    z-index: 1;
 }

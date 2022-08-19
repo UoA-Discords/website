@@ -1,0 +1,22 @@
+#logo {
+    height: 256px;
+    width: 256px;
+    position: absolute;
+    right: 2rem;
+    top: 5rem;
+    z-index: 1;
+}
+
+
+@keyframes spin {
+    from { transform: rotate(0); }
+    to { transform: rotate(360deg); }
+}
+  
+#logo.spinning {
+    animation-name: spin;
+    animation-duration: 3s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+}
