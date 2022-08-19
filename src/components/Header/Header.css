@@ -1,6 +1,27 @@
 #header {
     margin: 0;
     padding: 0.5em 0;
-    color: gray;
     margin-bottom: 1em;
+}
+
+div#siteName > p {
+    line-height: 1.2;
+    padding: 2px;
+    font-size: large;
+    font-weight: bold;
+    color: white;
+}
+
+div#siteName > p:nth-child(2) {
+    background-color: white;
+    color: black;
+    border-radius: 0.2em;
+}
+
+img#logo {
+    height: 256px;
+    width: 256px;
+    position: absolute;
+    right: 3rem;
+    top: 5rem;
 }

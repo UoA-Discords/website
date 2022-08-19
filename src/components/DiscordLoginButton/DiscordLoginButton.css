@@ -1,0 +1,12 @@
+#discordLoginButton {
+    background-color: #7289da;
+    color: white;
+    border: none;
+    font-weight: bold;
+    text-transform: none;
+}
+
+#discordLoginButton > img {
+    width: 32px;
+    height: 32px;
+}
