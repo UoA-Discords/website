@@ -2,7 +2,7 @@ import { Button, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { useCallback } from 'react';
 import { useCookies } from 'react-cookie';
 import discordIcon from '../../images/discordIcon.svg';
-import LightTooltip from '../LightTooltip';
+import LightTooltip from '../Tooltips/LightTooltip';
 import { makeDiscordLoginLink } from '../../helpers/makeDiscordLoginLink';
 import './DiscordLoginButton.css';
 
@@ -22,7 +22,7 @@ const DiscordLoginButton = () => {
     return (
         <LightTooltip title={shortenText ? <Typography>Login with Discord</Typography> : ``}>
             <Button id="discordLoginButton" variant="outlined" onClick={handleClick}>
-                <img src={discordIcon} alt="Discord logo" style={{ marginRight: `0.5rem` }} />
+                <img src={discordIcon} alt="Discord logo" />
                 <Typography>{shortenText ? `Login` : `Login with Discord`}</Typography>
             </Button>
         </LightTooltip>
