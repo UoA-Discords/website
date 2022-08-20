@@ -3,7 +3,7 @@ import { Collapse, IconButton, Paper, Stack, Typography } from '@mui/material';
 import { useCallback, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import './SearchBar.css';
-import LightTooltip from '../LightTooltip';
+import LightTooltip from '../Tooltips/LightTooltip';
 import TagSelector from '../TagSelector';
 import { EntryFacultyTags } from '../../shared/Types/Entries';
 

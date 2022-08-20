@@ -1,5 +1,5 @@
 import { Typography, IconButton } from '@mui/material';
-import LightTooltip from '../LightTooltip';
+import LightTooltip from '../Tooltips/LightTooltip';
 import LinkIcon from '@mui/icons-material/Link';
 
 const MakeLinkButton = ({ to }: { to: string }) => {

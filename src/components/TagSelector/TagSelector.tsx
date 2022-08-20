@@ -23,7 +23,7 @@ interface TagSelectorProps {
     handleRemove: (tag: EntryFacultyTags) => void;
 }
 
-function tagToString(tag: EntryFacultyTags): string {
+export function tagToString(tag: EntryFacultyTags): string {
     const input = EntryFacultyTags[tag]!;
     let output = input.charAt(0);
 
