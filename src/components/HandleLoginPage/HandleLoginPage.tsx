@@ -73,7 +73,7 @@ const HandleLoginPage = () => {
         console.log(`requesting`);
         const controller = new AbortController();
         axios
-            .request<LoginResponse>({
+            .request<Omit<LoginResponse, `issuedAt`>>({
                 method: `post`,
                 url: `${config.serverUrl}/discord/login`,
                 signal: controller.signal,
@@ -84,7 +84,7 @@ const HandleLoginPage = () => {
             })
             .then((res) => {
                 console.log(`done`);
-                setUserData(res.data);
+                setUserData({ ...res.data, issuedAt: Date.now() });
                 clearOAuthState(`oauth_state`);
                 setAuthStage(AuthStages.Exiting);
                 window.open(`/`, `_self`);

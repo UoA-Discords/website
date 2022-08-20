@@ -7,6 +7,7 @@ export interface LoginResponse {
     discordAuth: RESTPostOAuth2AccessTokenResult;
     siteAuth: string;
     userData: SiteUser;
+    issuedAt: number;
 }
 
 export function useSiteLogin() {
