@@ -6,6 +6,8 @@ import '@fontsource/roboto/700.css';
 import { createRoot } from 'react-dom/client';
 import { CookiesProvider } from 'react-cookie';
 import App from './App';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
 let theme = createTheme({
     palette: {
@@ -26,10 +28,12 @@ const container = document.getElementById(`root`)!;
 const root = createRoot(container);
 
 root.render(
-    <CookiesProvider>
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <App />
-        </ThemeProvider>
-    </CookiesProvider>,
+    <Provider store={store}>
+        <CookiesProvider>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <App />
+            </ThemeProvider>
+        </CookiesProvider>
+    </Provider>,
 );

@@ -1,31 +1,32 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Footer from './components/Footer';
-import { Container, Typography } from '@mui/material';
+import { Container } from '@mui/material';
 import AboutPage from './components/AboutPage';
 import Header from './components/Header';
-import SearchBar from './components/SearchBar';
 import HandleLoginPage from './components/HandleLoginPage';
 import NotFound from './components/NotFound';
-
 import './App.css';
 import './Logo.css';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { loadAllEntries } from './redux/slices/entryManager';
+import { AppDispatch } from './redux/store';
+import Home from './components/Home';
+import RateLimitNotification from './components/RateLimitNotification';
 
 const App = () => {
+    const dispatch = useDispatch<AppDispatch>();
+
+    useEffect(() => {
+        dispatch(loadAllEntries());
+    }, [dispatch]);
+
     return (
         <BrowserRouter>
             <Header />
+            <RateLimitNotification />
             <Routes>
-                <Route
-                    index
-                    element={
-                        <>
-                            <SearchBar />
-                            <Container maxWidth="xl" id="app">
-                                <Typography variant="h2">hi</Typography>
-                            </Container>
-                        </>
-                    }
-                />
+                <Route index element={<Home />} />
                 <Route
                     path="about"
                     element={
