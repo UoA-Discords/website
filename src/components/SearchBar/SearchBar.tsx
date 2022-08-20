@@ -9,8 +9,13 @@ import { EntryFacultyTags } from '../../shared/Types/Entries';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllEntries, setVisibleEntries } from '../../redux/slices/entryManager';
 
 const SearchBar = () => {
+    const dispatch = useDispatch();
+    const allEntries = useSelector(getAllEntries);
+
     const [fullView, setFullView] = useState(false);
 
     const [searchTerm, setSearchTerm] = useState(``);
@@ -33,6 +38,25 @@ const SearchBar = () => {
         [selectedTags],
     );
 
+    const handleTextSearch = useCallback(() => {
+        const finalSearchTerm = searchTerm.trim().toLowerCase();
+
+        if (finalSearchTerm.length === 0) {
+            dispatch(setVisibleEntries(Object.keys(allEntries)));
+        } else {
+            dispatch(
+                setVisibleEntries(
+                    Object.keys(allEntries).filter((e) => {
+                        const entry = allEntries[e]!;
+                        if (entry.guildData.name.toLowerCase().includes(finalSearchTerm)) return true;
+                        if (entry.inviteCode.toLowerCase().includes(finalSearchTerm)) return true;
+                        return false;
+                    }),
+                ),
+            );
+        }
+    }, [allEntries, dispatch, searchTerm]);
+
     return (
         <Paper elevation={2} square>
             <Stack direction="column" sx={{ ml: `0.5rem`, mr: `0.5rem` }}>
@@ -44,11 +68,14 @@ const SearchBar = () => {
                             value={searchTerm}
                             placeholder="Search for a Discord Server..."
                             onChange={(e) => setSearchTerm(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === `Enter`) handleTextSearch();
+                            }}
                         />
                     </div>
                     <LightTooltip title={<Typography>Search</Typography>}>
                         <span>
-                            <IconButton disabled={!searchTerm.length}>
+                            <IconButton disabled={!searchTerm.length} onClick={handleTextSearch}>
                                 <SearchIcon />
                             </IconButton>
                         </span>

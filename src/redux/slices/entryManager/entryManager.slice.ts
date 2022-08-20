@@ -9,10 +9,14 @@ import { setRateLimit } from '../main';
 export interface State {
     /** Approved entries. */
     entries: Record<string, ApprovedEntry>;
+
+    /** IDs of entries to show. */
+    visibleEntries: string[];
 }
 
 export const initialState: State = {
     entries: {},
+    visibleEntries: [],
 };
 
 const entryManagerSlice = createSlice({
@@ -33,12 +37,17 @@ const entryManagerSlice = createSlice({
                 entry.likes += action.payload.like ? 1 : -1;
             }
         },
+        setVisibleEntries(state, action: { payload: string[] }) {
+            state.visibleEntries = action.payload;
+        },
     },
 });
 
-export const { addEntries, removeAllEntries, setLikedEntry } = entryManagerSlice.actions;
+export const { addEntries, removeAllEntries, setLikedEntry, setVisibleEntries } = entryManagerSlice.actions;
 
 export const getAllEntries = (state: StoreState) => state.entryManager.entries;
+
+export const getVisibleEntries = (state: StoreState) => state.entryManager.visibleEntries;
 
 export const loadAllEntries = createAsyncThunk(`entryManager/loadEntries`, async (_, { dispatch }) => {
     try {
@@ -49,6 +58,7 @@ export const loadAllEntries = createAsyncThunk(`entryManager/loadEntries`, async
 
         dispatch(removeAllEntries());
         dispatch(addEntries(entryQuery.data));
+        dispatch(setVisibleEntries(entryQuery.data.map((e) => e.id)));
     } catch (error) {
         const r = digestRateLimitResponse(error);
         if (r !== null) {
