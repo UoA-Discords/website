@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Footer from './components/Footer';
 import { Container } from '@mui/material';
-import AboutPage from './components/AboutPage';
+import AboutPage from './components/Pages/About';
 import Header from './components/Header';
 import LoginPage from './components/Pages/Login';
 import NotFoundPage from './components/Pages/NotFound';
