@@ -7,7 +7,7 @@ import './Footer.css';
 export const ForceHashLink = ({ to, hash, children }: { to: string; hash: string; children: ReactNode }) => {
     return (
         <Link
-            style={{ color: `inherit`, textDecoration: `inherit` }}
+            style={{ textDecoration: `inherit` }}
             to={`${to}#${hash}`}
             onClick={() => window.location.replace(`#${hash}`)}
         >
