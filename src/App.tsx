@@ -4,7 +4,7 @@ import { Container } from '@mui/material';
 import AboutPage from './components/AboutPage';
 import Header from './components/Header';
 import HandleLoginPage from './components/HandleLoginPage';
-import NotFound from './components/NotFound';
+import NotFoundPage from './components/Pages/NotFound';
 import './App.css';
 import './Logo.css';
 import { useEffect } from 'react';
@@ -45,7 +45,7 @@ const App = () => {
                     }
                 />
                 <Route path="settings" element={<SettingsPage />} />
-                <Route path="*" element={<NotFound />} />
+                <Route path="*" element={<NotFoundPage />} />
             </Routes>
             <Footer />
         </BrowserRouter>
