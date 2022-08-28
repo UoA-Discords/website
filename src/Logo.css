@@ -13,7 +13,7 @@
     to { transform: rotate(360deg); }
 }
   
-#logo.spinning {
+.spinning {
     animation-name: spin;
     animation-duration: 3s;
     animation-timing-function: linear;
