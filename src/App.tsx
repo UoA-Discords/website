@@ -12,7 +12,8 @@ import { useDispatch } from 'react-redux';
 import { loadAllEntries } from './redux/slices/entryManager';
 import { AppDispatch } from './redux/store';
 import Home from './components/Home';
-import RateLimitNotification from './components/RateLimitNotification';
+import RateLimitedModal from './components/Modals/RateLimited';
+import SettingsPage from './components/Pages/Settings';
 
 const App = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -24,7 +25,7 @@ const App = () => {
     return (
         <BrowserRouter>
             <Header />
-            <RateLimitNotification />
+            <RateLimitedModal />
             <Routes>
                 <Route index element={<Home />} />
                 <Route
@@ -43,6 +44,7 @@ const App = () => {
                         </Container>
                     }
                 />
+                <Route path="settings" element={<SettingsPage />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
             <Footer />
