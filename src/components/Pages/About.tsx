@@ -1,6 +1,6 @@
 import { Box, Paper, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import MakeLinkButton from '../MakeLinkButton';
+import MakeLinkButton from '../Buttons/MakeLink';
 
 const AboutPage = () => {
     const [text] = useState(() => {

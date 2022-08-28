@@ -1,9 +1,9 @@
 import { Button, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { useCallback } from 'react';
 import { useCookies } from 'react-cookie';
-import discordIcon from '../../images/discordIcon.svg';
-import LightTooltip from '../Tooltips/LightTooltip';
-import { makeDiscordLoginLink } from '../../helpers/makeDiscordLoginLink';
+import discordIcon from '../../../images/discordIcon.svg';
+import LightTooltip from '../../Tooltips/LightTooltip';
+import { makeDiscordLoginLink } from '../../../helpers/makeDiscordLoginLink';
 import './DiscordLoginButton.css';
 
 const DiscordLoginButton = () => {

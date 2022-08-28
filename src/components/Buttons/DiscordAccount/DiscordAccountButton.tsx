@@ -1,7 +1,7 @@
 import { ListItemButton, Stack, Collapse, Typography } from '@mui/material';
 import { useState } from 'react';
-import { getProfilePicture } from '../../helpers/getProfilePicture';
-import { LoginResponse } from '../../hooks/useSiteLogin';
+import { getProfilePicture } from '../../../helpers/getProfilePicture';
+import { LoginResponse } from '../../../hooks/useSiteLogin';
 import ManageAccountPage from './ManageAccountPage';
 
 const DiscordAccountButton = ({ loginResponse }: { loginResponse: LoginResponse }) => {

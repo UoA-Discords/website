@@ -5,9 +5,9 @@ import './Header.css';
 
 import tempLogo from '../../images/tempLogo.png';
 
-import DiscordLoginButton from '../DiscordLoginButton';
+import DiscordLoginButton from '../Buttons/DiscordLogin';
 import { useSiteLogin } from '../../hooks/useSiteLogin';
-import DiscordAccountButton from '../DiscordAccountButton';
+import DiscordAccountButton from '../Buttons/DiscordAccount';
 
 const Header = () => {
     const { loginResponse } = useSiteLogin();
