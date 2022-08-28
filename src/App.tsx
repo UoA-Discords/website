@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { loadAllEntries } from './redux/slices/entryManager';
 import { AppDispatch } from './redux/store';
-import Home from './components/Home';
+import HomePage from './components/Pages/Home';
 import RateLimitedModal from './components/Modals/RateLimited';
 import SettingsPage from './components/Pages/Settings';
 
@@ -27,7 +27,7 @@ const App = () => {
             <Header />
             <RateLimitedModal />
             <Routes>
-                <Route index element={<Home />} />
+                <Route index element={<HomePage />} />
                 <Route
                     path="about"
                     element={
