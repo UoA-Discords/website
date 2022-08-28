@@ -39,7 +39,7 @@ const SearchBar = () => {
     const handleFilteringByTag = useCallback(
         (entry: string): boolean => {
             if (debouncedSelectedTags.length === 0) return true;
-            const approvedEntry = allEntries[entry];
+            const approvedEntry = allEntries[entry]!;
             return approvedEntry.facultyTags.some((tag) => debouncedSelectedTags.includes(tag));
         },
         [debouncedSelectedTags, allEntries],
