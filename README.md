@@ -28,6 +28,8 @@ yarn build # or npm run build
 yarn start # or npm run start
 ```
 
+By default your client will think the API is located at http://localhost:3001, you can override this by navigating to the settings page (http://localhost:3000/settings). For instance, if you don't want to set up the backend you can make the redirect to https://api.uoa-discords.com. This settings page also allows to to change other things like Discord client ID, redirect URI, etc...
+
 ## Script Reference
 
 -   `yarn start` Starts the application with hot-reloading enabled.
