@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { RateLimitInfo } from '../redux/slices/main';
+import { RateLimitInfo } from '../types/RateLimitInfo';
 
 export function digestRateLimitResponse(res: unknown): Omit<RateLimitInfo, `startedAt`> | null {
     if (axios.isAxiosError(res) && res.response?.status === 429) {
