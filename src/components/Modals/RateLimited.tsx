@@ -18,7 +18,7 @@ const style: SxProps = {
     p: 4,
 };
 
-const RateLimitNotification = () => {
+const RateLimitedModal = () => {
     const dispatch = useDispatch();
     const rateLimit = useSelector(getRateLimit);
 
@@ -81,4 +81,4 @@ const RateLimitNotification = () => {
     );
 };
 
-export default RateLimitNotification;
+export default RateLimitedModal;
