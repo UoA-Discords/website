@@ -67,8 +67,8 @@ const ServerCard = ({ server, index }: { server: ApprovedEntry; index: number })
 
     return (
         <Grow in={shouldFadeIn}>
-            <Card sx={{ position: `relative`, zIndex: 1 }}>
-                <CardActionArea disableRipple sx={{ display: `flex`, justifyContent: `flex-start` }}>
+            <Card sx={{ position: `relative`, zIndex: 1, height: `100%` }}>
+                <CardActionArea disableRipple sx={{ display: `flex`, justifyContent: `flex-start`, height: `100%` }}>
                     <CardMedia
                         component="img"
                         image={`https://cdn.discordapp.com/icons/${server.id}/${server.guildData.icon}`}
