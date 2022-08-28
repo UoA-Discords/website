@@ -1,26 +1,49 @@
 import { InputUnstyled } from '@mui/base';
 import { Collapse, IconButton, Paper, Stack, Typography } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import './SearchBar.css';
 import LightTooltip from '../Tooltips/LightTooltip';
 import TagSelector from '../TagSelector';
-import { EntryFacultyTags } from '../../shared/Types/Entries';
+import { ApprovedEntry, EntryFacultyTags } from '../../shared/Types/Entries';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllEntries, setVisibleEntries } from '../../redux/slices/entryManager';
+import { getAllEntries, getVisibleEntries, setVisibleEntries } from '../../redux/slices/entryManager';
+import useDebounce from '../../hooks/useDebounce';
 
 const SearchBar = () => {
     const dispatch = useDispatch();
     const allEntries = useSelector(getAllEntries);
+    const visibleEntries = useSelector(getVisibleEntries);
 
     const [fullView, setFullView] = useState(false);
 
     const [searchTerm, setSearchTerm] = useState(``);
 
     const [selectedTags, setSelectedTags] = useState<EntryFacultyTags[]>([]);
+
+    const debouncedSelectedTags = useDebounce(selectedTags, 300);
+
+    useEffect(() => {
+        if (debouncedSelectedTags.length === 0) {
+            handleTextSearch();
+        } else {
+            dispatch(setVisibleEntries(visibleEntries.filter(handleFilteringByTag)));
+        }
+        // It complains about missing the visibleEntries dependency
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [debouncedSelectedTags, allEntries, dispatch]);
+
+    const handleFilteringByTag = useCallback(
+        (entry: string): boolean => {
+            if (debouncedSelectedTags.length === 0) return true;
+            const approvedEntry = allEntries[entry];
+            return approvedEntry.facultyTags.some((tag) => debouncedSelectedTags.includes(tag));
+        },
+        [debouncedSelectedTags, allEntries],
+    );
 
     const handleAddTag = useCallback(
         (tag: EntryFacultyTags) => {
@@ -40,22 +63,22 @@ const SearchBar = () => {
 
     const handleTextSearch = useCallback(() => {
         const finalSearchTerm = searchTerm.trim().toLowerCase();
+        const filteredEntries =
+            finalSearchTerm.length === 0
+                ? Object.keys(allEntries)
+                : Object.keys(allEntries).filter((e) => {
+                      const entry = allEntries[e]!;
+                      if (entry.guildData.name.toLowerCase().includes(finalSearchTerm)) return true;
+                      if (entry.inviteCode.toLowerCase().includes(finalSearchTerm)) return true;
+                      return false;
+                  });
 
-        if (finalSearchTerm.length === 0) {
-            dispatch(setVisibleEntries(Object.keys(allEntries)));
+        if (debouncedSelectedTags.length === 0) {
+            dispatch(setVisibleEntries(filteredEntries));
         } else {
-            dispatch(
-                setVisibleEntries(
-                    Object.keys(allEntries).filter((e) => {
-                        const entry = allEntries[e]!;
-                        if (entry.guildData.name.toLowerCase().includes(finalSearchTerm)) return true;
-                        if (entry.inviteCode.toLowerCase().includes(finalSearchTerm)) return true;
-                        return false;
-                    }),
-                ),
-            );
+            dispatch(setVisibleEntries(filteredEntries.filter(handleFilteringByTag)));
         }
-    }, [allEntries, dispatch, searchTerm]);
+    }, [searchTerm, allEntries, debouncedSelectedTags.length, dispatch, handleFilteringByTag]);
 
     return (
         <Paper elevation={2} square>
