@@ -5,7 +5,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import './SearchBar.css';
 import LightTooltip from '../Tooltips/LightTooltip';
 import TagSelector from '../TagSelector';
-import { ApprovedEntry, EntryFacultyTags } from '../../shared/Types/Entries';
+import { EntryFacultyTags } from '../../shared/Types/Entries';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
