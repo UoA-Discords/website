@@ -1,4 +1,4 @@
-import { Button, Modal, Stack, Typography } from '@mui/material';
+import { Button, Modal, Stack, SxProps, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,14 +6,14 @@ import { clearRateLimit, getRateLimit } from '../../redux/slices/main';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import DarkTooltip from '../Tooltips/DarkTooltip';
 
-const style = {
-    position: `absolute` as const,
+const style: SxProps = {
+    position: `absolute`,
     top: `50%`,
     left: `50%`,
     transform: `translate(-50%, -50%)`,
     width: 400,
     bgcolor: `background.paper`,
-    border: `2px solid #000`,
+    border: `2px solid #333`,
     boxShadow: 24,
     p: 4,
 };
@@ -50,10 +50,10 @@ const RateLimitNotification = () => {
         <Modal open>
             <Box sx={style}>
                 <Stack direction="row" alignItems="center" spacing={2}>
+                    <WarningAmberIcon color="warning" fontSize="large" />
                     <Typography variant="h4" textAlign="center">
                         Ratelimited
                     </Typography>
-                    <WarningAmberIcon color="warning" fontSize="large" />
                 </Stack>
                 <Typography sx={{ mt: 2 }}>
                     You are being ratelimited by the server after sending too many requests.
