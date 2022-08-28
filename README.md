@@ -8,39 +8,31 @@ Frontend website for the UoA Discords project.
 
 ## Installation
 
-1. Make sure you have NodeJS
-    ```sh
-    node -v
-    ```
-    Get it [here](https://nodejs.org/).
-1. Install dependencies using [yarn](https://yarnpkg.com/) or npm
+Make sure you have the following dependencies installed:
 
-    ```sh
-    yarn
-    ```
+-   [NodeJS](https://nodejs.org/), any version >= 16 should work. Lower versions have not been tested.
 
-    ```sh
-    npm install
-    ```
+-   [yarn](https://yarnpkg.com/) (can be installed using `npm i -g yarn`), not strictly required but strongly recommended.
 
-1. Start the API in development mode using the **start** script
+-   [git](https://git-scm.com/), should be installed already (via NodeJS).
 
-    ```sh
-    yarn start
-    ```
+Now you can run the following in a terminal:
 
-    ```sh
-    npm run start
-    ```
+```sh
+git clone https://github.com/UoA-Discords/website.git uoa-discords-website
+cd uoa-discords-website
+git submodule init
+git submodule update
+yarn install # or npm install
+yarn build # or npm run build
+yarn start # or npm run start
+```
 
-1. Make a production build using the **build** script
+## Script Reference
 
-    ```sh
-    yarn build
-    ```
-
-    ```sh
-    npm run build
-    ```
-
-    - You should now have static HTML, JS, and CSS files ready to be served from the **build** folder.
+-   `yarn start` Starts the application with hot-reloading enabled.
+-   `yarn build` Creates a production-ready build in the **build/** directory.
+-   `yarn test` Runs Jest testing on the application.
+-   `yarn lint` Runs eslint and Prettier linting rules on the source files.
+-   `yarn typecheck` Runs TSC typechecking on the source files.
+-   `yarn check-all` Runs linting, typechecking, and testing.
