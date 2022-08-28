@@ -2,7 +2,7 @@ import { Button, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useEffect, useState } from 'react';
 import MuiLink from '@mui/material/Link';
-import { ForceHashLink } from '../Footer';
+import { ForceHashLink } from '../../Footer';
 import { Link } from 'react-router-dom';
 import './CSRF.css';
 
@@ -27,7 +27,7 @@ const CSRF = () => {
             <Typography textAlign="center" variant="h5" sx={{ pb: 3 }}>
                 Please{` `}
                 <MuiLink component="span">
-                    <ForceHashLink to="/about" hash="contact">
+                    <ForceHashLink to="/about" hash="contact" style={{ color: `inherit` }}>
                         contact us
                     </ForceHashLink>
                 </MuiLink>

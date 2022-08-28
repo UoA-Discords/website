@@ -3,7 +3,7 @@ import Footer from './components/Footer';
 import { Container } from '@mui/material';
 import AboutPage from './components/AboutPage';
 import Header from './components/Header';
-import HandleLoginPage from './components/HandleLoginPage';
+import LoginPage from './components/Pages/Login';
 import NotFoundPage from './components/Pages/NotFound';
 import './App.css';
 import './Logo.css';
@@ -40,7 +40,7 @@ const App = () => {
                     path="login"
                     element={
                         <Container maxWidth="xl" id="app">
-                            <HandleLoginPage />
+                            <LoginPage />
                         </Container>
                     }
                 />

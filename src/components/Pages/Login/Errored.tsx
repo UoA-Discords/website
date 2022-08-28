@@ -1,9 +1,9 @@
 import { Button, Paper, Stack, Typography } from '@mui/material';
 import { ReactNode, useEffect, useState } from 'react';
 
-import tempLogo from '../../images/tempLogo.png';
-import tempLogoGlitched from '../../images/tempLogoGlitched.png';
-import { ForceHashLink } from '../Footer';
+import tempLogo from '../../../images/tempLogo.png';
+import tempLogoGlitched from '../../../images/tempLogoGlitched.png';
+import { ForceHashLink } from '../../Footer';
 import MuiLink from '@mui/material/Link';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -54,6 +54,7 @@ const Errored = ({ error }: { error: unknown }) => {
                             </>,
                         );
                     } catch (e) {
+                        console.log(e);
                         setMsg(
                             <Typography textAlign="center">
                                 Status Code {error.response.status} ({error.response.statusText})`
@@ -61,11 +62,13 @@ const Errored = ({ error }: { error: unknown }) => {
                         );
                     }
                 }
+                console.log(error);
                 return;
             }
         }
 
         if (error instanceof Error) {
+            console.log(error);
             setMsg(
                 <Typography sx={{ whiteSpace: `pre-wrap` }} textAlign="center">
                     {error.message}
@@ -104,7 +107,7 @@ const Errored = ({ error }: { error: unknown }) => {
                     <br />
                     We recommend you take a screenshot of the console (F12 on Windows) and{` `}
                     <MuiLink component="span">
-                        <ForceHashLink to="/about" hash="contact">
+                        <ForceHashLink to="/about" hash="contact" style={{ color: `inherit` }}>
                             send it to us.
                         </ForceHashLink>
                     </MuiLink>

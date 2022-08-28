@@ -3,12 +3,11 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useSearchParams } from 'react-router-dom';
-import { config } from '../../config';
-import { LoginResponse, useSiteLogin } from '../../hooks/useSiteLogin';
+import { config } from '../../../config';
+import { LoginResponse, useSiteLogin } from '../../../hooks/useSiteLogin';
 import CSRF from './CSRF';
 import Errored from './Errored';
 import Loading from './Loading';
-// import { DiscordAPI } from '../../shared/DiscordAPI';
 
 enum AuthStages {
     /** Request access token from API. */
@@ -24,7 +23,7 @@ enum AuthStages {
     Exiting,
 }
 
-const HandleLoginPage = () => {
+const LoginPage = () => {
     const [searchParams] = useSearchParams();
 
     const [authStage, setAuthStage] = useState<AuthStages>(AuthStages.Loading);
@@ -70,7 +69,6 @@ const HandleLoginPage = () => {
             clearOAuthState(`oauth_state`);
         }
 
-        console.log(`requesting`);
         const controller = new AbortController();
         axios
             .request<Omit<LoginResponse, `issuedAt`>>({
@@ -83,7 +81,6 @@ const HandleLoginPage = () => {
                 },
             })
             .then((res) => {
-                console.log(`done`);
                 setUserData({ ...res.data, issuedAt: Date.now() });
                 clearOAuthState(`oauth_state`);
                 setAuthStage(AuthStages.Exiting);
@@ -124,4 +121,4 @@ const HandleLoginPage = () => {
     }
 };
 
-export default HandleLoginPage;
+export default LoginPage;
