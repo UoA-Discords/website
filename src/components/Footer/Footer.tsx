@@ -21,12 +21,10 @@ const Footer = () => {
         <Paper id="footer" elevation={0} square>
             <Grid container spacing={2} justifyContent="space-evenly" sx={{ pl: 1, pr: 1 }}>
                 <Grid item xs={12}>
-                    <Typography
-                        textAlign="center"
-                        title="This doesn't mean anything, it just looks official."
-                        sx={{ pl: 1, pr: 1 }}
-                    >
-                        UoA Discords {new Date().getFullYear()} © NachoToast
+                    <Typography textAlign="center" sx={{ pl: 1, pr: 1 }}>
+                        <span title="This doesn't mean anything, it just looks official.">
+                            UoA Discords {new Date().getFullYear()} © NachoToast
+                        </span>
                     </Typography>
                 </Grid>
                 <Grid item>
