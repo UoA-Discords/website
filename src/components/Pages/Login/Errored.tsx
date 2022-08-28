@@ -68,7 +68,6 @@ const Errored = ({ error }: { error: unknown }) => {
         }
 
         if (error instanceof Error) {
-            console.log(error);
             setMsg(
                 <Typography sx={{ whiteSpace: `pre-wrap` }} textAlign="center">
                     {error.message}

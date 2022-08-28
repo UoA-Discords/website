@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Footer from './components/Footer';
-import { Container } from '@mui/material';
 import AboutPage from './components/Pages/About';
 import Header from './components/Header';
 import LoginPage from './components/Pages/Login';
@@ -28,22 +27,8 @@ const App = () => {
             <RateLimitedModal />
             <Routes>
                 <Route index element={<HomePage />} />
-                <Route
-                    path="about"
-                    element={
-                        <Container maxWidth="xl" id="app">
-                            <AboutPage />
-                        </Container>
-                    }
-                />
-                <Route
-                    path="login"
-                    element={
-                        <Container maxWidth="xl" id="app">
-                            <LoginPage />
-                        </Container>
-                    }
-                />
+                <Route path="about" element={<AboutPage />} />
+                <Route path="login" element={<LoginPage />} />
                 <Route path="settings" element={<SettingsPage />} />
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>

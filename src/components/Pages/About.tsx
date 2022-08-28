@@ -1,4 +1,5 @@
-import { Box, Paper, Typography } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
+import { Container } from '@mui/system';
 import { useEffect, useState } from 'react';
 import MakeLinkButton from '../Buttons/MakeLink';
 
@@ -18,7 +19,7 @@ const AboutPage = () => {
     }, []);
 
     return (
-        <Box>
+        <Container maxWidth="xl" id="app">
             <Typography variant="h2" gutterBottom>
                 {text} Us
             </Typography>
@@ -40,7 +41,7 @@ const AboutPage = () => {
                 <MakeLinkButton to="site-policy" />
             </Typography>
             <Paper sx={{ height: `500px` }}></Paper>
-        </Box>
+        </Container>
     );
 };
 

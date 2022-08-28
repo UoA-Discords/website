@@ -1,4 +1,5 @@
 import { Fade, Stack, Typography } from '@mui/material';
+import { Container } from '@mui/system';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
@@ -96,15 +97,15 @@ const LoginPage = () => {
         };
     }, [authStage, clearOAuthState, oauth_state, searchParams, setUserData]);
 
-    switch (authStage) {
-        case AuthStages.Loading:
-            return <Loading />;
-        case AuthStages.Errored:
-            return <Errored error={error} />;
-        case AuthStages.CSRF:
-            return <CSRF />;
-        default:
-            return (
+    return (
+        <Container maxWidth="xl" id="app">
+            {authStage === AuthStages.Loading ? (
+                <Loading />
+            ) : authStage === AuthStages.Errored ? (
+                <Errored error={error} />
+            ) : authStage === AuthStages.CSRF ? (
+                <CSRF />
+            ) : (
                 <Stack
                     alignItems="center"
                     justifyContent="center"
@@ -117,8 +118,9 @@ const LoginPage = () => {
                         <img src="https://i.redd.it/m308pw9b09831.jpg" alt="adios" />
                     </Fade>
                 </Stack>
-            );
-    }
+            )}
+        </Container>
+    );
 };
 
 export default LoginPage;
