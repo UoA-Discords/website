@@ -7,17 +7,17 @@ import LikedIcon from '@mui/icons-material/Favorite';
 
 import { useSiteLogin } from '../../../hooks/useSiteLogin';
 import { UserPermissionLevels } from '../../../shared/Types/User';
-import axios from 'axios';
-import { config } from '../../../config';
-import { useDispatch } from 'react-redux';
+import axios, { AxiosRequestConfig } from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 import { setLikedEntry } from '../../../redux/slices/entryManager';
 import { digestRateLimitResponse } from '../../../helpers/digestRateLimitResponse';
-import { setRateLimit } from '../../../redux/slices/main';
+import { getSettings, setRateLimit } from '../../../redux/slices/main';
 
 const ServerCard = ({ server, index }: { server: ApprovedEntry; index: number }) => {
     const dispatch = useDispatch();
     const [shouldFadeIn, setShouldFadeIn] = useState(false);
     const { loginResponse, setUserData } = useSiteLogin();
+    const settings = useSelector(getSettings);
 
     const likeIndex = useMemo<number>(
         () => loginResponse?.userData.likes.indexOf(server.id) ?? -1,
@@ -28,18 +28,25 @@ const ServerCard = ({ server, index }: { server: ApprovedEntry; index: number })
         if (loginResponse === undefined) return;
         const controller = new AbortController();
 
+        const requestObject: AxiosRequestConfig = {
+            method: `patch`,
+            baseURL: settings.serverUrl,
+            url: `/entries/${server.id}/likes`,
+            signal: controller.signal,
+            data: {
+                like: likeIndex === -1,
+            },
+            headers: {
+                Authorization: `Bearer ${loginResponse.siteAuth}`,
+            },
+        };
+
+        if (settings.rateLimitBypassToken !== undefined) {
+            requestObject.headers![`RateLimit-Bypass-Token`] = settings.rateLimitBypassToken;
+        }
+
         axios
-            .request<void>({
-                method: `patch`,
-                url: `${config.serverUrl}/entries/${server.id}/likes`,
-                signal: controller.signal,
-                data: {
-                    like: likeIndex === -1,
-                },
-                headers: {
-                    Authorization: `Bearer ${loginResponse.siteAuth}`,
-                },
-            })
+            .request<void>(requestObject)
             .then(() => {
                 if (likeIndex === -1) loginResponse.userData.likes.push(server.id);
                 else loginResponse.userData.likes.splice(likeIndex, 1);
@@ -57,7 +64,7 @@ const ServerCard = ({ server, index }: { server: ApprovedEntry; index: number })
             });
 
         return () => controller.abort();
-    }, [dispatch, likeIndex, loginResponse, server.id, setUserData]);
+    }, [dispatch, likeIndex, loginResponse, server.id, setUserData, settings.rateLimitBypassToken, settings.serverUrl]);
 
     useEffect(() => {
         const timeout = setTimeout(() => setShouldFadeIn(true), index * 40);

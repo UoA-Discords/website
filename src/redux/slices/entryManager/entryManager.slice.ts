@@ -1,10 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { config } from '../../../config';
+import axios, { AxiosRequestConfig } from 'axios';
 import { digestRateLimitResponse } from '../../../helpers/digestRateLimitResponse';
 import { ApprovedEntry } from '../../../shared/Types/Entries';
 import { StoreState } from '../../store';
-import { setRateLimit } from '../main';
+import { getSettings, setRateLimit } from '../main';
 
 export interface State {
     /** Approved entries. */
@@ -49,12 +48,21 @@ export const getAllEntries = (state: StoreState) => state.entryManager.entries;
 
 export const getVisibleEntries = (state: StoreState) => state.entryManager.visibleEntries;
 
-export const loadAllEntries = createAsyncThunk(`entryManager/loadEntries`, async (_, { dispatch }) => {
+export const loadAllEntries = createAsyncThunk(`entryManager/loadEntries`, async (_, { dispatch, getState }) => {
     try {
-        const entryQuery = await axios.request<ApprovedEntry[]>({
+        const settings = getSettings(getState() as StoreState);
+        const requestObject: AxiosRequestConfig = {
             method: `get`,
-            url: `${config.serverUrl}/entries`,
-        });
+            baseURL: settings.serverUrl,
+            url: `/entries`,
+            headers: {},
+        };
+
+        if (settings.rateLimitBypassToken !== undefined) {
+            requestObject.headers![`RateLimit-Bypass-Token`] = settings.rateLimitBypassToken;
+        }
+
+        const entryQuery = await axios.request<ApprovedEntry[]>(requestObject);
 
         dispatch(removeAllEntries());
         dispatch(addEntries(entryQuery.data));

@@ -1,7 +1,8 @@
 import { Grid, Paper, Typography } from '@mui/material';
 import { ReactNode } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { config } from '../../config';
+import { getSettings } from '../../redux/slices/main';
 import './Footer.css';
 
 export const ForceHashLink = ({
@@ -27,6 +28,8 @@ export const ForceHashLink = ({
 };
 
 const Footer = () => {
+    const { serverUrl } = useSelector(getSettings);
+
     return (
         <Paper id="footer" elevation={0} square>
             <Grid container spacing={2} justifyContent="space-evenly" sx={{ pl: 1, pr: 1 }}>
@@ -53,7 +56,7 @@ const Footer = () => {
                     </ForceHashLink>
                 </Grid>
                 <Grid item>
-                    <a href={`${config.serverUrl}/api-docs`} target="_blank" rel="noreferrer noopener">
+                    <a href={`${serverUrl}/api-docs`} target="_blank" rel="noreferrer noopener">
                         <Typography variant="h6">API</Typography>
                     </a>
                 </Grid>

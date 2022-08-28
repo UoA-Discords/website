@@ -1,11 +1,12 @@
 import { Fade, Stack, Typography } from '@mui/material';
 import { Container } from '@mui/system';
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
+import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import { config } from '../../../config';
 import { LoginResponse, useSiteLogin } from '../../../hooks/useSiteLogin';
+import { getSettings } from '../../../redux/slices/main';
 import CSRF from './CSRF';
 import Errored from './Errored';
 import Loading from './Loading';
@@ -33,6 +34,7 @@ const LoginPage = () => {
     const [{ oauth_state }, , clearOAuthState] = useCookies<`oauth_state`, { oauth_state?: string }>([`oauth_state`]);
 
     const { setUserData } = useSiteLogin();
+    const settings = useSelector(getSettings);
 
     useEffect(() => {
         if (authStage !== AuthStages.Loading) return;
@@ -71,16 +73,25 @@ const LoginPage = () => {
         }
 
         const controller = new AbortController();
+
+        const requestObject: AxiosRequestConfig = {
+            method: `post`,
+            baseURL: settings.serverUrl,
+            url: `/discord/login`,
+            signal: controller.signal,
+            data: {
+                code,
+                redirect_uri: settings.redirectURI,
+            },
+            headers: {},
+        };
+
+        if (settings.rateLimitBypassToken !== undefined) {
+            requestObject.headers![`RateLimit-Bypass-Token`] = settings.rateLimitBypassToken;
+        }
+
         axios
-            .request<Omit<LoginResponse, `issuedAt`>>({
-                method: `post`,
-                url: `${config.serverUrl}/discord/login`,
-                signal: controller.signal,
-                data: {
-                    code,
-                    redirect_uri: config.redirectURI,
-                },
-            })
+            .request<Omit<LoginResponse, `issuedAt`>>(requestObject)
             .then((res) => {
                 setUserData({ ...res.data, issuedAt: Date.now() });
                 clearOAuthState(`oauth_state`);
@@ -95,7 +106,16 @@ const LoginPage = () => {
         return () => {
             controller.abort();
         };
-    }, [authStage, clearOAuthState, oauth_state, searchParams, setUserData]);
+    }, [
+        authStage,
+        clearOAuthState,
+        oauth_state,
+        searchParams,
+        setUserData,
+        settings.rateLimitBypassToken,
+        settings.redirectURI,
+        settings.serverUrl,
+    ]);
 
     return (
         <Container maxWidth="xl" id="app">
