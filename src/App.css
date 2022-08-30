@@ -28,6 +28,7 @@ body.hiddenScroll::-webkit-scrollbar {
 
 #app {
   flex-grow: 1;
+  padding-top:20px;
 }
 
 .discordProfilePicture {

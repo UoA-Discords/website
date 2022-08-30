@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import './Header.css';
 
-import tempLogo from '../../images/tempLogo.png';
+import tempLogo from '../../images/uoadiscbirdopacity.png';
 
 import DiscordLoginButton from '../Buttons/DiscordLogin';
 import { useSiteLogin } from '../../hooks/useSiteLogin';
@@ -14,7 +14,7 @@ const Header = () => {
 
     const theme = useTheme();
 
-    const hideLogo = useMediaQuery(theme.breakpoints.down(`md`));
+    const hideLogo = useMediaQuery(theme.breakpoints.down(1100));
     const hideText = useMediaQuery(theme.breakpoints.down(`sm`));
 
     const [logoHover, setLogoHover] = useState(false);

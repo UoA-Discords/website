@@ -1,4 +1,4 @@
-import { Chip, Grid, GridProps } from '@mui/material';
+import { Chip, Grid, GridProps, Box } from '@mui/material';
 import { EntryFacultyTags } from '../../shared/Types/Entries';
 
 const AllTags: EntryFacultyTags[] = [
@@ -40,24 +40,27 @@ export function tagToString(tag: EntryFacultyTags): string {
 
 const TagSelector = ({ gridProps, selectedTags, handleAdd, handleRemove }: TagSelectorProps) => {
     return (
-        <Grid container spacing={1} {...gridProps}>
-            {AllTags.map((e) => {
-                const selected = selectedTags.includes(e);
+        <Box sx={{width: 1, pb: 1}} >
+            <Grid container spacing={1} {...gridProps}>
+                {AllTags.map((e) => {
+                    const selected = selectedTags.includes(e);
 
-                return (
-                    <Grid item key={e}>
-                        <Chip
-                            label={tagToString(e)}
-                            variant="outlined"
-                            color={selected ? `primary` : `default`}
-                            clickable
-                            onClick={() => (selected ? handleRemove(e) : handleAdd(e))}
-                            sx={{ borderRadius: 0.5 }}
-                        />
-                    </Grid>
-                );
-            })}
-        </Grid>
+                    return (
+                        <Grid item key={e}>
+                            <Chip
+                                label={tagToString(e)}
+                                variant="filled"
+                                color={selected ? `primary` : `default`}
+                                style={{backgroundColor: selected ? `#7289da` : `#40444b`, color: selected ? `#fff` : `#bdbec2`}}
+                                clickable
+                                onClick={() => (selected ? handleRemove(e) : handleAdd(e))}
+                                sx={{ borderRadius: 0.5 }}
+                            />
+                        </Grid>
+                    );
+                })}
+            </Grid>
+        </Box>
     );
 };
 
