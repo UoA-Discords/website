@@ -1,12 +1,12 @@
 import { Container, Grid } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { getAllEntries, getVisibleEntries } from '../../../redux/slices/entryManager';
+import { getAllEntries, getVisibleEntries, getVisibleEntriesByLikes } from '../../../redux/slices/entryManager';
 import SearchBar from '../../SearchBar';
 import ServerCard from './ServerCard';
 
 const HomePage = () => {
     const allEntries = useSelector(getAllEntries);
-    const entryKeys = useSelector(getVisibleEntries);
+    const entryKeys = useSelector(getVisibleEntriesByLikes);
 
     return (
         <>

@@ -75,14 +75,15 @@ const SearchBar = () => {
                     </div>
                     <LightTooltip title={<Typography>Search</Typography>}>
                         <span>
-                            <IconButton disabled={!searchTerm.length} onClick={handleTextSearch}>
+                            <IconButton disabled={!searchTerm.length} onClick={handleTextSearch} style={{color : searchTerm.length > 0 ? `#b9bbbe` : `#656565`}}>
                                 <SearchIcon />
                             </IconButton>
                         </span>
                     </LightTooltip>
                     <LightTooltip
                         placement="right"
-                        title={<Typography>{fullView ? `Less Options` : `More Options`}</Typography>}
+                        style={{color : `#b9bbbe`}}
+                        title={<Typography>{fullView ? `Hide Tags` : `Show Tags`}</Typography>}
                     >
                         <IconButton onClick={() => setFullView(!fullView)}>
                             {fullView ? <ExpandLessIcon /> : <ExpandMoreIcon />}
