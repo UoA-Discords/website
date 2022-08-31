@@ -1,6 +1,6 @@
 import { Container, Grid } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { getAllEntries, getVisibleEntries, getVisibleEntriesByLikes } from '../../../redux/slices/entryManager';
+import { getAllEntries, getVisibleEntriesByLikes } from '../../../redux/slices/entryManager';
 import SearchBar from '../../SearchBar';
 import ServerCard from './ServerCard';
 
