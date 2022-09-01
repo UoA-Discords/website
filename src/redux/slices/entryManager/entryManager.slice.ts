@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios, { AxiosRequestConfig } from 'axios';
 import { digestRateLimitResponse } from '../../../helpers/digestRateLimitResponse';
-import { ApprovedEntry } from '../../../shared/Types/Entries';
+import { EntryStates, FullEntry } from '../../../shared/Types/Entries';
 import { StoreState } from '../../store';
 import { getSettings, setRateLimit } from '../main';
 
 export interface State {
     /** Approved entries. */
-    entries: Record<string, ApprovedEntry>;
+    entries: Record<string, FullEntry<EntryStates.Approved | EntryStates.Featured>>;
 
     /** IDs of entries to show. */
     visibleEntries: string[];
@@ -22,7 +22,7 @@ const entryManagerSlice = createSlice({
     name: `entryManager`,
     initialState,
     reducers: {
-        addEntries(state, action: { payload: ApprovedEntry[] }) {
+        addEntries(state, action: { payload: FullEntry<EntryStates.Approved | EntryStates.Featured>[] }) {
             action.payload.forEach((entry) => {
                 state.entries[entry.id] = entry;
             });
@@ -49,12 +49,13 @@ export const getAllEntries = (state: StoreState) => state.entryManager.entries;
 export const getVisibleEntries = (state: StoreState) => state.entryManager.visibleEntries;
 
 export const getVisibleEntriesByLikes = (state: StoreState) => {
-    const entries = Object.values(state.entryManager.visibleEntries); // get all visible entries
+    const entries = [...state.entryManager.visibleEntries]; // get all visible entries
     const likes = entries.map((entry) => state.entryManager.entries[entry].likes); // get all likes
-    const sortedEntries = entries.sort((a, b) => 
-        likes[entries.indexOf(b)] - likes[entries.indexOf(a)]); // sort the entries by the number of likes
-    return sortedEntries; 
-}
+    const sortedEntries = entries.sort((a, b) => {
+        return likes[entries.indexOf(b)] - likes[entries.indexOf(a)];
+    }); // sort the entries by the number of likes
+    return sortedEntries;
+};
 
 export const loadAllEntries = createAsyncThunk(`entryManager/loadEntries`, async (_, { dispatch, getState }) => {
     try {
@@ -70,11 +71,19 @@ export const loadAllEntries = createAsyncThunk(`entryManager/loadEntries`, async
             requestObject.headers![`RateLimit-Bypass-Token`] = settings.rateLimitBypassToken;
         }
 
-        const entryQuery = await axios.request<ApprovedEntry[]>(requestObject);
+        const entryQuery = await axios.request<{
+            approved: FullEntry<EntryStates.Approved>[];
+            featured: FullEntry<EntryStates.Featured>[];
+        }>(requestObject);
 
         dispatch(removeAllEntries());
-        dispatch(addEntries(entryQuery.data));
-        dispatch(setVisibleEntries(entryQuery.data.map((e) => e.id)));
+        dispatch(addEntries([...entryQuery.data.approved, ...entryQuery.data.featured]));
+        dispatch(
+            setVisibleEntries([
+                ...entryQuery.data.approved.map((e) => e.id),
+                ...entryQuery.data.featured.map((e) => e.id),
+            ]),
+        );
     } catch (error) {
         const r = digestRateLimitResponse(error);
         if (r !== null) {
