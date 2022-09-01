@@ -32,14 +32,14 @@ const Footer = () => {
 
     return (
         <Paper id="footer" elevation={0} square>
-            <Grid container spacing={2} justifyContent="space-evenly" sx={{ pl: 1, pr: 1 }} style={{paddingBottom:20}}>
+            <Grid container spacing={2} justifyContent="space-evenly" sx={{ pl: 1, pr: 1, pb: 3 }}>
                 <Grid item xs={12}>
-                    <Typography textAlign="center" sx={{ pl: 1, pr: 1 }} style={{paddingTop: 15}}>
+                    <Typography textAlign="center" sx={{ pl: 1, pr: 1, pt: 3 }} >
                         <span title="This doesn't mean anything, it just looks official.">
                             UoA Discords {new Date().getFullYear()} © NachoToast
                         </span>
                     </Typography>
-                    <Typography textAlign="center" sx={{ pl: 1, pr: 1 }} style={{paddingBottom:10}}>
+                    <Typography textAlign="center" sx={{ pl: 1, pr: 1, pb:2 }} >
                         <span title="This does mean something.">
                             Not affiliated with Discord or the University of Auckland.
                         </span>
