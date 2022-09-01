@@ -75,7 +75,7 @@ const SearchBar = () => {
                     </div>
                     <LightTooltip title={<Typography>Search</Typography>}>
                         <span>
-                            <IconButton disabled={!searchTerm.length} onClick={handleTextSearch} style={{color : searchTerm.length > 0 ? `#b9bbbe` : `#656565`}}>
+                            <IconButton disabled={!searchTerm.length} onClick={handleTextSearch} sx={{color : searchTerm.length > 0 ? `#b9bbbe` : `#656565`}}>
                                 <SearchIcon />
                             </IconButton>
                         </span>
