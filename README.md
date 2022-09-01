@@ -43,17 +43,14 @@ By default your client will think the API is located at http://localhost:3001, y
 To be done after the inital installation
 - Download any new changes from the GitHub:
     ```sh
-    cd uoa-discords-website
     git pull
     ```
 - Run the website:
     ```sh
-    cd uoa-discords-website
     yarn start
     ```
 - Push to the GitHub:
     ```sh
-    cd uoa-discords-website
     git checkout -b [BranchName] # Create a new branchName
     git add .
     git commit -m "Change summary here"
