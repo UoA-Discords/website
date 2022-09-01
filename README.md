@@ -59,5 +59,5 @@ To be done after the inital installation
     git commit -m "Change summary here"
     git push origin [BranchName] # Same as you made
     ```
-    - Then visit the [GitHub](https://github.com/UoA-Discords/website), and click "create pull request". Fill out your changes, and submit it to be verified by other team members :D
+    - Then visit the [GitHub](https://github.com/UoA-Discords/website), and click "Compare & pull request". Fill out your changes, and submit it to be verified by other team members :D
 
