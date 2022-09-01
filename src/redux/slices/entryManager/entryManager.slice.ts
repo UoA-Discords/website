@@ -48,6 +48,14 @@ export const getAllEntries = (state: StoreState) => state.entryManager.entries;
 
 export const getVisibleEntries = (state: StoreState) => state.entryManager.visibleEntries;
 
+export const getVisibleEntriesByLikes = (state: StoreState) => {
+    const entries = Object.values(state.entryManager.visibleEntries); // get all visible entries
+    const likes = entries.map((entry) => state.entryManager.entries[entry].likes); // get all likes
+    const sortedEntries = entries.sort((a, b) => 
+        likes[entries.indexOf(b)] - likes[entries.indexOf(a)]); // sort the entries by the number of likes
+    return sortedEntries; 
+}
+
 export const loadAllEntries = createAsyncThunk(`entryManager/loadEntries`, async (_, { dispatch, getState }) => {
     try {
         const settings = getSettings(getState() as StoreState);

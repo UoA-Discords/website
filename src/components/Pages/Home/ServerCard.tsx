@@ -97,7 +97,7 @@ const ServerCard = ({ server, index }: { server: ApprovedEntry; index: number })
                             loginResponse.userData.permissionLevel < UserPermissionLevels.Like
                         }
                         endIcon={likeIndex !== -1 ? <LikedIcon /> : <LikeIcon />}
-                        sx={{ position: `absolute`, right: 0, bottom: 0 }}
+                        sx={{ position: `absolute`, right: 0, bottom: 0,  color: likeIndex !== -1 ? `#ed4245` : `#a3a6aa`  }}
                     >
                         {server.likes}
                     </Button>
