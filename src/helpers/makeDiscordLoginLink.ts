@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
 
-const SCOPES = [`guilds`, `identify`];
+const SCOPES = [`identify`];
 
 /** Makes a Discord OAuth2 authorization link to initiate the Discord login process. */
 export function makeDiscordLoginLink(clientId: string, redirectUri: string): { link: string; state: string } {
