@@ -1,5 +1,4 @@
 import { GuildVerificationLevel } from 'discord-api-types/payloads/v10/guild';
-import { WithdrawnEntry } from '../shared/Types/Entries';
 
 /** Shape of object returned by root of API (e.g. `GET https://api.uoa-discords.com/`). */
 export interface RootResponse {
@@ -8,7 +7,8 @@ export interface RootResponse {
     entryStats: {
         pending: number;
         approved: number;
-        denied: WithdrawnEntry;
+        featured: number;
+        denied: number;
         optOut: number;
     };
     users: number;

@@ -1,9 +1,11 @@
 #searchInput {
-    background-color: #1b1b1b;
+    background-color: #40444b; /* was #1b1b1b */
     font-size: 14pt;
-    border-radius: 0.3em;
-    margin: 0.3em;
+    border-radius: 3px;
+    margin: 0.8em;
+    margin-left:0.3em;
     padding: 0.3em;
+    padding-left:0.6em;
     outline: none;
     color: white;
     width: 100%;

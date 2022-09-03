@@ -9,7 +9,7 @@ export function defaultSettings(): Settings {
                 ? `http://localhost:3001`
                 : window.location.host === `ntgc.ddns.net:3000`
                 ? `http://ntgc.ddns.net:3001`
-                : `https://api.uoa-discords.com`,
+                : `https://bpi.uoa-discords.com`,
         discordClientId: `958568584349618227`,
         redirectURI: window.location.origin + `/login`,
     };

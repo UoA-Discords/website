@@ -1,6 +1,6 @@
 import { Button, Card, CardActionArea, CardContent, CardMedia, Grow, Typography } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ApprovedEntry } from '../../../shared/Types/Entries';
+import { EntryStates, FullEntry } from '../../../shared/Types/Entries';
 
 import LikeIcon from '@mui/icons-material/FavoriteBorder';
 import LikedIcon from '@mui/icons-material/Favorite';
@@ -13,7 +13,13 @@ import { setLikedEntry } from '../../../redux/slices/entryManager';
 import { digestRateLimitResponse } from '../../../helpers/digestRateLimitResponse';
 import { getSettings, setRateLimit } from '../../../redux/slices/main';
 
-const ServerCard = ({ server, index }: { server: ApprovedEntry; index: number }) => {
+const ServerCard = ({
+    server,
+    index,
+}: {
+    server: FullEntry<EntryStates.Approved | EntryStates.Featured>;
+    index: number;
+}) => {
     const dispatch = useDispatch();
     const [shouldFadeIn, setShouldFadeIn] = useState(false);
     const { loginResponse, setUserData } = useSiteLogin();
@@ -97,7 +103,12 @@ const ServerCard = ({ server, index }: { server: ApprovedEntry; index: number })
                             loginResponse.userData.permissionLevel < UserPermissionLevels.Like
                         }
                         endIcon={likeIndex !== -1 ? <LikedIcon /> : <LikeIcon />}
-                        sx={{ position: `absolute`, right: 0, bottom: 0 }}
+                        sx={{
+                            position: `absolute`,
+                            right: 0,
+                            bottom: 0,
+                            color: likeIndex !== -1 ? `#ed4245` : `#a3a6aa`,
+                        }}
                     >
                         {server.likes}
                     </Button>

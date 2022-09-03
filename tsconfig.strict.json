@@ -11,7 +11,6 @@
     "useUnknownInCatchVariables": true,
     "alwaysStrict": true,
     "exactOptionalPropertyTypes": true,
-    "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "removeComments": true,

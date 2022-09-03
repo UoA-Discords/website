@@ -1,9 +1,11 @@
 #logo {
-    height: 256px;
-    width: 256px;
+    /* height: 225.04; Height for when tags extended*/
+    /* width: 266px; Width for when tags extended*/
+    height: 165.04;
+    width: 226px;
     position: absolute;
-    right: 2rem;
-    top: 5rem;
+    right: 12.8rem;
+    top: 0.4rem;
     z-index: 1;
 }
 
