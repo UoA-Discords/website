@@ -10,13 +10,12 @@ import { EntryFacultyTags } from '../../shared/Types/Entries';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllEntries, getVisibleEntries, setVisibleEntries } from '../../redux/slices/entryManager';
+import { getAllEntries, setVisibleEntries } from '../../redux/slices/entryManager';
 import useDebounce from '../../hooks/useDebounce';
 
 const SearchBar = () => {
     const dispatch = useDispatch();
     const allEntries = useSelector(getAllEntries);
-    const visibleEntries = useSelector(getVisibleEntries);
 
     const [fullView, setFullView] = useState(false);
 
