@@ -1,4 +1,4 @@
-import { Chip, Grid, GridProps, Box } from '@mui/material';
+import { Grid, GridProps, Box } from '@mui/material';
 import { EntryFacultyTags } from '../../shared/Types/Entries';
 import FacultyTag from './FacultyTag';
 
