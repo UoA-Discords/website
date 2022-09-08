@@ -2,7 +2,7 @@ import { Chip } from '@mui/material';
 import { EntryFacultyTags } from '../../shared/Types/Entries';
 import { tagToString } from './TagSelector';
 
-const Tag = ({
+const FacultyTag = ({
     tag,
     isSelected,
     handleClick,
@@ -27,4 +27,4 @@ const Tag = ({
     );
 };
 
-export default Tag;
+export default FacultyTag;

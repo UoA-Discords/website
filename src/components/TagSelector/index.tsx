@@ -1,4 +1,4 @@
-import Tag from './Tag';
+import FacultyTag from './FacultyTag';
 
 export { default } from './TagSelector';
-export { Tag };
+export { FacultyTag as Tag };
