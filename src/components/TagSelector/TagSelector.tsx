@@ -19,8 +19,8 @@ const AllTags: EntryFacultyTags[] = [
 interface TagSelectorProps {
     selectedTags: EntryFacultyTags[];
     gridProps?: GridProps;
-    handleAdd: (tag: EntryFacultyTags) => void;
-    handleRemove: (tag: EntryFacultyTags) => void;
+    handleAdd?: (tag: EntryFacultyTags) => void;
+    handleRemove?: (tag: EntryFacultyTags) => void;
 }
 
 export function tagToString(tag: EntryFacultyTags): string {
@@ -40,7 +40,7 @@ export function tagToString(tag: EntryFacultyTags): string {
 
 const TagSelector = ({ gridProps, selectedTags, handleAdd, handleRemove }: TagSelectorProps) => {
     return (
-        <Box sx={{width: 1, pb: 1}} >
+        <Box sx={{ width: 1, pb: 1 }}>
             <Grid container spacing={1} {...gridProps}>
                 {AllTags.map((e) => {
                     const selected = selectedTags.includes(e);
@@ -51,9 +51,13 @@ const TagSelector = ({ gridProps, selectedTags, handleAdd, handleRemove }: TagSe
                                 label={tagToString(e)}
                                 variant="filled"
                                 color={selected ? `primary` : `default`}
-                                style={{backgroundColor: selected ? `#7289da` : `#40444b`, color: selected ? `#fff` : `#bdbec2`}}
-                                clickable
-                                onClick={() => (selected ? handleRemove(e) : handleAdd(e))}
+                                style={{
+                                    backgroundColor: selected ? `#7289da` : `#40444b`,
+                                    color: selected ? `#fff` : `#bdbec2`,
+                                }}
+                                clickable={handleAdd !== undefined && handleRemove !== undefined}
+                                /* The clickable property ensures these functions must be defined*/
+                                onClick={() => (selected ? handleRemove!(e) : handleAdd!(e))}
                                 sx={{ borderRadius: 0.5 }}
                             />
                         </Grid>
