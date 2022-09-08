@@ -26,16 +26,6 @@ const SearchBar = () => {
 
     const debouncedSelectedTags = useDebounce(selectedTags, 300);
 
-    useEffect(() => {
-        if (debouncedSelectedTags.length === 0) {
-            handleTextSearch();
-        } else {
-            dispatch(setVisibleEntries(visibleEntries.filter(handleFilteringByTag)));
-        }
-        // It complains about missing the visibleEntries dependency
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [debouncedSelectedTags, allEntries, dispatch]);
-
     const handleFilteringByTag = useCallback(
         (entry: string): boolean => {
             if (debouncedSelectedTags.length === 0) return true;
@@ -44,6 +34,16 @@ const SearchBar = () => {
         },
         [debouncedSelectedTags, allEntries],
     );
+
+    useEffect(() => {
+        if (debouncedSelectedTags.length === 0) {
+            handleTextSearch();
+        } else {
+            dispatch(setVisibleEntries(Object.keys(allEntries).filter(handleFilteringByTag)));
+        }
+        // It complains about missing the visibleEntries dependency
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [debouncedSelectedTags, allEntries, dispatch, handleFilteringByTag]);
 
     const handleAddTag = useCallback(
         (tag: EntryFacultyTags) => {
@@ -98,14 +98,18 @@ const SearchBar = () => {
                     </div>
                     <LightTooltip title={<Typography>Search</Typography>}>
                         <span>
-                            <IconButton disabled={!searchTerm.length} onClick={handleTextSearch} sx={{color : searchTerm.length > 0 ? `#b9bbbe` : `#656565`}}>
+                            <IconButton
+                                disabled={!searchTerm.length}
+                                onClick={handleTextSearch}
+                                sx={{ color: searchTerm.length > 0 ? `#b9bbbe` : `#656565` }}
+                            >
                                 <SearchIcon />
                             </IconButton>
                         </span>
                     </LightTooltip>
                     <LightTooltip
                         placement="right"
-                        style={{color : `#b9bbbe`}}
+                        style={{ color: `#b9bbbe` }}
                         title={<Typography>{fullView ? `Hide Tags` : `Show Tags`}</Typography>}
                     >
                         <IconButton onClick={() => setFullView(!fullView)}>
