@@ -15,7 +15,7 @@ const NotFoundPage = () => {
 
     return (
         <>
-            <Container id="app" maxWidth="xl" sx={{ mt: 1 }}>
+            <Container id="app" sx={{ mt: 1 }}>
                 <Typography variant="h2">Not Found</Typography>
                 <Typography>
                     The page you were looking for does not exist, click{` `}

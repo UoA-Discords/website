@@ -22,7 +22,7 @@ const AboutPage = () => {
     }, []);
 
     return (
-        <Container maxWidth="xl" id="app" sx={{ mt: 2 }}>
+        <Container id="app" sx={{ mt: 2 }}>
             <Typography variant="h2">{text} Us</Typography>
             <Typography color="text.secondary" maxWidth="md">
                 UoA Discords is a project to make Discord servers for the University of Auckland more accessible. By

@@ -11,7 +11,7 @@ const HomePage = () => {
     return (
         <>
             <SearchBar />
-            <Container maxWidth="xl" id="app" sx={{ mt: 3 }}>
+            <Container id="app" sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                     {entryKeys.length ? (
                         entryKeys.map((e, i) => {

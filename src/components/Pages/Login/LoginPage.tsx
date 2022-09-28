@@ -118,7 +118,7 @@ const LoginPage = () => {
     ]);
 
     return (
-        <Container maxWidth="xl" id="app">
+        <Container id="app">
             {authStage === AuthStages.Loading ? (
                 <Loading />
             ) : authStage === AuthStages.Errored ? (

@@ -18,7 +18,7 @@ const SettingsPage = () => {
     const [defaultSettings] = useState(getDefaultSettings());
 
     return (
-        <Container maxWidth="xl" id="app" sx={{ mt: 2 }}>
+        <Container id="app" sx={{ mt: 2 }}>
             <Typography variant="h4" gutterBottom>
                 Settings
             </Typography>
