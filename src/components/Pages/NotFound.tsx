@@ -1,9 +1,18 @@
 import { Container, Typography } from '@mui/material';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import zombieChina from '../../images/ZombieChina.webp';
 
 const NotFoundPage = () => {
+    useEffect(() => {
+        document.body.classList.add(`hiddenScroll`);
+
+        return () => {
+            document.body.classList.remove(`hiddenScroll`);
+        };
+    }, []);
+
     return (
         <>
             <Container id="app" maxWidth="xl" sx={{ mt: 1 }}>
