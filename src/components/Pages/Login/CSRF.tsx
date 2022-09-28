@@ -2,9 +2,8 @@ import { Button, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useEffect, useState } from 'react';
 import MuiLink from '@mui/material/Link';
-import { ForceHashLink } from '../../Footer';
-import { Link } from 'react-router-dom';
 import './CSRF.css';
+import InternalLink from '../../Links/InternalLink';
 
 const CSRF = () => {
     const [waitingFor, setWaitingFor] = useState(0);
@@ -27,15 +26,13 @@ const CSRF = () => {
             <Typography textAlign="center" variant="h5" sx={{ pb: 3 }}>
                 Please{` `}
                 <MuiLink component="span">
-                    <ForceHashLink to="/about" hash="contact" style={{ color: `inherit` }}>
-                        contact us
-                    </ForceHashLink>
+                    <InternalLink href="/about#contact">contact us</InternalLink>
                 </MuiLink>
                 {` `}immediately.
             </Typography>
-            <Link to="/" style={{ textDecoration: `none`, color: `inherit` }}>
+            <InternalLink href="/" underline="none">
                 <Button variant="outlined">Go Home</Button>
-            </Link>
+            </InternalLink>
         </Stack>
     );
 };

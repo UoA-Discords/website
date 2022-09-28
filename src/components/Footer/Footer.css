@@ -5,12 +5,12 @@
     margin-top: 1em;
 }
 
-#footer a {
+#footer .link {
     color: inherit;
     text-decoration: none;
     transition: color 0.1s linear;
 }
 
-#footer a:hover {
+#footer .link:hover {
     color: #b9bbbe;
 }

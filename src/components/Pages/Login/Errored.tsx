@@ -3,10 +3,8 @@ import { ReactNode, useEffect, useState } from 'react';
 
 import tempLogo from '../../../images/tempLogo.png';
 import tempLogoGlitched from '../../../images/tempLogoGlitched.png';
-import { ForceHashLink } from '../../Footer';
-import MuiLink from '@mui/material/Link';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
+import InternalLink from '../../Links/InternalLink';
 
 const Errored = ({ error }: { error: unknown }) => {
     const [msg, setMsg] = useState<ReactNode>(<></>);
@@ -105,11 +103,7 @@ const Errored = ({ error }: { error: unknown }) => {
                     This error hasn't been seen before (lucky you!)
                     <br />
                     We recommend you take a screenshot of the console (F12 on Windows) and{` `}
-                    <MuiLink component="span">
-                        <ForceHashLink to="/about" hash="contact" style={{ color: `inherit` }}>
-                            send it to us.
-                        </ForceHashLink>
-                    </MuiLink>
+                    <InternalLink href="/about#contact">send it to us.</InternalLink>
                 </Typography>
             </>,
         );
@@ -124,9 +118,9 @@ const Errored = ({ error }: { error: unknown }) => {
             <Paper elevation={2} sx={{ textAlign: `center`, p: 2 }}>
                 {msg}
             </Paper>
-            <Link to="/" style={{ textDecoration: `none`, color: `inherit` }}>
+            <InternalLink href="/" underline="none">
                 <Button variant="outlined">Go Home</Button>
-            </Link>
+            </InternalLink>
         </Stack>
     );
 };

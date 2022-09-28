@@ -6,22 +6,26 @@ import { getAllStaff, loadAllStaff } from '../../../../redux/slices/userManager'
 import { AppDispatch } from '../../../../redux/store';
 import { SiteUser, UserPermissionLevels } from '../../../../shared/Types/User';
 import ProfilePicture from '../../../ProfilePicture';
+import LightTooltip from '../../../Tooltips/LightTooltip';
 
 const UserProfile = ({ user }: { user: SiteUser }) => {
     return (
-        <Paper sx={{ p: 1 }}>
-            <Stack direction="row" spacing={1}>
-                <ProfilePicture user={user} />
-                <Stack>
-                    <Typography sx={{ whiteSpace: `nowrap` }}>
-                        {user.username}#<span style={{ color: `gray` }}>{user.discriminator}</span>
-                    </Typography>
-                    {user.permissionLevel > UserPermissionLevels.Default && (
-                        <Typography color="#7289da">{UserPermissionLevels[user.permissionLevel]!}</Typography>
-                    )}
+        <LightTooltip title={<Typography>{user.id}</Typography>} placement="top">
+            <Paper sx={{ p: 1 }}>
+                <Stack direction="row" spacing={1}>
+                    <ProfilePicture user={user} />
+                    <Stack>
+                        <Typography sx={{ whiteSpace: `nowrap` }}>
+                            {user.username}
+                            <span style={{ color: `gray` }}>#{user.discriminator}</span>
+                        </Typography>
+                        {user.permissionLevel > UserPermissionLevels.Default && (
+                            <Typography color="#7289da">{UserPermissionLevels[user.permissionLevel]!}</Typography>
+                        )}
+                    </Stack>
                 </Stack>
-            </Stack>
-        </Paper>
+            </Paper>
+        </LightTooltip>
     );
 };
 
@@ -49,7 +53,7 @@ const OurTeam = () => {
 
     return (
         <Paper sx={{ m: 1, p: 2 }} elevation={12}>
-            <Grid container>
+            <Grid container spacing={1}>
                 {staff.map((e) => (
                     <Grid item key={e.id}>
                         <UserProfile user={e} />

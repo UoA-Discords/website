@@ -4,9 +4,10 @@ import { useCookies } from 'react-cookie';
 import { useSelector } from 'react-redux';
 import { makeDiscordLoginLink } from '../../../../helpers/makeDiscordLoginLink';
 import { getSettings } from '../../../../redux/slices/main';
-import { ForceHashLink } from '../../../Footer';
 
 import discordLoginFAQ from '../../../../images/DiscordLoginFAQ.png';
+import InternalLink from '../../../Links/InternalLink';
+import ExternalLink from '../../../Links/ExternalLink';
 
 const Question = ({ children }: { children: ReactNode }) => {
     return (
@@ -45,14 +46,9 @@ const FAQ = () => {
             <Question>How does the Discord login work?</Question>
             <Answer>
                 We use the recommended{` `}
-                <Link
-                    underline="none"
-                    href="https://discord.com/developers/docs/topics/oauth2"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                >
+                <ExternalLink href="https://discord.com/developers/docs/topics/oauth2">
                     Discord OAuth2 process
-                </Link>
+                </ExternalLink>
                 {` `}
                 for UoA Discords. The only data we receive is your username, avatar, and banner. You can even{` `}
                 <Tooltip title={<img src={discordLoginFAQ} alt="Discord login screen." height="300" />}>
@@ -63,11 +59,7 @@ const FAQ = () => {
             <Question>Can I opt-out my server from this website?</Question>
             <Answer>
                 Yes, please{` `}
-                <Link component="span" underline="hover">
-                    <ForceHashLink to="/about" hash="contact" style={{ color: `inherit` }}>
-                        contact us
-                    </ForceHashLink>
-                </Link>
+                <InternalLink href="/about#contact">contact us</InternalLink>
                 {` `}
                 to do so.
             </Answer>
