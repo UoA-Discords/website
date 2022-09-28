@@ -11,11 +11,14 @@ export interface State {
 
     /** IDs of entries to show. */
     visibleEntries: string[];
+
+    doneInitialLoad: boolean;
 }
 
 export const initialState: State = {
     entries: {},
     visibleEntries: [],
+    doneInitialLoad: false,
 };
 
 const entryManagerSlice = createSlice({
@@ -39,10 +42,14 @@ const entryManagerSlice = createSlice({
         setVisibleEntries(state, action: { payload: string[] }) {
             state.visibleEntries = action.payload;
         },
+        setDoneInitialLoad(state, action: { payload: boolean }) {
+            state.doneInitialLoad = action.payload;
+        },
     },
 });
 
-export const { addEntries, removeAllEntries, setLikedEntry, setVisibleEntries } = entryManagerSlice.actions;
+export const { addEntries, removeAllEntries, setLikedEntry, setVisibleEntries, setDoneInitialLoad } =
+    entryManagerSlice.actions;
 
 export const getAllEntries = (state: StoreState) => state.entryManager.entries;
 
@@ -56,6 +63,8 @@ export const getVisibleEntriesByLikes = (state: StoreState) => {
     }); // sort the entries by the number of likes
     return sortedEntries;
 };
+
+export const getDoneInitialLoad = (state: StoreState) => state.entryManager.doneInitialLoad;
 
 export const loadAllEntries = createAsyncThunk(`entryManager/loadEntries`, async (_, { dispatch, getState }) => {
     try {
@@ -91,6 +100,8 @@ export const loadAllEntries = createAsyncThunk(`entryManager/loadEntries`, async
         } else {
             console.error(error);
         }
+    } finally {
+        dispatch(setDoneInitialLoad(true));
     }
 });
 

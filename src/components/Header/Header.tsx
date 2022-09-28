@@ -1,6 +1,6 @@
 import { Fade, Grow, Paper, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import './Header.css';
 
 import tempLogo from '../../images/uoadiscbirdopacity.png';
@@ -8,8 +8,14 @@ import tempLogo from '../../images/uoadiscbirdopacity.png';
 import DiscordLoginButton from '../Buttons/DiscordLogin';
 import { useSiteLogin } from '../../hooks/useSiteLogin';
 import DiscordAccountButton from '../Buttons/DiscordAccount';
+import { useSelector } from 'react-redux';
+import { getAllEntries, getDoneInitialLoad, getVisibleEntries } from '../../redux/slices/entryManager';
 
 const Header = () => {
+    const allEntries = useSelector(getAllEntries);
+    const visibleEntryNames = useSelector(getVisibleEntries);
+    const doneInitialLoad = useSelector(getDoneInitialLoad);
+
     const { loginResponse } = useSiteLogin();
 
     const theme = useTheme();
@@ -18,6 +24,21 @@ const Header = () => {
     const hideText = useMediaQuery(theme.breakpoints.down(`sm`));
 
     const [logoHover, setLogoHover] = useState(false);
+
+    const text = useMemo(() => {
+        const numAllEntries = Object.keys(allEntries).length;
+        const numVisibleEntries = visibleEntryNames.length;
+
+        if (!doneInitialLoad) {
+            return `Your catalogue for the University of Auckland's Discord servers.`;
+        }
+
+        if (Object.keys(allEntries).length === visibleEntryNames.length) {
+            return `Your catalogue for the ${numAllEntries} University of Auckland's Discord servers.`;
+        }
+
+        return `Displaying ${numVisibleEntries} of ${numAllEntries} servers.`;
+    }, [allEntries, doneInitialLoad, visibleEntryNames.length]);
 
     return (
         <Paper id="header" elevation={0} square>
@@ -37,9 +58,7 @@ const Header = () => {
                     )}
                     {!hideText && (
                         <Fade in timeout={{ enter: theme.transitions.duration.enteringScreen * 4 }}>
-                            <Typography sx={{ color: `gray` }}>
-                                Your catalogue for the University of Auckland's Discord servers.
-                            </Typography>
+                            <Typography sx={{ color: `gray` }}>{text}</Typography>
                         </Fade>
                     )}
                 </div>
