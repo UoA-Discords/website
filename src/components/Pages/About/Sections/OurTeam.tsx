@@ -2,18 +2,16 @@ import { Grid, LinearProgress, Paper, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProfilePicture } from '../../../../helpers/getProfilePicture';
 import { getAllStaff, loadAllStaff } from '../../../../redux/slices/userManager';
 import { AppDispatch } from '../../../../redux/store';
 import { SiteUser, UserPermissionLevels } from '../../../../shared/Types/User';
+import ProfilePicture from '../../../ProfilePicture';
 
 const UserProfile = ({ user }: { user: SiteUser }) => {
-    const { alt, src } = getProfilePicture(user);
-
     return (
         <Paper sx={{ p: 1 }}>
             <Stack direction="row" spacing={1}>
-                <img width="64" height="64" src={src} alt={alt} className="discordProfilePicture" />
+                <ProfilePicture user={user} />
                 <Stack>
                     <Typography sx={{ whiteSpace: `nowrap` }}>
                         {user.username}#<span style={{ color: `gray` }}>{user.discriminator}</span>

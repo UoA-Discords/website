@@ -1,13 +1,11 @@
 import { ListItemButton, Stack, Collapse, Typography } from '@mui/material';
 import { useState } from 'react';
-import { getProfilePicture } from '../../../helpers/getProfilePicture';
 import { LoginResponse } from '../../../hooks/useSiteLogin';
+import ProfilePicture from '../../ProfilePicture';
 import ManageAccountPage from './ManageAccountPage';
 
 const DiscordAccountButton = ({ loginResponse }: { loginResponse: LoginResponse }) => {
     const [isHovered, setIsHovered] = useState<boolean>(false);
-
-    const { src, alt } = getProfilePicture(loginResponse.userData);
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -24,7 +22,7 @@ const DiscordAccountButton = ({ loginResponse }: { loginResponse: LoginResponse 
         >
             <ListItemButton sx={{ borderRadius: `0 0 0 1rem` }} onClick={() => setIsOpen(!isOpen)}>
                 <Stack direction="row" spacing={1} alignItems="center">
-                    <img src={src} alt={alt} className="discordProfilePicture" height="64" width="64" />
+                    <ProfilePicture user={loginResponse.userData} />
                     <Collapse in={isHovered} orientation="horizontal" sx={{ whiteSpace: `nowrap` }}>
                         {loginResponse.userData.username}
                         <Typography variant="body1" color="gray" sx={{ whiteSpace: `nowrap` }}>
