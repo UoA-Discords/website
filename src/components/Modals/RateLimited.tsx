@@ -47,7 +47,7 @@ const RateLimitedModal = () => {
     if (rateLimit === null) return <></>;
 
     return (
-        <Modal open>
+        <Modal open disableScrollLock>
             <Box sx={style}>
                 <Stack direction="row" alignItems="center" spacing={2}>
                     <WarningAmberIcon color="warning" fontSize="large" />

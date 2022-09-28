@@ -20,7 +20,7 @@ const ExitingSiteModal = ({ open, handleClose, href }: { open: boolean; handleCl
     const url = useMemo(() => new URL(href), [href]);
 
     return (
-        <Modal open={open} onClose={handleClose}>
+        <Modal open={open} onClose={handleClose} disableScrollLock>
             <Box sx={style}>
                 <Stack direction="column" alignItems="center" spacing={1}>
                     <Stack direction="row" alignItems="center" spacing={2}>
