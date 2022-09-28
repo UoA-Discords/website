@@ -5,7 +5,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import './SearchBar.css';
 import LightTooltip from '../Tooltips/LightTooltip';
 import TagSelector from '../TagSelector';
-import { EntryFacultyTags } from '../../shared/Types/Entries';
+import { EntryFacultyTags, EntryStates, FullEntry } from '../../shared/Types/Entries';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -22,24 +22,32 @@ const SearchBar = () => {
 
     const [selectedTags, setSelectedTags] = useState<EntryFacultyTags[]>([]);
 
-    const handleFilteringByTag = useCallback(
-        (entry: string): boolean => {
-            if (selectedTags.length === 0) return true;
-            const approvedEntry = allEntries[entry]!;
-            return approvedEntry.facultyTags.some((tag) => selectedTags.includes(tag));
-        },
-        [selectedTags, allEntries],
-    );
+    const doSearch = useCallback(() => {
+        const finalSearchTerm = searchTerm.trim().toLowerCase();
+
+        type SearchFunction = (e: FullEntry<EntryStates.Approved | EntryStates.Featured>) => boolean;
+
+        const matchesText: SearchFunction = (entry) => {
+            if (entry.guildData.name.toLowerCase().includes(finalSearchTerm)) return true;
+            if (entry.inviteCode.toLowerCase().includes(finalSearchTerm)) return true;
+            return false;
+        };
+
+        const matchesAllTags: SearchFunction = (entry) => selectedTags.every((e) => entry.facultyTags.includes(e));
+
+        dispatch(
+            setVisibleEntries(
+                Object.keys(allEntries).filter((id) => {
+                    const entry = allEntries[id];
+                    return matchesText(entry) && matchesAllTags(entry);
+                }),
+            ),
+        );
+    }, [allEntries, dispatch, searchTerm, selectedTags]);
 
     useEffect(() => {
-        if (selectedTags.length === 0) {
-            handleTextSearch();
-        } else {
-            dispatch(setVisibleEntries(Object.keys(allEntries).filter(handleFilteringByTag)));
-        }
-        // It complains about missing the visibleEntries dependency
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedTags, allEntries, dispatch, handleFilteringByTag]);
+        doSearch();
+    }, [doSearch, selectedTags]);
 
     const handleAddTag = useCallback(
         (tag: EntryFacultyTags) => {
@@ -57,25 +65,6 @@ const SearchBar = () => {
         [selectedTags],
     );
 
-    const handleTextSearch = useCallback(() => {
-        const finalSearchTerm = searchTerm.trim().toLowerCase();
-        const filteredEntries =
-            finalSearchTerm.length === 0
-                ? Object.keys(allEntries)
-                : Object.keys(allEntries).filter((e) => {
-                      const entry = allEntries[e]!;
-                      if (entry.guildData.name.toLowerCase().includes(finalSearchTerm)) return true;
-                      if (entry.inviteCode.toLowerCase().includes(finalSearchTerm)) return true;
-                      return false;
-                  });
-
-        if (selectedTags.length === 0) {
-            dispatch(setVisibleEntries(filteredEntries));
-        } else {
-            dispatch(setVisibleEntries(filteredEntries.filter(handleFilteringByTag)));
-        }
-    }, [searchTerm, allEntries, selectedTags.length, dispatch, handleFilteringByTag]);
-
     return (
         <Paper elevation={2} square>
             <Stack direction="column" sx={{ ml: `0.5rem`, mr: `0.5rem` }}>
@@ -88,7 +77,7 @@ const SearchBar = () => {
                             placeholder="Search for a Discord Server..."
                             onChange={(e) => setSearchTerm(e.target.value)}
                             onKeyDown={(e) => {
-                                if (e.key === `Enter`) handleTextSearch();
+                                if (e.key === `Enter`) doSearch();
                             }}
                         />
                     </div>
@@ -96,7 +85,7 @@ const SearchBar = () => {
                         <span>
                             <IconButton
                                 disabled={!searchTerm.length}
-                                onClick={handleTextSearch}
+                                onClick={doSearch}
                                 sx={{ color: searchTerm.length > 0 ? `#b9bbbe` : `#656565` }}
                             >
                                 <SearchIcon />
