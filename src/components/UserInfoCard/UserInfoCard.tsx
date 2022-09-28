@@ -1,23 +1,27 @@
-import { Paper, Tooltip, Typography } from '@mui/material';
-import { Stack } from '@mui/system';
-import { ReactElement } from 'react';
+import { Paper, Tooltip, TooltipProps, Typography } from '@mui/material';
+import { Stack, Link } from '@mui/material';
 import { BasicUserInfo, UserPermissionLevels } from '../../shared/Types/User';
 import ProfilePicture from '../ProfilePicture';
 
-const UserInfoCard = ({ user, children }: { user: BasicUserInfo; children: ReactElement }) => {
+export interface UserInfoCardProps extends Omit<TooltipProps, `title` | `children`> {
+    user: BasicUserInfo;
+}
+
+const UserInfoCard = (props: UserInfoCardProps) => {
+    const { user } = props;
     return (
         <Tooltip
-            children={children}
             enterDelay={0}
             TransitionProps={{ timeout: 0 }}
             components={{ Tooltip: Paper }}
             title={
-                <Paper sx={{ p: 1, mt: 1 }} variant="outlined" square>
+                <Paper sx={{ p: 1, m: 1 }} variant="outlined" square>
                     <Stack direction="row" spacing={1}>
                         <ProfilePicture user={user} />
                         <Stack>
                             <Typography sx={{ whiteSpace: `nowrap` }}>
-                                {user.username}#<span style={{ color: `gray` }}>{user.discriminator}</span>
+                                {user.username}
+                                <span style={{ color: `gray` }}>#{user.discriminator}</span>
                             </Typography>
                             {user.permissionLevel > UserPermissionLevels.Default && (
                                 <Typography color="#7289da">{UserPermissionLevels[user.permissionLevel]!}</Typography>
@@ -26,7 +30,14 @@ const UserInfoCard = ({ user, children }: { user: BasicUserInfo; children: React
                     </Stack>
                 </Paper>
             }
-        />
+            {...props}
+        >
+            <Link underline="none" sx={{ cursor: `help` }} component="span">
+                <ProfilePicture user={user} height={20} width={20} style={{ marginBottom: `-4px` }} />
+                &nbsp;
+                {user.username}
+            </Link>
+        </Tooltip>
     );
 };
 
