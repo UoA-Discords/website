@@ -35,7 +35,7 @@ const FAQ = () => {
             <Question>Can I put a server on here?</Question>
             <Answer>
                 Of course! To do this make sure you are{` `}
-                <Link underline="none" sx={{ cursor: `pointer` }} onClick={handleClick}>
+                <Link underline="hover" sx={{ cursor: `pointer` }} onClick={handleClick}>
                     logged in
                 </Link>
                 , click on your profile icon in the top-right, and press the "Add Server" button.
@@ -56,16 +56,14 @@ const FAQ = () => {
                 {` `}
                 for UoA Discords. The only data we receive is your username, avatar, and banner. You can even{` `}
                 <Tooltip title={<img src={discordLoginFAQ} alt="Discord login screen." height="300" />}>
-                    <Link sx={{ cursor: `pointer` }} underline="none">
-                        verify this yourself
-                    </Link>
+                    <span style={{ cursor: `help`, color: `#7289DA` }}>verify this yourself</span>
                 </Tooltip>
                 {` `}when logging in.
             </Answer>
             <Question>Can I opt-out my server from this website?</Question>
             <Answer>
                 Yes, please{` `}
-                <Link component="span" underline="none">
+                <Link component="span" underline="hover">
                     <ForceHashLink to="/about" hash="contact" style={{ color: `inherit` }}>
                         contact us
                     </ForceHashLink>

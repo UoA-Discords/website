@@ -45,7 +45,7 @@ const AboutPage = () => {
             </Typography>
             <Paper sx={{ m: 1, p: 2 }} elevation={12}>
                 Please behave responsibly while using UoA Discords by following the Discord{` `}
-                <Link underline="none" href="https://discord.com/guidelines" target="_blank" rel="noreferrer noopener">
+                <Link underline="hover" href="https://discord.com/guidelines" target="_blank" rel="noreferrer noopener">
                     community guidelines
                 </Link>
                 . Exploiting or otherwise abusing our services may lead to your IP being ratelimited, having
@@ -57,7 +57,7 @@ const AboutPage = () => {
             </Typography>
             <Paper sx={{ m: 1, p: 2 }} elevation={12}>
                 You can contact us through our{` `}
-                <Link underline="none" href="https://discord.gg/XmdRWSCy2U" target="_blank" rel="noreferrer noopener">
+                <Link underline="hover" href="https://discord.gg/XmdRWSCy2U" target="_blank" rel="noreferrer noopener">
                     Discord server
                 </Link>
                 . We encourage you to do so if you have:
