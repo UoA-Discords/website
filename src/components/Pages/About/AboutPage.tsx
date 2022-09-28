@@ -2,6 +2,7 @@ import { Link, Paper, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import { useState } from 'react';
 import MakeSectionLinkButton from '../../Buttons/MakeSectionLink';
+import ExternalLink from '../../Links/ExternalLink';
 
 import FAQ from './Sections/FAQ';
 import OurTeam from './Sections/OurTeam';
@@ -49,10 +50,8 @@ const AboutPage = () => {
             </Typography>
             <Paper sx={{ m: 1, p: 2 }} elevation={12}>
                 You can contact us through our{` `}
-                <Link underline="hover" href="https://discord.gg/XmdRWSCy2U" target="_blank" rel="noreferrer noopener">
-                    Discord server
-                </Link>
-                . We encourage you to do so if you have:
+                <ExternalLink href="https://discord.gg/XmdRWSCy2U">Discord server</ExternalLink>. We encourage you to do
+                so if you have:
                 <ul>
                     <li>A bug or vulnerability to report</li>
                     <li>Feedback to give</li>

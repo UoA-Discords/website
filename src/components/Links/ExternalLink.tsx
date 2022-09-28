@@ -3,7 +3,7 @@ import { Link, SxProps, Theme } from '@mui/material';
 import ExitingSiteModal from '../Modals/ExitingSite';
 
 /** URL's with hostnames equal to any of these are exempt from showing a warning when clicked on. */
-const whitelistedSites = new Set([`discord.com`, `localhost`]);
+const whitelistedSites = new Set([`discord.com`, `discord.gg`, `localhost`]);
 
 /** A link to a page on a different site. */
 const ExternalLink = ({
