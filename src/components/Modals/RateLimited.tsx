@@ -11,7 +11,7 @@ const style: SxProps = {
     top: `50%`,
     left: `50%`,
     transform: `translate(-50%, -50%)`,
-    width: 400,
+    width: `max(400, 90%)`,
     bgcolor: `background.paper`,
     border: `2px solid #333`,
     boxShadow: 24,
