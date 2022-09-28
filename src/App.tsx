@@ -13,6 +13,7 @@ import { AppDispatch } from './redux/store';
 import HomePage from './components/Pages/Home';
 import RateLimitedModal from './components/Modals/RateLimited';
 import SettingsPage from './components/Pages/Settings';
+import FocusedServerModal from './components/Modals/FocusedServer';
 
 const ScrollRestoration = () => {
     const { pathname } = useLocation();
@@ -41,6 +42,7 @@ const App = () => {
             <ScrollRestoration />
             <Header />
             <RateLimitedModal />
+            <FocusedServerModal />
             <Routes>
                 <Route index element={<HomePage />} />
                 <Route path="about" element={<AboutPage />} />
