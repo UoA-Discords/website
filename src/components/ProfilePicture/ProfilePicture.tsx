@@ -1,8 +1,18 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { BasicUserInfo } from '../../shared/Types/User';
 import discordIcon from '../../images/discordIcon.svg';
 
-const ProfilePicture = ({ user, width, height }: { user: BasicUserInfo; width?: number; height?: number }) => {
+const ProfilePicture = ({
+    user,
+    width,
+    height,
+    style,
+}: {
+    user: BasicUserInfo;
+    width?: number;
+    height?: number;
+    style?: React.CSSProperties;
+}) => {
     const [avatar, setAvatar] = useState(user.avatar);
 
     if (avatar !== null) {
@@ -12,7 +22,7 @@ const ProfilePicture = ({ user, width, height }: { user: BasicUserInfo; width?: 
                 height={height ?? 64}
                 src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`}
                 alt={`${user.username}'s Discord profile`}
-                style={{ borderRadius: `50%` }}
+                style={{ borderRadius: `50%`, ...style }}
                 onError={() => setAvatar(null)}
             />
         );
@@ -22,7 +32,7 @@ const ProfilePicture = ({ user, width, height }: { user: BasicUserInfo; width?: 
         <img
             width={width ?? 64}
             height={height ?? 64}
-            style={{ padding: `0.2em` }}
+            style={{ padding: `0.2em`, ...style }}
             src={discordIcon}
             alt="Discord logo"
         />
