@@ -1,4 +1,4 @@
-import { Button, Card, CardActionArea, CardContent, CardMedia, Grow, Typography } from '@mui/material';
+import { Button, Card, CardActionArea, CardContent, CardMedia, Grow, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { EntryStates, FullEntry } from '../../../shared/Types/Entries';
 
@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setLikedEntry } from '../../../redux/slices/entryManager';
 import { digestRateLimitResponse } from '../../../helpers/digestRateLimitResponse';
 import { getSettings, setRateLimit } from '../../../redux/slices/main';
+import FacultyTag from '../../TagSelector/FacultyTag';
 
 const ServerCard = ({
     server,
@@ -94,6 +95,11 @@ const ServerCard = ({
                             {server.memberCountHistory.at(-1)?.[1] ?? `-`} Members (
                             {server.memberCountHistory.at(-1)?.[0] ?? `-`} Online)
                         </Typography>
+                        <Stack direction="row" gap={1} mt={0.5}>
+                            {server.facultyTags.map((tag, i) => (
+                                <FacultyTag tag={tag} key={i} />
+                            ))}
+                        </Stack>
                     </CardContent>
                     <Button
                         component="span"

@@ -1,11 +1,11 @@
 import { InputUnstyled } from '@mui/base';
 import { Collapse, IconButton, Paper, Stack, Typography } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import './SearchBar.css';
 import LightTooltip from '../Tooltips/LightTooltip';
 import TagSelector from '../TagSelector';
-import { EntryFacultyTags } from '../../shared/Types/Entries';
+import { EntryFacultyTags, EntryStates, FullEntry } from '../../shared/Types/Entries';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -21,6 +21,33 @@ const SearchBar = () => {
     const [searchTerm, setSearchTerm] = useState(``);
 
     const [selectedTags, setSelectedTags] = useState<EntryFacultyTags[]>([]);
+
+    const doSearch = useCallback(() => {
+        const finalSearchTerm = searchTerm.trim().toLowerCase();
+
+        type SearchFunction = (e: FullEntry<EntryStates.Approved | EntryStates.Featured>) => boolean;
+
+        const matchesText: SearchFunction = (entry) => {
+            if (entry.guildData.name.toLowerCase().includes(finalSearchTerm)) return true;
+            if (entry.inviteCode.toLowerCase().includes(finalSearchTerm)) return true;
+            return false;
+        };
+
+        const matchesAllTags: SearchFunction = (entry) => selectedTags.every((e) => entry.facultyTags.includes(e));
+
+        dispatch(
+            setVisibleEntries(
+                Object.keys(allEntries).filter((id) => {
+                    const entry = allEntries[id];
+                    return matchesText(entry) && matchesAllTags(entry);
+                }),
+            ),
+        );
+    }, [allEntries, dispatch, searchTerm, selectedTags]);
+
+    useEffect(() => {
+        doSearch();
+    }, [doSearch, selectedTags]);
 
     const handleAddTag = useCallback(
         (tag: EntryFacultyTags) => {
@@ -38,25 +65,6 @@ const SearchBar = () => {
         [selectedTags],
     );
 
-    const handleTextSearch = useCallback(() => {
-        const finalSearchTerm = searchTerm.trim().toLowerCase();
-
-        if (finalSearchTerm.length === 0) {
-            dispatch(setVisibleEntries(Object.keys(allEntries)));
-        } else {
-            dispatch(
-                setVisibleEntries(
-                    Object.keys(allEntries).filter((e) => {
-                        const entry = allEntries[e]!;
-                        if (entry.guildData.name.toLowerCase().includes(finalSearchTerm)) return true;
-                        if (entry.inviteCode.toLowerCase().includes(finalSearchTerm)) return true;
-                        return false;
-                    }),
-                ),
-            );
-        }
-    }, [allEntries, dispatch, searchTerm]);
-
     return (
         <Paper elevation={2} square>
             <Stack direction="column" sx={{ ml: `0.5rem`, mr: `0.5rem` }}>
@@ -69,20 +77,24 @@ const SearchBar = () => {
                             placeholder="Search for a Discord Server..."
                             onChange={(e) => setSearchTerm(e.target.value)}
                             onKeyDown={(e) => {
-                                if (e.key === `Enter`) handleTextSearch();
+                                if (e.key === `Enter`) doSearch();
                             }}
                         />
                     </div>
                     <LightTooltip title={<Typography>Search</Typography>}>
                         <span>
-                            <IconButton disabled={!searchTerm.length} onClick={handleTextSearch} sx={{color : searchTerm.length > 0 ? `#b9bbbe` : `#656565`}}>
+                            <IconButton
+                                disabled={!searchTerm.length}
+                                onClick={doSearch}
+                                sx={{ color: searchTerm.length > 0 ? `#b9bbbe` : `#656565` }}
+                            >
                                 <SearchIcon />
                             </IconButton>
                         </span>
                     </LightTooltip>
                     <LightTooltip
                         placement="right"
-                        style={{color : `#b9bbbe`}}
+                        style={{ color: `#b9bbbe` }}
                         title={<Typography>{fullView ? `Hide Tags` : `Show Tags`}</Typography>}
                     >
                         <IconButton onClick={() => setFullView(!fullView)}>
