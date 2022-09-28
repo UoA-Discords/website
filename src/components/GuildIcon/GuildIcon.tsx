@@ -11,8 +11,7 @@ const GuildIcon = ({ server }: { server: FullEntry<EntryStates.Approved | EntryS
             <CardMedia
                 component="img"
                 image={`https://cdn.discordapp.com/icons/${server.id}/${server.guildData.icon}`}
-                sx={{ width: 128, p: 1 }}
-                className="discordProfilePicture"
+                sx={{ width: 128, p: 1, borderRadius: `50%` }}
                 onError={() => setErrored(true)}
             />
         );
