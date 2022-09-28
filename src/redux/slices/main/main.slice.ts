@@ -5,7 +5,7 @@ import { Settings } from '../../../types/Settings';
 import { StoreState } from '../../store';
 
 export interface State {
-    rateLimit: null | RateLimitInfo;
+    rateLimit: RateLimitInfo | null;
     settings: Settings;
 }
 
