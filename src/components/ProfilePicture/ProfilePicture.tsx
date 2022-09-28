@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { BasicUserInfo } from '../../shared/Types/User';
 import discordIcon from '../../images/discordIcon.svg';
 

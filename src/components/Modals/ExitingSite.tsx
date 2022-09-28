@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Box, Modal, Stack, SxProps, Typography, Button } from '@mui/material';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import ExternalLink from '../Links/ExternalLink';

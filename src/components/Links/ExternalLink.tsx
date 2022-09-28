@@ -1,5 +1,5 @@
 import React, { ReactNode, useMemo, useState } from 'react';
-import { Link } from '@mui/material';
+import { Link, SxProps, Theme } from '@mui/material';
 import ExitingSiteModal from '../Modals/ExitingSite';
 
 /** URL's with hostnames equal to any of these are exempt from showing a warning when clicked on. */
@@ -16,7 +16,7 @@ const ExternalLink = ({
 }: {
     href: string;
     children: ReactNode;
-    style?: React.CSSProperties;
+    style?: SxProps<Theme>;
     underline?: `none` | `hover` | `always`;
     target?: React.HTMLAttributeAnchorTarget;
     skipMask?: boolean;

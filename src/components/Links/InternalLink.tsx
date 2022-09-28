@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import StyledLink from '@mui/material/Link';
+import { Link as StyledLink, SxProps, Theme } from '@mui/material';
 
 /** A link to a page on the same site. */
 const InternalLink = ({
@@ -11,7 +11,7 @@ const InternalLink = ({
 }: {
     href: string;
     children: ReactNode;
-    style?: React.CSSProperties;
+    style?: SxProps<Theme>;
     underline?: `none` | `hover` | `always`;
 }) => {
     return (

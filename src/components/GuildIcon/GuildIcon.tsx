@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import tempLogo from '../../images/tempLogo.png';
 import { EntryStates, FullEntry } from '../../shared/Types/Entries';
 import { CardMedia } from '@mui/material';
