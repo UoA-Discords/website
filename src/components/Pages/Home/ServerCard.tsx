@@ -1,4 +1,4 @@
-import { Button, Card, CardActionArea, CardContent, CardMedia, Grow, Stack, Typography } from '@mui/material';
+import { Button, Card, CardActionArea, CardContent, Grow, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { EntryStates, FullEntry } from '../../../shared/Types/Entries';
 
@@ -13,6 +13,7 @@ import { setLikedEntry } from '../../../redux/slices/entryManager';
 import { digestRateLimitResponse } from '../../../helpers/digestRateLimitResponse';
 import { getSettings, setRateLimit } from '../../../redux/slices/main';
 import FacultyTag from '../../TagSelector/FacultyTag';
+import GuildIcon from '../../GuildIcon';
 
 const ServerCard = ({
     server,
@@ -83,12 +84,7 @@ const ServerCard = ({
         <Grow in={shouldFadeIn}>
             <Card sx={{ position: `relative`, zIndex: 1, height: `100%` }}>
                 <CardActionArea disableRipple sx={{ display: `flex`, justifyContent: `flex-start`, height: `100%` }}>
-                    <CardMedia
-                        component="img"
-                        image={`https://cdn.discordapp.com/icons/${server.id}/${server.guildData.icon}`}
-                        sx={{ width: 128, p: 1 }}
-                        className="discordProfilePicture"
-                    />
+                    <GuildIcon server={server} />
                     <CardContent sx={{ flexGrow: 1 }}>
                         <Typography variant="h5">{server.guildData.name}</Typography>
                         <Typography color="text.secondary">
@@ -97,7 +93,7 @@ const ServerCard = ({
                         </Typography>
                         <Stack direction="row" gap={1} mt={0.5}>
                             {server.facultyTags.map((tag, i) => (
-                                <FacultyTag tag={tag} key={i} />
+                                <FacultyTag tag={tag} />
                             ))}
                         </Stack>
                     </CardContent>
