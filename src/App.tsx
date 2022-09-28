@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import Footer from './components/Footer';
 import AboutPage from './components/Pages/About';
 import Header from './components/Header';
@@ -14,6 +14,21 @@ import HomePage from './components/Pages/Home';
 import RateLimitedModal from './components/Modals/RateLimited';
 import SettingsPage from './components/Pages/Settings';
 
+const ScrollRestoration = () => {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        const locationHash = window.location.hash;
+        if (locationHash !== ``) {
+            const element = document.getElementById(locationHash.slice(1));
+            element?.scrollIntoView({ behavior: `smooth` });
+        }
+    }, [pathname]);
+
+    return <></>;
+};
+
 const App = () => {
     const dispatch = useDispatch<AppDispatch>();
 
@@ -23,6 +38,7 @@ const App = () => {
 
     return (
         <BrowserRouter>
+            <ScrollRestoration />
             <Header />
             <RateLimitedModal />
             <Routes>
