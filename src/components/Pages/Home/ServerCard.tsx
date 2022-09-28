@@ -93,7 +93,7 @@ const ServerCard = ({
                         </Typography>
                         <Stack direction="row" gap={1} mt={0.5}>
                             {server.facultyTags.map((tag, i) => (
-                                <FacultyTag tag={tag} />
+                                <FacultyTag tag={tag} key={i} />
                             ))}
                         </Stack>
                     </CardContent>
