@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 
-// Modified from: https://usehooks.com/useDebounce/
+/** @see {@link https://usehooks.com/useDebounce/} */
 function useDebounce<T>(value: T, delay: number) {
     // State and setters for debounced value
     const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
     useEffect(
         () => {
             // Update debounced value after delay
@@ -19,6 +20,7 @@ function useDebounce<T>(value: T, delay: number) {
         },
         [value, delay], // Only re-call effect if value or delay changes
     );
+
     return debouncedValue;
 }
 
