@@ -14,6 +14,7 @@ import { digestRateLimitResponse } from '../../../helpers/digestRateLimitRespons
 import { getSettings, setRateLimit } from '../../../redux/slices/main';
 import FacultyTag from '../../TagSelector/FacultyTag';
 import GuildIcon from '../../GuildIcon';
+import ServerFoundModal from '../../Modals/FocusedServer/ServerFound';
 
 const ServerCard = ({
     server,
@@ -32,47 +33,54 @@ const ServerCard = ({
         [loginResponse?.userData.likes, server.id],
     );
 
-    const handleLike = useCallback(() => {
-        if (loginResponse === undefined) return;
-        const controller = new AbortController();
+    const handleLike = useCallback(
+        (e: React.MouseEvent) => {
+            e.stopPropagation();
 
-        const requestObject: AxiosRequestConfig = {
-            method: `patch`,
-            baseURL: settings.serverUrl,
-            url: `/entries/${server.id}/likes`,
-            signal: controller.signal,
-            data: {
-                like: likeIndex === -1,
-            },
-            headers: {
-                Authorization: `Bearer ${loginResponse.siteAuth}`,
-            },
-        };
+            if (loginResponse === undefined) return;
+            const controller = new AbortController();
 
-        if (settings.rateLimitBypassToken !== undefined) {
-            requestObject.headers![`RateLimit-Bypass-Token`] = settings.rateLimitBypassToken;
-        }
+            const requestObject: AxiosRequestConfig = {
+                method: `patch`,
+                baseURL: settings.serverUrl,
+                url: `/entries/${server.id}/likes`,
+                signal: controller.signal,
+                data: {
+                    like: likeIndex === -1,
+                },
+                headers: {
+                    Authorization: `Bearer ${loginResponse.siteAuth}`,
+                },
+            };
 
-        axios
-            .request<void>(requestObject)
-            .then(() => {
-                if (likeIndex === -1) loginResponse.userData.likes.push(server.id);
-                else loginResponse.userData.likes.splice(likeIndex, 1);
+            if (settings.rateLimitBypassToken !== undefined) {
+                requestObject.headers![`RateLimit-Bypass-Token`] = settings.rateLimitBypassToken;
+            }
 
-                dispatch(setLikedEntry({ id: server.id, like: likeIndex === -1 }));
-                setUserData({ ...loginResponse });
-            })
-            .catch((e) => {
-                const r = digestRateLimitResponse(e);
-                if (r !== null) {
-                    dispatch(setRateLimit(r));
-                } else {
-                    console.error(e);
-                }
-            });
+            axios
+                .request<void>(requestObject)
+                .then(() => {
+                    if (likeIndex === -1) loginResponse.userData.likes.push(server.id);
+                    else loginResponse.userData.likes.splice(likeIndex, 1);
 
-        return () => controller.abort();
-    }, [dispatch, likeIndex, loginResponse, server.id, setUserData, settings.rateLimitBypassToken, settings.serverUrl]);
+                    dispatch(setLikedEntry({ id: server.id, like: likeIndex === -1 }));
+                    setUserData({ ...loginResponse });
+                })
+                .catch((e) => {
+                    const r = digestRateLimitResponse(e);
+                    if (r !== null) {
+                        dispatch(setRateLimit(r));
+                    } else {
+                        console.error(e);
+                    }
+                });
+
+            return () => controller.abort();
+        },
+        [dispatch, likeIndex, loginResponse, server.id, setUserData, settings.rateLimitBypassToken, settings.serverUrl],
+    );
+
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         const timeout = setTimeout(() => setShouldFadeIn(true), index * 40);
@@ -83,13 +91,17 @@ const ServerCard = ({
     return (
         <Grow in={shouldFadeIn}>
             <Card sx={{ position: `relative`, zIndex: 1, height: `100%` }}>
-                <CardActionArea disableRipple sx={{ display: `flex`, justifyContent: `flex-start`, height: `100%` }}>
+                <CardActionArea
+                    disableRipple
+                    sx={{ display: `flex`, justifyContent: `flex-start`, height: `100%` }}
+                    onClick={() => setOpen(true)}
+                >
                     <GuildIcon server={server} />
                     <CardContent sx={{ flexGrow: 1 }}>
                         <Typography variant="h5">{server.guildData.name}</Typography>
                         <Typography color="text.secondary">
-                            {server.memberCountHistory.at(-1)?.[1] ?? `-`} Members (
-                            {server.memberCountHistory.at(-1)?.[0] ?? `-`} Online)
+                            {server.memberCountHistory.at(-1)?.[1] ?? `?`} Members (
+                            {server.memberCountHistory.at(-1)?.[0] ?? `?`} Online)
                         </Typography>
                         <Stack direction="row" gap={1} mt={0.5}>
                             {server.facultyTags.map((tag, i) => (
@@ -115,39 +127,10 @@ const ServerCard = ({
                         {server.likes}
                     </Button>
                 </CardActionArea>
+                <ServerFoundModal entry={server} open={open} onClose={() => setOpen(false)} />
             </Card>
         </Grow>
     );
-
-    // return (
-    //     <Fade in={shouldFadeIn}>
-    //         <Card sx={{ height: `100%`, width: `100%` }}>
-    //             <CardActionArea disableRipple sx={{ display: `flex`, p: 1, width: `100%`, height: `100%` }}>
-    //                 <CardMedia
-    //                     component="img"
-    //                     image={`https://cdn.discordapp.com/icons/${server.id}/${server.guildData.icon}`}
-    //                     sx={{ width: 128 }}
-    //                     className="discordProfilePicture"
-    //                 />
-    //                 <Box sx={{ display: `flex`, flexDirection: `column`, flexGrow: 1 }}>
-    //                     <CardContent sx={{ flex: `1 0 auto` }}>
-    //                         <Typography component="div" variant="h5">
-    //                             {server.guildData.name}
-    //                         </Typography>
-    //                         <Typography variant="subtitle1" color="text.secondary" component="div">
-    //                             {server.memberCountHistory.at(-1)?.[1] ?? `-`} Members (
-    //                             {server.memberCountHistory.at(-1)?.[0] ?? `-`} Online)
-    //                         </Typography>
-    //                         <span style={{ color: `gray` }}>
-    //                             {server.facultyTags.map((e) => tagToString(e)).join(`, `)}
-    //                         </span>
-    //                         <Button component="span">{server.likes}</Button>
-    //                     </CardContent>
-    //                 </Box>
-    //             </CardActionArea>
-    //         </Card>
-    //     </Fade>
-    // );
 };
 
 export default ServerCard;
