@@ -11,7 +11,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllEntries, setVisibleEntries } from '../../redux/slices/entryManager';
-import useDebounce from '../../hooks/useDebounce';
 
 const SearchBar = () => {
     const dispatch = useDispatch();
@@ -23,26 +22,24 @@ const SearchBar = () => {
 
     const [selectedTags, setSelectedTags] = useState<EntryFacultyTags[]>([]);
 
-    const debouncedSelectedTags = useDebounce(selectedTags, 300);
-
     const handleFilteringByTag = useCallback(
         (entry: string): boolean => {
-            if (debouncedSelectedTags.length === 0) return true;
+            if (selectedTags.length === 0) return true;
             const approvedEntry = allEntries[entry]!;
-            return approvedEntry.facultyTags.some((tag) => debouncedSelectedTags.includes(tag));
+            return approvedEntry.facultyTags.some((tag) => selectedTags.includes(tag));
         },
-        [debouncedSelectedTags, allEntries],
+        [selectedTags, allEntries],
     );
 
     useEffect(() => {
-        if (debouncedSelectedTags.length === 0) {
+        if (selectedTags.length === 0) {
             handleTextSearch();
         } else {
             dispatch(setVisibleEntries(Object.keys(allEntries).filter(handleFilteringByTag)));
         }
         // It complains about missing the visibleEntries dependency
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [debouncedSelectedTags, allEntries, dispatch, handleFilteringByTag]);
+    }, [selectedTags, allEntries, dispatch, handleFilteringByTag]);
 
     const handleAddTag = useCallback(
         (tag: EntryFacultyTags) => {
@@ -72,12 +69,12 @@ const SearchBar = () => {
                       return false;
                   });
 
-        if (debouncedSelectedTags.length === 0) {
+        if (selectedTags.length === 0) {
             dispatch(setVisibleEntries(filteredEntries));
         } else {
             dispatch(setVisibleEntries(filteredEntries.filter(handleFilteringByTag)));
         }
-    }, [searchTerm, allEntries, debouncedSelectedTags.length, dispatch, handleFilteringByTag]);
+    }, [searchTerm, allEntries, selectedTags.length, dispatch, handleFilteringByTag]);
 
     return (
         <Paper elevation={2} square>
