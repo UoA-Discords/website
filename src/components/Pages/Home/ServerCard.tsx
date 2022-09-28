@@ -96,8 +96,8 @@ const ServerCard = ({
                             {server.memberCountHistory.at(-1)?.[0] ?? `-`} Online)
                         </Typography>
                         <Stack direction="row" gap={1} mt={0.5}>
-                            {server.facultyTags.map((tag) => (
-                                <FacultyTag tag={tag} />
+                            {server.facultyTags.map((tag, i) => (
+                                <FacultyTag tag={tag} key={i} />
                             ))}
                         </Stack>
                     </CardContent>
