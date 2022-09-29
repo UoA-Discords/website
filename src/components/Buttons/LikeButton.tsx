@@ -74,7 +74,6 @@ const LikeButton = ({ entryId, entryLikes, sx }: { entryId: string; entryLikes: 
 
             // clicking the button should invert the desired state
             setWantsToLike(!wantsToLike);
-            // setLikeModifier(likeModifier + (wantsToLike ? -1 : 1));
         },
         [wantsToLike],
     );
