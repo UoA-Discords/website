@@ -1,22 +1,19 @@
-import { Box, Modal, SxProps, Typography, Button, Stack, Grid, Stepper, Step, StepLabel, Paper } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
+import { Box, Modal, SxProps, Typography, Button, Stack, Grid, Paper } from '@mui/material';
 import { EntryStates, FullEntry } from '../../../shared/Types/Entries';
+
+// local components
 import GuildIcon from '../../GuildIcon';
 import ExternalLink from '../../Links/ExternalLink';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import DarkTooltip from '../../Tooltips/DarkTooltip';
-
-import InviteCreatedIcon from '@mui/icons-material/Link';
-import SubmittedIcon from '@mui/icons-material/AddBox';
-import ApprovedIcon from '@mui/icons-material/Check';
-import ShareIcon from '@mui/icons-material/Share';
-
-import discordIcon from '../../../images/discordIcon.svg';
 import { FacultyTag } from '../../TagSelector';
-import UserInfoCard from '../../UserInfoCard';
 
-dayjs.extend(relativeTime);
+// icons
+import ShareIcon from '@mui/icons-material/Share';
+import discordIcon from '../../../images/discordIcon.svg';
+
+// tooltips
+import DarkTooltip from '../../Tooltips/DarkTooltip';
+import ServerTimeline from './ServerTimeline';
 
 const style: SxProps = {
     position: `absolute`,
@@ -30,7 +27,8 @@ const style: SxProps = {
     p: 4,
 };
 
-const ServerFoundModal = ({
+/** Modal for a approved/featured server that is currently selected. */
+const SelectedServerModal = ({
     entry,
     open,
     onClose,
@@ -84,6 +82,7 @@ const ServerFoundModal = ({
                             <Grid item container xs={12} md={6} justifyContent="center">
                                 <ExternalLink href={`https://discord.gg/${entry.inviteCode}`} underline="none">
                                     <Button
+                                        sx={{ textTransform: `none` }}
                                         variant="outlined"
                                         size="large"
                                         color="secondary"
@@ -109,8 +108,6 @@ const ServerFoundModal = ({
                     </Grid>
                     {entry.guildData.description !== null && (
                         <Grid item container xs={12} justifyContent="center" sx={{ mt: 1 }}>
-                            {/* <Typography sx={{ p: 1, border: `solid 1px #333` }}> */}
-                            {/* </Typography> */}
                             <Paper sx={{ p: 2 }} variant="outlined">
                                 {entry.guildData.description}
                             </Paper>
@@ -127,67 +124,7 @@ const ServerFoundModal = ({
                         </Grid>
                     )}
                     <Grid item xs={12} md={6}>
-                        <Stepper orientation="vertical">
-                            {entry.inviteCreatedBy !== null && entry.inviteCreatedBy.id !== entry.createdBy.id && (
-                                <Step completed active>
-                                    <StepLabel icon={<InviteCreatedIcon />}>
-                                        <Typography>
-                                            Invite by{` `}
-                                            <UserInfoCard placement="left" user={entry.inviteCreatedBy} />
-                                        </Typography>
-                                    </StepLabel>
-                                </Step>
-                            )}
-                            <Step completed active>
-                                <StepLabel icon={<SubmittedIcon />}>
-                                    <Typography>
-                                        Submitted by{` `}
-                                        <UserInfoCard placement="left" user={entry.createdBy} />
-                                        &nbsp;
-                                        <DarkTooltip
-                                            title={
-                                                <Typography>
-                                                    {new Date(entry.createdAt).toLocaleString(`en-NZ`, {
-                                                        dateStyle: `medium`,
-                                                        timeStyle: `short`,
-                                                    })}
-                                                </Typography>
-                                            }
-                                            placement="right"
-                                        >
-                                            <span style={{ cursor: `help`, color: `gray` }}>
-                                                {dayjs(entry.createdAt).fromNow()}
-                                            </span>
-                                        </DarkTooltip>
-                                    </Typography>
-                                </StepLabel>
-                            </Step>
-                            <Step completed active>
-                                <StepLabel icon={<ApprovedIcon />}>
-                                    <Typography>
-                                        {EntryStates[entry.state]} by{` `}
-                                        <UserInfoCard placement="left" user={entry.stateActionDoneBy} />
-                                        &nbsp;
-                                        <DarkTooltip
-                                            title={
-                                                <Typography>
-                                                    {` `}
-                                                    {new Date(entry.stateActionDoneAt).toLocaleString(`en-NZ`, {
-                                                        dateStyle: `medium`,
-                                                        timeStyle: `short`,
-                                                    })}
-                                                </Typography>
-                                            }
-                                            placement="right"
-                                        >
-                                            <span style={{ cursor: `help`, color: `gray` }}>
-                                                after {dayjs(entry.stateActionDoneAt).from(entry.createdAt, true)}
-                                            </span>
-                                        </DarkTooltip>
-                                    </Typography>
-                                </StepLabel>
-                            </Step>
-                        </Stepper>
+                        <ServerTimeline entry={entry} />
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <div>
@@ -230,4 +167,4 @@ const ServerFoundModal = ({
     );
 };
 
-export default ServerFoundModal;
+export default SelectedServerModal;
