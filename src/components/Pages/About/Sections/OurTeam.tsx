@@ -4,31 +4,8 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllStaff, loadAllStaff } from '../../../../redux/slices/userManager';
 import { AppDispatch } from '../../../../redux/store';
-import { SiteUser, UserPermissionLevels } from '../../../../shared/Types/User';
-import ProfilePicture from '../../../ProfilePicture';
-import LightTooltip from '../../../Tooltips/LightTooltip';
-
-const UserProfile = ({ user }: { user: SiteUser }) => {
-    return (
-        <LightTooltip title={<Typography>{user.id}</Typography>} placement="top">
-            <Paper sx={{ p: 1 }}>
-                <Stack direction="row" spacing={1}>
-                    <ProfilePicture user={user} />
-                    <Stack>
-                        <Typography sx={{ whiteSpace: `nowrap` }}>
-                            {user.username}
-                            <span style={{ color: `gray` }}>#{user.discriminator}</span>
-                        </Typography>
-                        {user.permissionLevel > UserPermissionLevels.Default && (
-                            <Typography color="#7289da">{UserPermissionLevels[user.permissionLevel]!}</Typography>
-                        )}
-                    </Stack>
-                </Stack>
-            </Paper>
-        </LightTooltip>
-    );
-};
-
+import TimestampTooltip from '../../../Tooltips/TimestampTooltip';
+import UserInfoCard from '../../../UserInfoCard';
 const OurTeam = () => {
     const dispatch = useDispatch<AppDispatch>();
 
@@ -54,9 +31,18 @@ const OurTeam = () => {
     return (
         <Paper sx={{ m: 1, p: 2 }} elevation={12}>
             <Grid container spacing={1}>
-                {staff.map((e) => (
-                    <Grid item key={e.id}>
-                        <UserProfile user={e} />
+                {[staff[0], staff[0]].map((e, i) => (
+                    <Grid item key={i} sx={{ m: 0, p: 0 }}>
+                        <UserInfoCard user={e} paperProps={{ square: false, sx: { m: 0 } }}>
+                            <span>
+                                <TimestampTooltip
+                                    theme="light"
+                                    tooltipProps={{ placement: `bottom` }}
+                                    timestamp={e.lastLogin}
+                                    prefixString="Last seen "
+                                />
+                            </span>
+                        </UserInfoCard>
                     </Grid>
                 ))}
             </Grid>
