@@ -1,0 +1,17 @@
+.timestampTooltip {
+    color: gray;
+    transition: 200ms;
+}
+
+.timestampTooltip:hover {
+    color: #ccc;
+}
+
+.infoCardTooltip {
+    color: #90CAF9;
+    transition: 200ms;
+}
+
+.infoCardTooltip:hover {
+    color: #c0def7;
+}
