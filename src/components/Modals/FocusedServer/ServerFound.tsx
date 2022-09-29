@@ -15,7 +15,6 @@ import ShareIcon from '@mui/icons-material/Share';
 import discordIcon from '../../../images/discordIcon.svg';
 import { FacultyTag } from '../../TagSelector';
 import UserInfoCard from '../../UserInfoCard';
-import { GuildVerificationLevel } from 'discord-api-types/v10';
 
 dayjs.extend(relativeTime);
 
@@ -191,7 +190,10 @@ const ServerFoundModal = ({
                         </Stepper>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <div>Verification Level: {GuildVerificationLevel[entry.guildData.verificationLevel]}</div>
+                        <div>
+                            Verification Level:{` `}
+                            {[`None`, `Low`, `Medium`, `High`, `Very High`][entry.guildData.verificationLevel]}
+                        </div>
                         <div>Likes: {entry.likes}</div>
                         <div>ID: {entry.id}</div>
                         <div>History Length: {entry.memberCountHistory.length} Days</div>
