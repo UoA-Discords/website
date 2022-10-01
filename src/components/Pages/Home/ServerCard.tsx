@@ -3,7 +3,7 @@ import { Card, CardActionArea, CardContent, Grow, Stack, Typography } from '@mui
 import { EntryStates, FullEntry } from '../../../shared/Types/Entries';
 import FacultyTag from '../../TagSelector/FacultyTag';
 import GuildIcon from '../../GuildIcon';
-import SelectedServerModal from '../../Modals/SelectedServer';
+import SelectedServerDialog from '../../Dialogs/SelectedServer';
 import LikeButton from '../../Buttons/LikeButton';
 import './ServerCard.css';
 
@@ -66,7 +66,7 @@ const ServerCard = ({
                             sx={{ position: `absolute`, right: 0, bottom: 0 }}
                         />
                     </CardActionArea>
-                    <SelectedServerModal entry={server} open={open} onClose={() => setOpen(false)} />
+                    <SelectedServerDialog entry={server} open={open} onClose={() => setOpen(false)} />
                 </Card>
             </div>
         </Grow>

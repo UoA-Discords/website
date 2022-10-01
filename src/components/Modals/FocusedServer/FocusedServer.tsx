@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getAllEntries, getDoneInitialLoad } from '../../../redux/slices/entryManager';
 import { EntryStates, FullEntry } from '../../../shared/Types/Entries';
-import SelectedServerModal from '../SelectedServer';
+import SelectedServerDialog from '../../Dialogs/SelectedServer';
 import ServerNotFoundModal from './ServerNotFound';
 
 enum FocusedServerStates {
@@ -74,7 +74,7 @@ const FocusedServerModal = () => {
         case FocusedServerStates.NotFound:
             return <ServerNotFoundModal id={focusedServer.id} />;
         default:
-            return <SelectedServerModal entry={focusedServer.payload} open={open} onClose={() => setOpen(false)} />;
+            return <SelectedServerDialog entry={focusedServer.payload} open={open} onClose={() => setOpen(false)} />;
     }
 };
 
