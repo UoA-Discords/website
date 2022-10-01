@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Typography, Button, Stack, Grid, Paper, Dialog } from '@mui/material';
+import { Typography, Button, Stack, Grid, Paper, Dialog, useTheme, useMediaQuery } from '@mui/material';
 import { EntryStates, FullEntry } from '../../../shared/Types/Entries';
+import ServerGraph from './ServerGraph';
 
 // local components
 import GuildIcon from '../../GuildIcon';
@@ -25,6 +26,8 @@ const SelectedServerDialog = ({
     open: boolean;
     onClose: () => void;
 }) => {
+    const theme = useTheme();
+
     const handleClose = useCallback(
         (e: React.MouseEvent) => {
             e.stopPropagation();
@@ -52,6 +55,8 @@ const SelectedServerDialog = ({
             return () => clearTimeout(myTimeout);
         }
     }, [copySuccess]);
+
+    const smallOrAbove = useMediaQuery(theme.breakpoints.up(`sm`));
 
     return (
         <Dialog open={open} onClose={handleClose} disableScrollLock maxWidth="lg">
@@ -84,7 +89,7 @@ const SelectedServerDialog = ({
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Typography color="gray" textAlign="center">
-                                    {entry.memberCountHistory.at(-1)?.[0] ?? `0`} Members (
+                                    {entry.memberCountHistory.at(-1)?.[1] ?? `0`} Members (
                                     <span style={{ color: `lightgreen` }}>
                                         {entry.memberCountHistory.at(-1)?.[0] ?? `0`}
                                     </span>
@@ -101,27 +106,33 @@ const SelectedServerDialog = ({
                             </Paper>
                         </Grid>
                     )}
-                    {entry.facultyTags.length > 0 && (
+                    <Grid item container xs={12} md={6} justifyContent="center" spacing={1}>
+                        {entry.facultyTags.length > 0 && (
+                            <Grid item xs={12}>
+                                <Typography color="gray">Tags ({entry.facultyTags.length})</Typography>
+                                <Stack direction="row" gap={1} mt={0.5}>
+                                    {entry.facultyTags.map((tag, i) => (
+                                        <FacultyTag tag={tag} key={i} />
+                                    ))}
+                                </Stack>
+                            </Grid>
+                        )}
                         <Grid item xs={12}>
-                            <Typography color="gray">Tags ({entry.facultyTags.length})</Typography>
-                            <Stack direction="row" gap={1} mt={0.5}>
-                                {entry.facultyTags.map((tag, i) => (
-                                    <FacultyTag tag={tag} key={i} />
-                                ))}
-                            </Stack>
+                            <ServerTimeline entry={entry} />
+                        </Grid>
+                    </Grid>
+                    {smallOrAbove && entry.memberCountHistory.length > 1 && (
+                        <Grid item xs={12} md={6}>
+                            <ServerGraph historyData={entry.memberCountHistory} />
                         </Grid>
                     )}
-                    <Grid item xs={12} md={6}>
-                        <ServerTimeline entry={entry} />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12}>
                         <div>
                             Verification Level:{` `}
                             {[`None`, `Low`, `Medium`, `High`, `Very High`][entry.guildData.verificationLevel]}
                         </div>
                         <div>Likes: {entry.likes}</div>
                         <div>ID: {entry.id}</div>
-                        <div>History Length: {entry.memberCountHistory.length} Days</div>
                         <DarkTooltip
                             title={
                                 <Typography>
