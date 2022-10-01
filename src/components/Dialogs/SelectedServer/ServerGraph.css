@@ -1,0 +1,13 @@
+.rankText {
+    transition: 200ms linear;
+    color: lightgreen;
+    cursor: help;
+}
+
+.rankText.bad {
+    color: lightcoral;
+}
+
+.rankText:hover {
+    color: #90CAF9;
+}
