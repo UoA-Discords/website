@@ -31,7 +31,7 @@ const OurTeam = () => {
     return (
         <Paper sx={{ m: 1, p: 2 }} elevation={12}>
             <Grid container spacing={1}>
-                {[staff[0], staff[0]].map((e, i) => (
+                {staff.map((e, i) => (
                     <Grid item key={i} sx={{ m: 0, p: 0 }}>
                         <UserInfoCard user={e} paperProps={{ square: false, sx: { m: 0 } }}>
                             <span>
