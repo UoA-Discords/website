@@ -26,7 +26,10 @@ const ServerCard = ({
 
     return (
         <Grow in={shouldFadeIn}>
-            <div className={server.state === EntryStates.Featured ? `featuredServerCard` : undefined}>
+            <div
+                className={server.state === EntryStates.Featured ? `featuredServerCard` : undefined}
+                style={{ height: `100%` }}
+            >
                 {server.state === EntryStates.Featured && (
                     <>
                         <span className="orbiter orbiter1" />
