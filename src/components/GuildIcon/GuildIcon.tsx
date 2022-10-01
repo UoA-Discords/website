@@ -17,13 +17,13 @@ const GuildIcon = ({
             <CardMedia
                 component="img"
                 image={`https://cdn.discordapp.com/icons/${server.id}/${server.guildData.icon}`}
-                sx={{ width: 128, p: 1, borderRadius: `50%`, ...sx }}
+                sx={{ width: 128, height: 128, p: 1, borderRadius: `50%`, ...sx }}
                 onError={() => setErrored(true)}
             />
         );
     }
 
-    return <CardMedia component="img" image={tempLogo} sx={{ width: 128, p: 2, ...sx }} />;
+    return <CardMedia component="img" image={tempLogo} sx={{ width: 128, height: 128, p: 2, ...sx }} />;
 };
 
 export default GuildIcon;
