@@ -26,7 +26,7 @@ const InfoCardTooltip = ({
             title={<UserInfoCard user={user} />}
         >
             {children ?? (
-                <Link underline="none" sx={{ cursor: `help` }} component="span" className="infoCardTooltip">
+                <Link underline="none" component="span" className="infoCardTooltip">
                     <UserIcon user={user} height={20} width={20} style={{ marginBottom: `-4px` }} />
                     {` `}
                     {user.username}

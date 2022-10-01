@@ -1,6 +1,7 @@
 .infoCardTooltip {
     color: #90CAF9;
     transition: 200ms;
+    cursor: help;
 }
 
 .infoCardTooltip:hover {
