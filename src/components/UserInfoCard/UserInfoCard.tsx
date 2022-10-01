@@ -1,7 +1,7 @@
 import React from 'react';
 import { Paper, PaperProps, Typography, Stack } from '@mui/material';
 import { BasicUserInfo, UserPermissionLevels } from '../../shared/Types/User';
-import ProfilePicture from '../ProfilePicture';
+import UserIcon from '../UserIcon';
 
 /**
  * Card that displays information about a basic user, such as their:
@@ -26,7 +26,7 @@ const UserInfoCard = ({
     return (
         <Paper variant="outlined" square {...paperProps} sx={{ p: 1, m: 1, ...paperProps?.[`sx`] }}>
             <Stack direction="row" spacing={1}>
-                <ProfilePicture user={user} />
+                <UserIcon user={user} />
                 <Stack>
                     <Typography sx={{ whiteSpace: `nowrap` }}>
                         {user.username}

@@ -1,7 +1,7 @@
 import { ListItemButton, Stack, Collapse, Typography } from '@mui/material';
 import { useState } from 'react';
 import { LoginResponse } from '../../../hooks/useSiteLogin';
-import ProfilePicture from '../../ProfilePicture';
+import UserIcon from '../../UserIcon';
 import ManageAccountPage from './ManageAccountPage';
 
 const DiscordAccountButton = ({ loginResponse }: { loginResponse: LoginResponse }) => {
@@ -22,7 +22,7 @@ const DiscordAccountButton = ({ loginResponse }: { loginResponse: LoginResponse 
         >
             <ListItemButton sx={{ borderRadius: `0 0 0 1rem` }} onClick={() => setIsOpen(!isOpen)}>
                 <Stack direction="row" spacing={1} alignItems="center">
-                    <ProfilePicture user={loginResponse.userData} />
+                    <UserIcon user={loginResponse.userData} />
                     <Collapse in={isHovered} orientation="horizontal" sx={{ whiteSpace: `nowrap` }}>
                         {loginResponse.userData.username}
                         <Typography variant="body1" color="gray" sx={{ whiteSpace: `nowrap` }}>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BasicUserInfo } from '../../shared/Types/User';
 import discordIcon from '../../images/discordIcon.svg';
 
-const ProfilePicture = ({
+const UserIcon = ({
     user,
     width,
     height,
@@ -39,4 +39,4 @@ const ProfilePicture = ({
     );
 };
 
-export default ProfilePicture;
+export default UserIcon;

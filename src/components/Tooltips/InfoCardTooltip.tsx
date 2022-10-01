@@ -1,6 +1,6 @@
 import { Tooltip, TooltipProps, Paper, Link } from '@mui/material';
 import { BasicUserInfo } from '../../shared/Types/User';
-import ProfilePicture from '../ProfilePicture';
+import UserIcon from '../UserIcon';
 import UserInfoCard from '../UserInfoCard';
 import './Tooltips.css';
 
@@ -27,7 +27,7 @@ const InfoCardTooltip = ({
         >
             {children ?? (
                 <Link underline="none" sx={{ cursor: `help` }} component="span" className="infoCardTooltip">
-                    <ProfilePicture user={user} height={20} width={20} style={{ marginBottom: `-4px` }} />
+                    <UserIcon user={user} height={20} width={20} style={{ marginBottom: `-4px` }} />
                     {` `}
                     {user.username}
                 </Link>
