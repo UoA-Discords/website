@@ -54,7 +54,7 @@ const TimestampTooltip = ({
     };
 
     const displayText = (
-        <span style={{ cursor: `help` }} className="timestampTooltip">
+        <span className="genericHoverableText">
             {prefixString}
             {innerText}
             {suffixString}
