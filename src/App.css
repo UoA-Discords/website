@@ -34,3 +34,13 @@ body.hiddenScroll::-webkit-scrollbar {
   padding: 20px 0 24px 0;
   max-width: min(90%, 1440px);
 }
+
+.genericHoverableText {
+  color: gray;
+  transition: 200ms;
+  cursor: help;
+}
+
+.genericHoverableText:hover {
+  color: #ccc;
+}
