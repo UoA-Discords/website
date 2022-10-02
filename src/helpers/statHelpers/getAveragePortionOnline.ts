@@ -8,7 +8,7 @@ import { EntryStates, FullEntry } from '../../shared/Types/Entries';
 export function getAveragePortionOnline(
     memberCountHistory: FullEntry<Exclude<EntryStates, EntryStates.Pending>>[`memberCountHistory`],
 ): number {
-    const portionOnline = memberCountHistory.map(([online, total]) => online / total);
+    const portionOnline = memberCountHistory.map(([online, total]) => online / (total || 1));
 
     return portionOnline.reduce((prev, next) => prev + next) / memberCountHistory.length;
 }
