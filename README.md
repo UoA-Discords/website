@@ -1,5 +1,8 @@
 # UoA Discords / Website <!-- omit in toc -->
 
+[![CI](https://github.com/UoA-Discords/website/actions/workflows/node.js.ci.yml/badge.svg)](https://github.com/UoA-Discords/website/actions/workflows/node.js.ci.yml)
+[![CodeQL](https://github.com/UoA-Discords/website/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/UoA-Discords/website/actions/workflows/codeql-analysis.yml)
+
 Main organization and server registry website.
 
 This is our main website, which interfaces our UoA Discord server registry (see our [server registry API](https://github.com/UoA-Discords/server-registry-api)) and contains information about our organization and other projects.
