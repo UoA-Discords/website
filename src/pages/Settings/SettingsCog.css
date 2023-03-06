@@ -1,0 +1,38 @@
+svg.settingsCog {
+    font-size: 50px;
+    animation: settingsCogRotate 10s linear infinite;
+}
+
+svg.settingsCog:hover {
+    color: gray;
+}
+
+svg.settingsCog.overloaded {
+    animation-name: settingsCogRotateOverloaded;
+    animation-duration: 1.2s;
+}
+
+@keyframes settingsCogRotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes settingsCogRotateOverloaded {
+    0% {
+        color: #de8316;
+    }
+    20% {
+        color: #f57624;
+    }
+    40% {
+        color: #de4916;
+    }
+    80% {
+        color: #fa3119;
+    }
+    100% {
+        transform: rotate(360deg);
+        color: #de8316;
+    }
+}
