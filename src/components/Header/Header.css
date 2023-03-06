@@ -1,0 +1,28 @@
+a#siteName {
+    text-decoration: none;
+    color: white;
+    transition: color 0.1s linear;
+}
+
+a#siteName:hover {
+    color: #7289da;
+}
+
+a#siteName:hover > p:nth-child(2) {
+    background-color: #7289da;
+    color: white;
+}
+
+a#siteName > p {
+    line-height: 1.2;
+    padding: 2px;
+    font-size: large;
+    font-weight: bold;
+}
+
+a#siteName > p:nth-child(2) {
+    background-color: white;
+    color: black;
+    border-radius: 0.2em;
+    transition: color 0.1s linear, background-color 0.1s linear;
+}
