@@ -1,5 +1,5 @@
 import { notImplementedFunction } from '../defaultFillers';
-import { ISettingsContext, Settings, SettingsControllers, SettingsSessionData } from './Types';
+import { ISettingsContext, Settings, SettingsControllers, SettingsSessionData } from './SettingsTypes';
 
 export const defaultSettings: Settings = {
     serverUrl: 'https://registry.uoa-discords.com',

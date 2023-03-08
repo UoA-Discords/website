@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { defaultSettingsContext } from './Defaults';
+import { defaultSettingsContext } from './SettingsDefaults';
 
-export * from './Defaults';
-export * from './Types';
+export * from './SettingsDefaults';
+export * from './SettingsTypes';
 
 export const SettingsContext = createContext(defaultSettingsContext);

@@ -1,5 +1,5 @@
 import { notImplementedFunction } from '../defaultFillers';
-import { ILocationDataContext } from './Types';
+import { ILocationDataContext } from './LocationDataTypes';
 
 export const defaultLocationDataContext: ILocationDataContext = {
     title: '',

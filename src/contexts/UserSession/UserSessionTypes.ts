@@ -7,7 +7,10 @@ export interface UserSession extends LoginOrSignupResponse {
     firstSetAt: ISOString;
 }
 
-export interface UserSessionControllers {
+export interface IUserSessionContext {
+    /** The currently logged in user. */
+    loggedInUser: UserSession | null;
+
     /** Requests the server upgrade an authorization code to an access token. */
     requestLogin(authorizationCode: string): Promise<void>;
 
@@ -19,12 +22,4 @@ export interface UserSessionControllers {
 
     /** Updates properties of the logged in user, e.g. when they have modified their own permissions. */
     updateUser(updatedUser: User): void;
-}
-
-export interface IUserSessionContext {
-    /** The currently logged in user. */
-    loggedInUser: UserSession | null;
-
-    /** Functions for managing the currently logged in user's session. */
-    userControllers: UserSessionControllers;
 }

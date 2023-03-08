@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { defaultUserSessionContext } from './Defaults';
+import { defaultUserSessionContext } from './UserSessionDefaults';
 
-export * from './Defaults';
-export * from './Types';
+export * from './UserSessionDefaults';
+export * from './UserSessionTypes';
 
 export const UserSessionContext = createContext(defaultUserSessionContext);
