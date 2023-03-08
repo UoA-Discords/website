@@ -1,9 +1,10 @@
 import React, { ReactNode, useCallback, useMemo, useState } from 'react';
-import { ILocationDataContext, LocationDataContext } from '../../contexts/LocationData';
+import { ILocationDataContext, LocationDataContext } from '../../contexts';
 
 export const LocationDataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [title, setTitle] = useState<ReactNode>('');
-    const [description, setDescription] = useState<string | { text: string; to: string }[]>('');
+    const [title, setTitle] = useState<ILocationDataContext['title']>('');
+
+    const [description, setDescription] = useState<ILocationDataContext['description']>('');
 
     const setLocationData = useCallback<ILocationDataContext['setLocationData']>((title, description) => {
         setTitle(title);

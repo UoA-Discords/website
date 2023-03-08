@@ -1,18 +1,17 @@
 import React, { ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { api } from '../../api';
 import {
-    GlobalErrorsContext,
     IUserSessionContext,
+    MainStateContext,
     SettingsContext,
     UserSession,
     UserSessionContext,
-    UserSessionControllers,
 } from '../../contexts';
 import { getLocalUserSession, saveLocalUserSession } from './Helpers';
 
 export const UserSessionContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const { settings } = useContext(SettingsContext);
-    const { globalErrorsControllers } = useContext(GlobalErrorsContext);
+    const { setLatestError } = useContext(MainStateContext);
 
     const [loggedInUser, setLoggedInUser] = useState<UserSession | null>(getLocalUserSession);
 
@@ -21,7 +20,7 @@ export const UserSessionContextProvider: React.FC<{ children: ReactNode }> = ({ 
     // save any logged in user changes to local storage
     useEffect(() => saveLocalUserSession(loggedInUser), [loggedInUser]);
 
-    const requestLogin = useCallback<UserSessionControllers['requestLogin']>(
+    const requestLogin = useCallback<IUserSessionContext['requestLogin']>(
         async (authorizationCode) => {
             const response = await api.postLogin(
                 {
@@ -39,7 +38,7 @@ export const UserSessionContextProvider: React.FC<{ children: ReactNode }> = ({ 
         [settings.rateLimitBypassToken, settings.redirectUri, settings.serverUrl],
     );
 
-    const requestRefresh = useCallback<UserSessionControllers['requestRefresh']>(async () => {
+    const requestRefresh = useCallback<IUserSessionContext['requestRefresh']>(async () => {
         if (loggedInUser?.siteAuth === undefined) throw new Error('Cannot refresh without first being logged in!');
 
         const response = await api.getRefresh({
@@ -51,7 +50,7 @@ export const UserSessionContextProvider: React.FC<{ children: ReactNode }> = ({ 
         setLoggedInUser({ ...response, setAt: new Date().toISOString(), firstSetAt: loggedInUser.firstSetAt });
     }, [loggedInUser?.firstSetAt, loggedInUser?.siteAuth, settings.rateLimitBypassToken, settings.serverUrl]);
 
-    const requestLogout = useCallback<UserSessionControllers['requestLogout']>(async () => {
+    const requestLogout = useCallback<IUserSessionContext['requestLogout']>(async () => {
         if (loggedInUser?.siteAuth === undefined) throw new Error('Cannot logout without first being logged in!');
 
         await api.getLogout({
@@ -63,9 +62,9 @@ export const UserSessionContextProvider: React.FC<{ children: ReactNode }> = ({ 
         setLoggedInUser(null);
     }, [loggedInUser?.siteAuth, settings.rateLimitBypassToken, settings.serverUrl]);
 
-    const updateUser = useCallback<UserSessionControllers['updateUser']>(
+    const updateUser = useCallback<IUserSessionContext['updateUser']>(
         (newUser) => {
-            if (loggedInUser === null) throw new Error('Cannot logout without first being logged in!');
+            if (loggedInUser === null) throw new Error('Cannot update user without first being logged in!');
 
             setLoggedInUser({ ...loggedInUser, user: newUser });
         },
@@ -80,6 +79,8 @@ export const UserSessionContextProvider: React.FC<{ children: ReactNode }> = ({ 
 
         const controller = new AbortController();
 
+        let fetchComplete = false;
+
         api.getSelf({
             baseURL: settings.serverUrl,
             siteToken: loggedInUser.siteAuth,
@@ -92,15 +93,20 @@ export const UserSessionContextProvider: React.FC<{ children: ReactNode }> = ({ 
             })
             .catch((error) => {
                 console.log('[UserSession] Initial fetch failed');
-                globalErrorsControllers.handleError(error);
+                setLatestError(error);
+            })
+            .finally(() => {
+                fetchComplete = true;
+                setDoneInitialRefresh(true);
             });
 
-        setDoneInitialRefresh(true);
-
         return () => {
-            controller.abort();
+            if (!fetchComplete) {
+                console.log('[UserSession] Aborting initial fetch');
+                controller.abort();
+            }
         };
-    }, [doneInitialRefresh, globalErrorsControllers, loggedInUser, settings.rateLimitBypassToken, settings.serverUrl]);
+    }, [doneInitialRefresh, setLatestError, loggedInUser, settings.rateLimitBypassToken, settings.serverUrl]);
 
     // scheduling a call to /refresh
     useEffect(() => {
@@ -132,7 +138,7 @@ export const UserSessionContextProvider: React.FC<{ children: ReactNode }> = ({ 
                 })
                 .catch((error) => {
                     console.log('[UserSession] Background refresh failed');
-                    globalErrorsControllers.handleError(error);
+                    setLatestError(error);
                 });
 
         if (minsTillExpiry <= settings.maxRefreshMinutes) {
@@ -155,7 +161,7 @@ export const UserSessionContextProvider: React.FC<{ children: ReactNode }> = ({ 
             clearTimeout(timeout);
         };
     }, [
-        globalErrorsControllers,
+        setLatestError,
         loggedInUser?.discordAuth.expires_in,
         loggedInUser?.setAt,
         requestRefresh,
@@ -166,7 +172,10 @@ export const UserSessionContextProvider: React.FC<{ children: ReactNode }> = ({ 
     const finalValue = useMemo<IUserSessionContext>(
         () => ({
             loggedInUser,
-            userControllers: { requestLogin, requestRefresh, requestLogout, updateUser },
+            requestLogin,
+            requestRefresh,
+            requestLogout,
+            updateUser,
         }),
         [loggedInUser, requestLogin, requestLogout, requestRefresh, updateUser],
     );
