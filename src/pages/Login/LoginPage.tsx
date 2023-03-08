@@ -4,10 +4,10 @@ import { useSearchParams } from 'react-router-dom';
 import { HomeButton, LoginButton } from '../../components/Buttons';
 import { MainStateContext, SettingsContext, UserSessionContext } from '../../contexts';
 import { LocationDataContext } from '../../contexts/LocationData';
+import { ErrorDisplayer } from '../../components/ErrorDisplayer';
 import { Page } from '../../Page.styled';
 
 import adios from '../../images/adios.jpg';
-import { ErrorDisplayer } from '../../components/ErrorDisplayer';
 
 enum AuthStage {
     /** Requesting an access token from the server registry API. */
