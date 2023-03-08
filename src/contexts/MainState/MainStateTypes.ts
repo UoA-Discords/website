@@ -13,7 +13,11 @@ export interface IMainStateContext {
     /** The way the {@link latestError} should be displayed on the site. */
     globalErrorDisplayType: 'dialog' | 'inline';
 
-    setLatestError: (error: unknown) => void;
+    /**
+     * Sets the {@link latestError} object, returns true if the error supplied is an actual error and not a
+     * `CanceledError`.
+     */
+    setLatestError: (error: unknown) => boolean;
 
     setLatestServerResponse: (response: RootResponse | null) => void;
 

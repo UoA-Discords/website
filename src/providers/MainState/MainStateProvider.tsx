@@ -11,13 +11,22 @@ export const MainStateProvider: React.FC<{ children: ReactNode }> = ({ children 
         useState<IMainStateContext['globalErrorDisplayType']>('dialog');
 
     const setLatestError = useCallback<IMainStateContext['setLatestError']>((error) => {
-        if (error === null) return internalSetLatestError(null);
+        if (error === null) {
+            internalSetLatestError(null);
+            return false;
+        }
 
         const fullError = handleError(error);
+
+        if (fullError === null) {
+            internalSetLatestError(null);
+            return false;
+        }
 
         console.error(fullError);
 
         internalSetLatestError(fullError);
+        return true;
     }, []);
 
     const finalValue = useMemo<IMainStateContext>(
