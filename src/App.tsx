@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, CssBaseline } from '@mui/material';
-import { InfoPage, HomePage, SettingsPage, NotFoundPage } from './pages';
+import { InfoPage, HomePage, SettingsPage, NotFoundPage, LoginPage } from './pages';
+import { ErrorDisplayer } from './components/ErrorDisplayer';
 import { theme } from './theme';
 import { ContextProviders } from './providers';
 import { Header } from './components/Header';
@@ -16,11 +17,13 @@ export const App: React.FC = () => (
         <ThemeProvider theme={theme}>
             <CssBaseline enableColorScheme />
             <ContextProviders>
+                <ErrorDisplayer />
                 <Header />
                 <Routes>
                     <Route index element={<HomePage />} />
                     <Route path="settings" element={<SettingsPage />} />
                     <Route path="info" element={<InfoPage />} />
+                    <Route path="login" element={<LoginPage />} />
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
                 <Footer />
