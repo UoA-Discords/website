@@ -1,7 +1,7 @@
 import { api } from '../../api';
 import { AnyExpectedError } from '../../types/Responses';
 
-type RootResponse = ReturnType<Awaited<typeof api.postRoot>>;
+type RootResponse = Awaited<ReturnType<typeof api.postRoot>>;
 
 export interface IMainStateContext {
     /** The latest error received from the server registry API. */
