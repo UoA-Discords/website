@@ -11,13 +11,19 @@ const Section: React.FC<{ children: ReactNode }> = ({ children }) => (
     </Paper>
 );
 
-const Question: React.FC<{ children: ReactNode }> = ({ children }) => <Typography variant="h6">{children}</Typography>;
-
-const Answer: React.FC<{ children: ReactNode }> = ({ children }) => (
-    <Typography color="text.secondary">{children}</Typography>
+const Question: React.FC<{ children: ReactNode }> = ({ children }) => (
+    <Typography variant="h6" width="100%">
+        {children}
+    </Typography>
 );
 
-export const FAQ: React.FC = () => {
+const Answer: React.FC<{ children: ReactNode }> = ({ children }) => (
+    <Typography color="text.secondary" width="100%">
+        {children}
+    </Typography>
+);
+
+export const FAQ: React.FC<{ onLink: (id: string) => void }> = ({ onLink }) => {
     const { loggedInUser } = useContext(UserSessionContext);
     const { sessionData } = useContext(SettingsContext);
 
@@ -100,14 +106,64 @@ export const FAQ: React.FC = () => {
                     <Section>
                         <Question>What tech stack do you use?</Question>
                         <Answer>
-                            Our website is built in Typescript, using React.JS and Material UI.
+                            Our website is built in{' '}
+                            <ExternalLink href="https://www.typescriptlang.org/" title="Typescript official site">
+                                <Link component="span" underline="hover">
+                                    Typescript
+                                </Link>
+                            </ExternalLink>
+                            , using{' '}
+                            <ExternalLink href="https://reactjs.org/" title="React official site">
+                                <Link component="span" underline="hover">
+                                    React
+                                </Link>
+                            </ExternalLink>{' '}
+                            and{' '}
+                            <ExternalLink href="https://mui.com/" title="Material UI official site">
+                                <Link component="span" underline="hover">
+                                    Material UI
+                                </Link>
+                            </ExternalLink>
+                            .
                             <br />
                             <br />
-                            Our server registry API is built in Typescript, using Express and MongoDB.
+                            Our server registry API is built in{' '}
+                            <ExternalLink href="https://www.typescriptlang.org/" title="Typescript official site">
+                                <Link component="span" underline="hover">
+                                    Typescript
+                                </Link>
+                            </ExternalLink>
+                            , using{' '}
+                            <ExternalLink href="https://expressjs.com/" title="Express official site">
+                                <Link component="span" underline="hover">
+                                    Express
+                                </Link>
+                            </ExternalLink>{' '}
+                            and{' '}
+                            <ExternalLink href="https://www.mongodb.com/" title="MongoDB official site">
+                                <Link component="span" underline="hover">
+                                    MongoDB
+                                </Link>
+                            </ExternalLink>
+                            .
                             <br />
                             <br />
-                            We use GitHub actions for CI and CD, with the website being hosted via Cloudflare Pages and
-                            the server being locally hosted.
+                            We use{' '}
+                            <ExternalLink
+                                href="https://github.com/features/actions"
+                                title="Github actions information page"
+                            >
+                                <Link component="span" underline="hover">
+                                    Github actions
+                                </Link>
+                            </ExternalLink>{' '}
+                            for CI and CD, with the website being hosted via{' '}
+                            <ExternalLink href="https://pages.cloudflare.com/" title="Cloudflare Pages official site">
+                                <Link component="span" underline="hover">
+                                    Cloudflare Pages
+                                </Link>
+                            </ExternalLink>{' '}
+                            and the server being locally hosted.
                         </Answer>
                     </Section>
                 </Grid>
@@ -136,7 +192,21 @@ export const FAQ: React.FC = () => {
                 <Grid item xs={12}>
                     <Section>
                         <Question>Can I opt-out/remove my server from this website?</Question>
-                        <Answer>Yes, please contact us to get started.</Answer>
+                        <Answer>
+                            Yes, please{' '}
+                            <Link
+                                component="span"
+                                underline="hover"
+                                sx={{ cursor: 'pointer' }}
+                                onClick={() => {
+                                    document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
+                                    onLink('contact');
+                                }}
+                            >
+                                contact us
+                            </Link>{' '}
+                            to get started.
+                        </Answer>
                     </Section>
                 </Grid>
                 <Grid item xs={12}>

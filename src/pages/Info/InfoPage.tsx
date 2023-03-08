@@ -150,7 +150,7 @@ export const InfoPage: React.FC = () => {
             </Section>
 
             <Section title="FAQ" focussedId={focussedId} onLink={onLink}>
-                <FAQ />
+                <FAQ onLink={onLink} />
             </Section>
 
             <Section title="Site Policy" focussedId={focussedId} onLink={onLink}>
