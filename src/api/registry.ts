@@ -48,6 +48,14 @@ export function makeRequestConfig<T = never>(
     return config;
 }
 
+export async function checkRateLimitResponse(props: BaseRequestProps<true, false>): Promise<void> {
+    const config = makeRequestConfig(props, 'GET');
+
+    const { headers } = await axios.request(config);
+
+    if (headers['ratelimit-bypass-response'] !== 'Valid') throw new Error('Invalid rate limit bypass token.');
+}
+
 export async function postRoot(props: BaseRequestProps<true, false>): Promise<{
     startTime: ISOString;
     version: string;

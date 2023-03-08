@@ -26,6 +26,7 @@ export const MainStateProvider: React.FC<{ children: ReactNode }> = ({ children 
         console.error(fullError);
 
         internalSetLatestError(fullError);
+        setLatestServerResponse(null);
         return true;
     }, []);
 

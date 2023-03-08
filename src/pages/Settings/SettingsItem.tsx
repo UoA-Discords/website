@@ -17,12 +17,17 @@ import TestFailIcon from '@mui/icons-material/Cancel';
 import ShowPasswordIcon from '@mui/icons-material/Visibility';
 import HidePasswordIcon from '@mui/icons-material/VisibilityOff';
 
-export type SettingsItemTestState = 'available' | 'inProgress' | 'success' | 'fail';
+export enum SettingsItemTestState {
+    Available,
+    InProgress,
+    Failed,
+    Succeeded,
+}
 
 export interface SettingsItemTest {
     state: SettingsItemTestState;
     handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-    title: { [k in SettingsItemTestState]: string };
+    title: string;
 }
 
 export interface SettingsItemProps {
@@ -46,16 +51,16 @@ const _SettingsItem: React.FC<SettingsItemProps> = (props) => {
         color = 'secondary';
     } else {
         switch (test.state) {
-            case 'success':
+            case SettingsItemTestState.Succeeded:
                 color = 'success';
                 break;
-            case 'fail':
+            case SettingsItemTestState.Failed:
                 color = 'error';
                 break;
-            case 'inProgress':
+            case SettingsItemTestState.InProgress:
                 color = 'info';
                 break;
-            case 'available':
+            case SettingsItemTestState.Available:
                 color = 'secondary';
                 break;
         }
@@ -80,12 +85,12 @@ const _SettingsItem: React.FC<SettingsItemProps> = (props) => {
                             </Fade>
                             {test !== undefined && (
                                 <Fade in={value !== ''}>
-                                    <IconButton title={test.title[test.state]} onClick={test.handleClick}>
-                                        {test.state === 'success' ? (
+                                    <IconButton title={test.title} onClick={test.handleClick}>
+                                        {test.state === SettingsItemTestState.Succeeded ? (
                                             <TestSuccessIcon color={color} />
-                                        ) : test.state === 'available' ? (
+                                        ) : test.state === SettingsItemTestState.Available ? (
                                             <TestValueIcon color={color} />
-                                        ) : test.state === 'fail' ? (
+                                        ) : test.state === SettingsItemTestState.Failed ? (
                                             <TestFailIcon color={color} />
                                         ) : (
                                             <CircularProgress size={20} color={color} />
@@ -116,9 +121,9 @@ const _SettingsItem: React.FC<SettingsItemProps> = (props) => {
                 {title}
             </Typography>
             {test !== undefined ? (
-                <Fade in={test.state !== 'available'}>
+                <Fade in={test.state !== SettingsItemTestState.Available}>
                     <Typography variant="body2" color="gray" sx={{ ml: 1 }}>
-                        {test.title[test.state]}
+                        {test.title}
                     </Typography>
                 </Fade>
             ) : (

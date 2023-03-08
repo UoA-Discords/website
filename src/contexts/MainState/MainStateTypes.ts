@@ -19,7 +19,7 @@ export interface IMainStateContext {
      */
     setLatestError: (error: unknown) => boolean;
 
-    setLatestServerResponse: (response: RootResponse | null) => void;
+    setLatestServerResponse: (response: RootResponse) => void;
 
     setGlobalErrorDisplayType: (type: 'dialog' | 'inline') => void;
 }
