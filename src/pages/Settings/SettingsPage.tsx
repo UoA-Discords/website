@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { Typography, Grid, useTheme, useMediaQuery } from '@mui/material';
+import { Typography, Grid, useTheme, useMediaQuery, FormControlLabel, Switch, Paper } from '@mui/material';
 import { defaultSettings, MainStateContext, Settings, SettingsContext } from '../../contexts';
 import { Page } from '../../Page.styled';
 import { SettingsCog } from './SettingsCog';
@@ -7,8 +7,14 @@ import { SettingsItem, SettingsItemTestState } from './SettingsItem';
 import { LocationDataContext } from '../../contexts/LocationData';
 import { api } from '../../api';
 import { CanceledError } from 'axios';
+import { UserPermissions } from '../../types/User/UserPermissions';
+import { PermissionList } from '../../components/PermissionList';
 
 type ChangeCallback<T extends keyof Settings> = (key: T) => (e: React.ChangeEvent<HTMLInputElement>) => void;
+
+const allPermissions = Object.values(UserPermissions)
+    .filter((e): e is UserPermissions => typeof e === 'number')
+    .reduce((a, b) => a + b, 0);
 
 export const SettingsPage: React.FC = () => {
     const { setLocationData } = useContext(LocationDataContext);
@@ -50,6 +56,15 @@ export const SettingsPage: React.FC = () => {
                 if (!Number.isNaN(val) && Number.isInteger(val)) {
                     settingsControllers.setValue(k, val);
                 }
+            };
+        },
+        [settingsControllers],
+    );
+
+    const handleBooleanChange = useCallback<ChangeCallback<'showAllPermissions'>>(
+        (k) => {
+            return (e) => {
+                settingsControllers.setValue(k, e.target.checked);
             };
         },
         [settingsControllers],
@@ -244,6 +259,28 @@ export const SettingsPage: React.FC = () => {
                     isDefault={defaultSettings.maxRefreshMinutes === settings.maxRefreshMinutes}
                     inputMode="numeric"
                 />
+                <Grid item xs={12} md={6} sx={{ width: '100%' }}>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={settings.showAllPermissions}
+                                onChange={handleBooleanChange('showAllPermissions')}
+                                inputProps={{ 'aria-label': 'controlled' }}
+                            />
+                        }
+                        label="Show All Permissions"
+                    />
+                    <Typography variant="body2" color="gray" sx={{ ml: 1 }}>
+                        Whether all permissions will be shown in user profile pages, or just the important ones.
+                    </Typography>
+                    <Paper sx={{ mt: 1 }}>
+                        <PermissionList
+                            sx={{ p: 1 }}
+                            permissions={allPermissions}
+                            showAll={settings.showAllPermissions}
+                        />
+                    </Paper>
+                </Grid>
             </Grid>
             <div style={{ flexGrow: 1 }} />
             <Typography color="gray" textAlign="right" sx={{ alignSelf: 'flex-end', justifySelf: 'flex-end' }}>
