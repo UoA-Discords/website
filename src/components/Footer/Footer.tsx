@@ -34,9 +34,7 @@ export const Footer: React.FC = () => {
                     <FooterItem
                         type="internal"
                         href={`/users/${loggedInUser.user._id}`}
-                        icon={
-                            <ProfilePicture type="full" user={loggedInUser.user} size={24} style={{ color: 'gray' }} />
-                        }
+                        icon={<ProfilePicture user={loggedInUser.user} size={24} style={{ color: 'gray' }} />}
                         label="Profile"
                     />
                 ) : (

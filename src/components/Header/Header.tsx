@@ -56,7 +56,7 @@ export const Header: React.FC = () => {
                 {!shouldHideLoginOrProfileIcon &&
                     (loggedInUser !== null ? (
                         <InternalLink to={`/users/${loggedInUser.user._id}`} title="Go to your profile page">
-                            <ProfilePicture type="full" user={loggedInUser.user} />
+                            <ProfilePicture user={loggedInUser.user} />
                         </InternalLink>
                     ) : (
                         <LoginButton />
