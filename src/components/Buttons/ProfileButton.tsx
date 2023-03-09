@@ -6,7 +6,7 @@ import { ProfilePicture } from '../ProfilePicture';
 
 export const ProfileButton: React.FC<{ user: User<'ShowIP'> }> = ({ user }) => (
     <InternalLink to="/me">
-        <Button variant="outlined" startIcon={<ProfilePicture type="full" user={user} />}>
+        <Button variant="outlined" startIcon={<ProfilePicture user={user} />}>
             Profile
         </Button>
     </InternalLink>
