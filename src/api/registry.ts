@@ -169,7 +169,7 @@ export async function searchUsers(
     props: BaseRequestProps<true, 'optional'>,
     params: GetAllUsersParams,
 ): Promise<WithPagination<User<'HideIP' | 'ShowIP'>>> {
-    const config = makeRequestConfig(props, 'POST', '/search/servers', params);
+    const config = makeRequestConfig(props, 'POST', '/search/users', params);
 
     const { data } = await axios.request(config);
     return data;
