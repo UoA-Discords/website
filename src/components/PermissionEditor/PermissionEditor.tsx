@@ -112,7 +112,7 @@ export const PermissionEditor: React.FC<PermissionEditorProps> = (props) => {
         <Dialog maxWidth="md" open={isSaving || isOpen} onClose={onClose}>
             <DialogTitle textAlign="center">{targetUser.discord.username}'s Permissions</DialogTitle>
             <DialogContent>
-                <Grid container>
+                <Grid container spacing={1}>
                     {allPermissions.map((permission) => (
                         <Grid item xs={12} sm={6} key={permission}>
                             <FormControl>
@@ -127,7 +127,7 @@ export const PermissionEditor: React.FC<PermissionEditorProps> = (props) => {
                                     label={<Permission value={permission} />}
                                 />
                                 <FormLabel>
-                                    <Typography color="gray">{badgeIconMap[permission].title}</Typography>
+                                    <Typography color="text.secondary">{badgeIconMap[permission].title}</Typography>
                                 </FormLabel>
                             </FormControl>
                         </Grid>
