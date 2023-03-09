@@ -1,6 +1,4 @@
 export enum UserPermissions {
-    None = 0,
-
     /** This user can favourite a server. */
     Favourite = 1 << 0,
 

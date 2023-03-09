@@ -8,8 +8,6 @@
  * These values (mostly) come from https://www.auckland.ac.nz/en/study/our-faculties.html
  */
 export enum ServerTags {
-    None = 0,
-
     /** Humanities, social sciences, languages, and indigenous studies. */
     Arts = 1 << 0,
 
