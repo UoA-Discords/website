@@ -7,7 +7,13 @@ import { ErrorDisplayer } from '../../components/ErrorDisplayer';
 import { PermissionList } from '../../components/PermissionList';
 import { ProfilePicture } from '../../components/ProfilePicture';
 import { RelativeTimeString } from '../../components/RelativeTimeString';
-import { LocationDataContext, MainStateContext, SettingsContext, UserSessionContext } from '../../contexts';
+import {
+    LocationDataContext,
+    MainStateContext,
+    SettingsContext,
+    UserDictionaryContext,
+    UserSessionContext,
+} from '../../contexts';
 import { Page } from '../../Page.styled';
 import { ServerStatus } from '../../types/Server/ServerStatus';
 import { ServerStatusAction } from '../../types/Server/ServerStatusAction';
@@ -216,6 +222,7 @@ export const ProfilePage: React.FC = () => {
     const { settings } = useContext(SettingsContext);
     const { loggedInUser, updateUser } = useContext(UserSessionContext);
     const { latestError, setLatestError, setGlobalErrorDisplayType } = useContext(MainStateContext);
+    const { addIdsToDictionary } = useContext(UserDictionaryContext);
     const { setLocationData } = useContext(LocationDataContext);
 
     const { id } = useParams();
@@ -309,6 +316,17 @@ export const ProfilePage: React.FC = () => {
         settings.rateLimitBypassToken,
         settings.serverUrl,
     ]);
+
+    // relevant user fetching
+    useEffect(() => {
+        if (resolvedUser === null) return;
+
+        try {
+            addIdsToDictionary(resolvedUser.permissionsLog.map((e) => e.by));
+        } catch (error) {
+            setLatestError(error);
+        }
+    }, [addIdsToDictionary, resolvedUser, setLatestError]);
 
     if (id === undefined) {
         return (

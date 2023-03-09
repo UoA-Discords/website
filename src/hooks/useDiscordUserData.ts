@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { APIUser } from 'discord-api-types/payloads/v10/user';
 import { User } from '../types/User';
 import { DiscordIdString } from '../types/Utility';
+import { UserDictionaryContext } from '../contexts';
 
 export type AnyDiscordUserReference =
     | DiscordIdString
@@ -25,6 +26,8 @@ const isFullUser = (user: Exclude<AnyDiscordUserReference, DiscordIdString>): us
  * {@link User} objects as a way of referencing a user.
  */
 export function useDiscordUserData(discordUserReference: AnyDiscordUserReference): DiscordUserData {
+    const { getUser } = useContext(UserDictionaryContext);
+
     const user = useMemo<DiscordUserData>(() => {
         if (typeof discordUserReference === 'string')
             return {
@@ -50,5 +53,17 @@ export function useDiscordUserData(discordUserReference: AnyDiscordUserReference
         };
     }, [discordUserReference]);
 
-    return user;
+    const fullUser = useMemo<DiscordUserData>(() => {
+        const encountered = getUser(user.id);
+        if (encountered === null) return user;
+
+        return {
+            id: encountered._id,
+            username: encountered.discord.username,
+            discriminator: encountered.discord.discriminator,
+            avatar: encountered.discord.avatar,
+        };
+    }, [getUser, user]);
+
+    return fullUser;
 }
