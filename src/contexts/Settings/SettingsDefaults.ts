@@ -8,6 +8,7 @@ export const defaultSettings: Settings = {
     redirectUri: `${window.location.origin}/login`,
     minRefreshSeconds: 30,
     maxRefreshMinutes: 3 * 24 * 60,
+    showAllPermissions: false,
 };
 
 export const defaultSettingsControllers: SettingsControllers = {

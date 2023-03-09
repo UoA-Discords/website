@@ -34,6 +34,13 @@ export interface Settings {
      * @default 3 * 24 * 60 // 3 days
      */
     maxRefreshMinutes: number;
+
+    /**
+     * Whether all permissions will be shown in user profile pages, or just the important ones.
+     *
+     * @default false
+     */
+    showAllPermissions: boolean;
 }
 
 export interface SettingsControllers {
