@@ -1,18 +1,20 @@
 import React, { useContext, useMemo, useState } from 'react';
-import { APIUser } from 'discord-api-types/v10';
 import { DiscordIcon } from '../../images';
 import { UserSessionContext } from '../../contexts';
-import { ProfilePictureProps } from './ProfilePictureProps';
+import { AnyDiscordUserReference, useDiscordUserData } from '../../hooks/useDiscordUserData';
 
-export const ProfilePicture: React.FC<ProfilePictureProps> = ({ type, user, size = 64, style }) => {
+export interface ProfilePictureProps {
+    size?: number;
+    style?: React.CSSProperties;
+    user: AnyDiscordUserReference;
+}
+
+export const ProfilePicture: React.FC<ProfilePictureProps> = ({ user, size = 64, style }) => {
     const { loggedInUser } = useContext(UserSessionContext);
 
     const [errored, setErrored] = useState(false);
 
-    const { id, avatar, username } = useMemo<Pick<APIUser, 'id' | 'username' | 'discriminator' | 'avatar'>>(() => {
-        if (type === 'full') return { id: user._id, ...user.discord };
-        return user;
-    }, [type, user]);
+    const { id, username, avatar } = useDiscordUserData(user);
 
     const isSelf = useMemo(() => loggedInUser?.user._id === id, [id, loggedInUser?.user._id]);
 
