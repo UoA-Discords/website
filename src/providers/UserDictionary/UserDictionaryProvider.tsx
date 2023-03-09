@@ -1,6 +1,7 @@
 import React, { ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 import { api } from '../../api';
 import { IUserDictionaryContext, SettingsContext, UserDictionaryContext, UserSessionContext } from '../../contexts';
+import { DiscordIdString } from '../../types/Utility';
 
 export const UserDictionaryProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const { settings } = useContext(SettingsContext);
@@ -10,6 +11,16 @@ export const UserDictionaryProvider: React.FC<{ children: ReactNode }> = ({ chil
 
     const addIdsToDictionary = useCallback<IUserDictionaryContext['addIdsToDictionary']>(
         async (userIds) => {
+            const relevantUserIds: DiscordIdString[] = [];
+
+            for (const id of userIds) {
+                if (encounteredUsers[id] !== undefined) continue;
+                if (loggedInUser?.user._id === id) continue;
+                relevantUserIds.push(id);
+            }
+
+            if (relevantUserIds.length === 0) return;
+
             const { items, totalItemCount } = await api.searchUsers(
                 {
                     baseURL: settings.serverUrl,
@@ -19,7 +30,7 @@ export const UserDictionaryProvider: React.FC<{ children: ReactNode }> = ({ chil
                 {
                     page: 0,
                     perPage: 100,
-                    withIds: userIds.slice(0, 100),
+                    withIds: relevantUserIds.slice(0, 100),
                 },
             );
 
@@ -31,6 +42,7 @@ export const UserDictionaryProvider: React.FC<{ children: ReactNode }> = ({ chil
 
             console.log(`[UserDictionary] Fetched ${items.length} new users`, {
                 prompted: userIds.length,
+                promptedRelevant: relevantUserIds.length,
                 returned: items.length,
                 returnedTotalItemCount: totalItemCount,
                 dictionarySize,
@@ -50,6 +62,7 @@ export const UserDictionaryProvider: React.FC<{ children: ReactNode }> = ({ chil
         [
             encounteredUsers,
             loggedInUser?.siteAuth,
+            loggedInUser?.user._id,
             settings.maxUserDictionarySize,
             settings.rateLimitBypassToken,
             settings.serverUrl,
