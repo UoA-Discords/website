@@ -13,7 +13,7 @@ type ChangeCallback<T extends keyof Settings> = (key: T) => (e: React.ChangeEven
 export const SettingsPage: React.FC = () => {
     const { setLocationData } = useContext(LocationDataContext);
     const { settings, settingsControllers } = useContext(SettingsContext);
-    const { setLatestError, setLatestServerResponse } = useContext(MainStateContext);
+    const { latestServerResponse, setLatestError, setLatestServerResponse } = useContext(MainStateContext);
 
     const theme = useTheme();
 
@@ -246,10 +246,10 @@ export const SettingsPage: React.FC = () => {
                 />
             </Grid>
             <div style={{ flexGrow: 1 }} />
-            <Typography color="gray" textAlign="center" sx={{ alignSelf: 'flex-end', justifySelf: 'flex-end' }}>
+            <Typography color="gray" textAlign="right" sx={{ alignSelf: 'flex-end', justifySelf: 'flex-end' }}>
                 Website Version {process.env.REACT_APP_VERSION}
                 <br />
-                API Version Unknown
+                API Version {latestServerResponse?.version ?? 'Unknown'}
             </Typography>
         </Page>
     );
