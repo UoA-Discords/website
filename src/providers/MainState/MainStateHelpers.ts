@@ -8,7 +8,7 @@ export function handleError(error: unknown): IMainStateContext['latestError'] {
     if (!axios.isAxiosError(error)) return { recognized: false, value: error };
 
     if (error.response === undefined) {
-        if (error.code === 'ERR_NETWORK') return { recognized: false, value: { ...error, status: 404 } };
+        if (error.code === 'ERR_NETWORK') return { recognized: false, value: 'Network error' };
         return { recognized: false, value: error };
     }
 
