@@ -1,25 +1,26 @@
 import React, { ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 import { api } from '../../api';
 import { IUserDictionaryContext, SettingsContext, UserDictionaryContext, UserSessionContext } from '../../contexts';
+import { User } from '../../types/User';
 import { DiscordIdString } from '../../types/Utility';
 
 export const UserDictionaryProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const { settings } = useContext(SettingsContext);
     const { loggedInUser } = useContext(UserSessionContext);
 
-    const [encounteredUsers, setEncounteredUsers] = useState<IUserDictionaryContext['encounteredUsers']>({});
+    const [encounteredUsers, setEncounteredUsers] = useState<Record<DiscordIdString, User<'HideIP' | 'ShowIP'>>>({});
 
     const addIdsToDictionary = useCallback<IUserDictionaryContext['addIdsToDictionary']>(
         async (userIds) => {
-            const relevantUserIds: DiscordIdString[] = [];
+            const relevantUserIds = new Set<DiscordIdString>();
 
             for (const id of userIds) {
                 if (encounteredUsers[id] !== undefined) continue;
                 if (loggedInUser?.user._id === id) continue;
-                relevantUserIds.push(id);
+                relevantUserIds.add(id);
             }
 
-            if (relevantUserIds.length === 0) return;
+            if (relevantUserIds.size === 0) return;
 
             const { items, totalItemCount } = await api.searchUsers(
                 {
@@ -30,7 +31,7 @@ export const UserDictionaryProvider: React.FC<{ children: ReactNode }> = ({ chil
                 {
                     page: 0,
                     perPage: 100,
-                    withIds: relevantUserIds.slice(0, 100),
+                    withIds: Array.from(relevantUserIds).slice(0, 100),
                 },
             );
 
@@ -42,10 +43,11 @@ export const UserDictionaryProvider: React.FC<{ children: ReactNode }> = ({ chil
 
             console.log(`[UserDictionary] Fetched ${items.length} new users`, {
                 prompted: userIds.length,
-                promptedRelevant: relevantUserIds.length,
+                promptedRelevant: relevantUserIds.size,
                 returned: items.length,
                 returnedTotalItemCount: totalItemCount,
                 dictionarySize,
+                maxConfiguredSize: settings.maxUserDictionarySize,
                 freeSlots,
                 numExistingToRemove,
             });
@@ -69,9 +71,18 @@ export const UserDictionaryProvider: React.FC<{ children: ReactNode }> = ({ chil
         ],
     );
 
+    const getUser = useCallback<IUserDictionaryContext['getUser']>(
+        (id) => {
+            if (id === loggedInUser?.user._id) return loggedInUser.user;
+
+            return encounteredUsers[id] ?? null;
+        },
+        [encounteredUsers, loggedInUser?.user],
+    );
+
     const finalValue = useMemo<IUserDictionaryContext>(
-        () => ({ encounteredUsers, addIdsToDictionary }),
-        [addIdsToDictionary, encounteredUsers],
+        () => ({ addIdsToDictionary, getUser }),
+        [addIdsToDictionary, getUser],
     );
 
     return <UserDictionaryContext.Provider value={finalValue}>{children}</UserDictionaryContext.Provider>;
