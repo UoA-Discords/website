@@ -17,6 +17,9 @@ export const Header: React.FC = () => {
 
     const [hasHoveredOverLogo, setHasHoveredOverLogo] = useState(false);
 
+    const shouldHideTextLogo = useMediaQuery(theme.breakpoints.down('sm'));
+    const shouldHideLoginOrProfileIcon = useMediaQuery(theme.breakpoints.down('xs'));
+
     const shouldInitiallyHideLogo = useMediaQuery(theme.breakpoints.down(1100));
 
     const hideLogo = useMemo(
@@ -26,20 +29,15 @@ export const Header: React.FC = () => {
 
     return (
         <Paper sx={{ width: '100vw', m: 0, p: '0.5em 0' }} square>
-            <Stack
-                direction="row"
-                flexWrap="wrap"
-                alignItems="center"
-                justifyContent="space-between"
-                spacing={3}
-                sx={{ ml: '1rem', mr: '1rem' }}
-            >
-                <InternalLink to="/" id="siteName">
-                    <Typography>UOA</Typography>
-                    <Typography>DISCORDS</Typography>
-                    <Typography>.COM</Typography>
-                </InternalLink>
-                <div>
+            <Stack direction="row" alignItems="center" spacing={3} sx={{ ml: '1rem', mr: '1rem', overflowX: 'auto' }}>
+                {!shouldHideTextLogo && (
+                    <InternalLink to="/" id="siteName">
+                        <Typography>UOA</Typography>
+                        <Typography>DISCORDS</Typography>
+                        <Typography>.COM</Typography>
+                    </InternalLink>
+                )}
+                <div style={{ flexGrow: 1 }}>
                     <Typography variant="h3">{title}</Typography>
                     {typeof description === 'string' ? (
                         <Typography color="gray">{description}</Typography>
@@ -55,17 +53,17 @@ export const Header: React.FC = () => {
                         </Breadcrumbs>
                     )}
                 </div>
-                <div style={{ flexGrow: 1 }} />
-                {loggedInUser !== null ? (
-                    <InternalLink to={`/users/${loggedInUser.user._id}`} title="Go to your profile page">
-                        <ProfilePicture type="full" user={loggedInUser.user} />
-                    </InternalLink>
-                ) : (
-                    <LoginButton />
-                )}
+                {!shouldHideLoginOrProfileIcon &&
+                    (loggedInUser !== null ? (
+                        <InternalLink to={`/users/${loggedInUser.user._id}`} title="Go to your profile page">
+                            <ProfilePicture type="full" user={loggedInUser.user} />
+                        </InternalLink>
+                    ) : (
+                        <LoginButton />
+                    ))}
             </Stack>
             {!shouldInitiallyHideLogo && (
-                <Grow in={!hideLogo}>
+                <Grow in={!hideLogo} style={{ justifySelf: 'flex-end' }}>
                     <img
                         style={{
                             height: '165.04',
@@ -74,6 +72,7 @@ export const Header: React.FC = () => {
                             right: '12.8rem',
                             top: '0.4rem',
                             zIndex: 1,
+                            justifySelf: 'flex-end',
                         }}
                         src={TransparentBirdLogo}
                         alt="Site logo"
