@@ -100,6 +100,16 @@ export async function getSelf(props: BaseRequestProps<true, true>): Promise<User
     return data;
 }
 
+export async function getUserById(
+    props: BaseRequestProps<true, 'optional'>,
+    userId: DiscordIdString,
+): Promise<User<'HideIP' | 'ShowIP'>> {
+    const config = makeRequestConfig(props, 'GET', `/users/${userId}`);
+
+    const { data } = await axios.request(config);
+    return data;
+}
+
 export async function patchUserById(
     props: BaseRequestProps<true, true>,
     userId: DiscordIdString,
@@ -107,6 +117,16 @@ export async function patchUserById(
     reason: string,
 ): Promise<User<'HideIP' | 'ShowIP'>> {
     const config = makeRequestConfig(props, 'PATCH', `/users/${userId}`, { newPermissions, reason });
+
+    const { data } = await axios.request(config);
+    return data;
+}
+
+export async function getServerById(
+    props: BaseRequestProps<true, 'optional'>,
+    serverId: DiscordIdString,
+): Promise<Server> {
+    const config = makeRequestConfig(props, 'GET', `/servers/${serverId}`);
 
     const { data } = await axios.request(config);
     return data;
