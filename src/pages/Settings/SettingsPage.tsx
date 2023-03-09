@@ -10,7 +10,13 @@ import { CanceledError } from 'axios';
 import { UserPermissions } from '../../types/User/UserPermissions';
 import { PermissionList } from '../../components/PermissionList';
 
-type ChangeCallback<T extends keyof Settings> = (key: T) => (e: React.ChangeEvent<HTMLInputElement>) => void;
+type StringValuedKeys = { [k in keyof Settings]: Settings[k] extends string ? k : never }[keyof Settings];
+type NumericValuedKeys = { [k in keyof Settings]: Settings[k] extends number ? k : never }[keyof Settings];
+type OtherKeys = Exclude<keyof Settings, StringValuedKeys | NumericValuedKeys>;
+
+type ChangeCallback<T extends StringValuedKeys | NumericValuedKeys | OtherKeys> = (
+    key: T,
+) => (e: React.ChangeEvent<HTMLInputElement>) => void;
 
 const allPermissions = Object.values(UserPermissions)
     .filter((e): e is UserPermissions => typeof e === 'number')
@@ -33,9 +39,7 @@ export const SettingsPage: React.FC = () => {
         ]);
     }, [isSmall, setLocationData]);
 
-    const handleTextChange = useCallback<
-        ChangeCallback<'discordApplicationId' | 'rateLimitBypassToken' | 'redirectUri' | 'serverUrl'>
-    >(
+    const handleTextChange = useCallback<ChangeCallback<StringValuedKeys>>(
         (k) => {
             return (e) => {
                 e.preventDefault();
@@ -48,7 +52,7 @@ export const SettingsPage: React.FC = () => {
         [settingsControllers],
     );
 
-    const handleNumberChange = useCallback<ChangeCallback<'maxRefreshMinutes' | 'minRefreshSeconds'>>(
+    const handleNumberChange = useCallback<ChangeCallback<NumericValuedKeys>>(
         (k) => {
             return (e) => {
                 e.preventDefault();
@@ -61,7 +65,7 @@ export const SettingsPage: React.FC = () => {
         [settingsControllers],
     );
 
-    const handleBooleanChange = useCallback<ChangeCallback<'showAllPermissions'>>(
+    const handleBooleanChange = useCallback<ChangeCallback<OtherKeys>>(
         (k) => {
             return (e) => {
                 settingsControllers.setValue(k, e.target.checked);
@@ -194,7 +198,7 @@ export const SettingsPage: React.FC = () => {
 
     return (
         <Page maxWidth="lg">
-            <Grid container spacing={4} alignItems="center" sx={{ mt: 2 }}>
+            <Grid container spacing={4} sx={{ mt: 2 }}>
                 <SettingsItem
                     title="Endpoint for the server registry API."
                     label="API URL"
@@ -257,6 +261,15 @@ export const SettingsPage: React.FC = () => {
                     handleChange={handleNumberChange('maxRefreshMinutes')}
                     handleReset={handleReset('maxRefreshMinutes')}
                     isDefault={defaultSettings.maxRefreshMinutes === settings.maxRefreshMinutes}
+                    inputMode="numeric"
+                />
+                <SettingsItem
+                    title="Maximum number of users to store in memory for ease-of-lookup."
+                    label="Maximum User Dictionary Size"
+                    value={settings.maxUserDictionarySize.toString()}
+                    handleChange={handleNumberChange('maxUserDictionarySize')}
+                    handleReset={handleReset('maxUserDictionarySize')}
+                    isDefault={defaultSettings.maxUserDictionarySize === settings.maxUserDictionarySize}
                     inputMode="numeric"
                 />
                 <Grid item xs={12} md={6} sx={{ width: '100%' }}>

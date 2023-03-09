@@ -41,6 +41,13 @@ export interface Settings {
      * @default false
      */
     showAllPermissions: boolean;
+
+    /**
+     * Maximum number of users to store in memory for ease-of-lookup.
+     *
+     * @default 100
+     */
+    maxUserDictionarySize: number;
 }
 
 export interface SettingsControllers {

@@ -9,6 +9,7 @@ export const defaultSettings: Settings = {
     minRefreshSeconds: 30,
     maxRefreshMinutes: 3 * 24 * 60,
     showAllPermissions: false,
+    maxUserDictionarySize: 100,
 };
 
 export const defaultSettingsControllers: SettingsControllers = {
