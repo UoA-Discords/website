@@ -2,12 +2,10 @@ import React, { useContext, useEffect } from 'react';
 import { Typography } from '@mui/material';
 import { LocationDataContext } from '../../contexts/LocationData';
 import { Page } from '../../Page.styled';
-import { MainStateContext, SettingsContext } from '../../contexts';
-import { api } from '../../api';
+import { MainStateContext } from '../../contexts';
 
 export const HomePage: React.FC = () => {
-    const { settings } = useContext(SettingsContext);
-    const { latestServerResponse, setLatestError, setLatestServerResponse } = useContext(MainStateContext);
+    const { latestServerResponse } = useContext(MainStateContext);
     const { setLocationData } = useContext(LocationDataContext);
 
     useEffect(() => {
@@ -23,27 +21,6 @@ export const HomePage: React.FC = () => {
             setLocationData('UoA Discords', 'Your catalogue for the various University of Auckland Discord servers.');
         }
     }, [latestServerResponse, setLocationData]);
-
-    useEffect(() => {
-        const controller = new AbortController();
-
-        api.postRoot({
-            baseURL: settings.serverUrl,
-            siteToken: undefined,
-            controller,
-            rateLimitBypassToken: settings.rateLimitBypassToken,
-        })
-            .then((res) => {
-                setLatestServerResponse(res);
-            })
-            .catch((error) => {
-                setLatestError(error);
-            });
-
-        return () => {
-            controller.abort();
-        };
-    }, [setLatestError, setLatestServerResponse, settings.rateLimitBypassToken, settings.serverUrl]);
 
     return (
         <Page>

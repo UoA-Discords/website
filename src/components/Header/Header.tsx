@@ -1,17 +1,20 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme, useMediaQuery, Paper, Stack, Typography, Link, Grow, Breadcrumbs } from '@mui/material';
 import { InternalLink } from '../Links';
-import { UserSessionContext } from '../../contexts';
+import { MainStateContext, SettingsContext, UserSessionContext } from '../../contexts';
 import { LoginButton } from '../Buttons';
 import { ProfilePicture } from '../ProfilePicture';
 import { LocationDataContext } from '../../contexts/LocationData';
 import './Header.css';
 
 import TransparentBirdLogo from '../../images/TransparentBirdLogo.png';
+import { api } from '../../api';
 
 export const Header: React.FC = () => {
     const { loggedInUser } = useContext(UserSessionContext);
     const { title, description } = useContext(LocationDataContext);
+    const { setLatestError, setLatestServerResponse } = useContext(MainStateContext);
+    const { settings } = useContext(SettingsContext);
 
     const theme = useTheme();
 
@@ -26,6 +29,23 @@ export const Header: React.FC = () => {
         () => hasHoveredOverLogo || shouldInitiallyHideLogo,
         [hasHoveredOverLogo, shouldInitiallyHideLogo],
     );
+
+    useEffect(() => {
+        const controller = new AbortController();
+
+        api.postRoot({
+            baseURL: settings.serverUrl,
+            siteToken: undefined,
+            controller,
+            rateLimitBypassToken: settings.rateLimitBypassToken,
+        })
+            .then((res) => {
+                setLatestServerResponse(res);
+            })
+            .catch((error) => {
+                setLatestError(error);
+            });
+    }, [setLatestError, setLatestServerResponse, settings.rateLimitBypassToken, settings.serverUrl]);
 
     return (
         <Paper sx={{ width: '100vw', m: 0, p: '0.5em 0' }} square>
