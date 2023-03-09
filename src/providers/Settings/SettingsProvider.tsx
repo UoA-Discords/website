@@ -7,7 +7,7 @@ import {
     SettingsControllers,
     SettingsSessionData,
 } from '../../contexts';
-import { generateSessionData, getLocalSettings, saveLocalSettings } from './Helpers';
+import { generateSessionData, getLocalSettings, saveLocalSettings } from './SettingsHelpers';
 
 export const SettingsContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [settings, setSettings] = useState<Settings>(getLocalSettings);

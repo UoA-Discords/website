@@ -7,7 +7,7 @@ import {
     UserSession,
     UserSessionContext,
 } from '../../contexts';
-import { getLocalUserSession, saveLocalUserSession } from './Helpers';
+import { getLocalUserSession, saveLocalUserSession } from './UserSessionHelpers';
 
 export const UserSessionContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const { settings } = useContext(SettingsContext);
