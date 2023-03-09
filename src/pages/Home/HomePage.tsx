@@ -2,13 +2,48 @@ import React, { useContext, useEffect } from 'react';
 import { Typography } from '@mui/material';
 import { LocationDataContext } from '../../contexts/LocationData';
 import { Page } from '../../Page.styled';
+import { MainStateContext, SettingsContext } from '../../contexts';
+import { api } from '../../api';
 
 export const HomePage: React.FC = () => {
+    const { settings } = useContext(SettingsContext);
+    const { latestServerResponse, setLatestError, setLatestServerResponse } = useContext(MainStateContext);
     const { setLocationData } = useContext(LocationDataContext);
 
     useEffect(() => {
-        setLocationData('UoA Discords', 'Your catalogue for the various University of Auckland Discord servers.');
-    }, [setLocationData]);
+        if (latestServerResponse) {
+            const { numServers, numUsers } = latestServerResponse;
+            setLocationData(
+                'UoA Discords',
+                `Cataloguing ${numServers.toLocaleString(
+                    'en-NZ',
+                )} University of Auckland Discord servers (and ${numUsers.toLocaleString('en-NZ')} users).`,
+            );
+        } else {
+            setLocationData('UoA Discords', 'Your catalogue for the various University of Auckland Discord servers.');
+        }
+    }, [latestServerResponse, setLocationData]);
+
+    useEffect(() => {
+        const controller = new AbortController();
+
+        api.postRoot({
+            baseURL: settings.serverUrl,
+            siteToken: undefined,
+            controller,
+            rateLimitBypassToken: settings.rateLimitBypassToken,
+        })
+            .then((res) => {
+                setLatestServerResponse(res);
+            })
+            .catch((error) => {
+                setLatestError(error);
+            });
+
+        return () => {
+            controller.abort();
+        };
+    }, [setLatestError, setLatestServerResponse, settings.rateLimitBypassToken, settings.serverUrl]);
 
     return (
         <Page>
