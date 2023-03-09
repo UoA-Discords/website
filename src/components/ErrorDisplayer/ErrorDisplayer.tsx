@@ -12,12 +12,13 @@ import {
     Stack,
     Typography,
 } from '@mui/material';
-import { MainStateContext } from '../../contexts';
-import { InternalLink } from '../Links';
+import { MainStateContext, SettingsContext } from '../../contexts';
+import { ExternalLink, InternalLink } from '../Links';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export const ErrorDisplayer: React.FC<{ inline?: boolean }> = ({ inline = false }) => {
+    const { settings } = useContext(SettingsContext);
     const { latestError, globalErrorDisplayType } = useContext(MainStateContext);
 
     const [open, setOpen] = useState(false);
@@ -42,14 +43,37 @@ export const ErrorDisplayer: React.FC<{ inline?: boolean }> = ({ inline = false 
                   null;
     }, [latestError]);
 
+    const rawError = useMemo(() => {
+        if (latestError === null) return null;
+
+        const { recognized, value } = latestError;
+
+        if (recognized) {
+            if (value.additionalData === undefined || value.additionalData === null) return null;
+            return JSON.stringify(value.additionalData, undefined, 2).replaceAll(/Bearer.*"/g, 'Bearer [REDACTED]"');
+        }
+
+        if (value === 'Network error') return null;
+
+        try {
+            return JSON.stringify(value, undefined, 2)?.replaceAll(/Bearer.*"/g, 'Bearer [REDACTED]"');
+        } catch (error) {
+            return 'Failed to parse additional data, see console for more details.';
+        }
+    }, [latestError]);
+
     const titleElement = useMemo(
         () => (
-            <Typography textAlign="center" variant="h4" color="orange">
-                {finalCode !== null ? `Error ${finalCode}` : 'Unknown Error'}
+            <Typography textAlign="center" variant="h4" color="orange" gutterBottom>
+                {latestError?.value === 'Network error'
+                    ? 'Network Error'
+                    : finalCode !== null
+                    ? `Error ${finalCode}${latestError?.recognized ? ` - ${latestError.value.title}` : ''}`
+                    : 'Unknown Error'}
             </Typography>
         ),
 
-        [finalCode],
+        [finalCode, latestError],
     );
 
     const bodyElement = useMemo(() => {
@@ -61,9 +85,6 @@ export const ErrorDisplayer: React.FC<{ inline?: boolean }> = ({ inline = false 
             <Stack gap={2}>
                 {recognized ? (
                     <>
-                        <Typography textAlign="center" variant="h6" color="yellow">
-                            {value.title}
-                        </Typography>
                         <Typography>{value.description}</Typography>
                         <Typography color="gray">
                             If you think this error is a mistake, we encourage you to{' '}
@@ -77,32 +98,53 @@ export const ErrorDisplayer: React.FC<{ inline?: boolean }> = ({ inline = false 
                     </>
                 ) : (
                     <Typography>
-                        An unknown error occurred while making a request to our API. We try to plan for all possible
-                        errors, so you should definitely{' '}
-                        <InternalLink to="/info#contact" onClick={() => setOpen(false)}>
-                            <Link component="span" underline="hover">
-                                contact us
-                            </Link>
-                        </InternalLink>
-                        .
+                        {latestError.value === 'Network error' ? (
+                            <>
+                                Failed to make a request, either your internet is down, or our server is down. If you're
+                                100% certain of the latter, please{' '}
+                                <InternalLink to="/info#contact" onClick={() => setOpen(false)}>
+                                    <Link component="span" underline="hover">
+                                        contact us
+                                    </Link>
+                                </InternalLink>
+                                .<br />
+                                <br />
+                                <span style={{ color: 'lightgray' }}>
+                                    The configured server URL is{' '}
+                                    <ExternalLink href={settings.serverUrl} title="Configured server endpoint">
+                                        <Link component="span" underline="hover">
+                                            {settings.serverUrl}
+                                        </Link>
+                                    </ExternalLink>
+                                </span>
+                            </>
+                        ) : (
+                            <>
+                                An unknown error occurred while making a request to our API. We try to plan for all
+                                possible errors, so you should definitely{' '}
+                                <InternalLink to="/info#contact" onClick={() => setOpen(false)}>
+                                    <Link component="span" underline="hover">
+                                        contact us
+                                    </Link>
+                                </InternalLink>
+                                .
+                            </>
+                        )}
                     </Typography>
                 )}
-                <Accordion expanded={isExpanded} onChange={() => setIsExpanded(!isExpanded)} disableGutters>
-                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                        {isExpanded ? 'Hide More Info' : 'Show More Info'}
-                    </AccordionSummary>
-                    <AccordionDetails sx={{ overflow: 'auto', maxHeight: '300px' }}>
-                        <pre>
-                            {JSON.stringify(recognized ? value.additionalData : value, undefined, 2).replaceAll(
-                                /Bearer.*"/g,
-                                'Bearer [REDACTED]"',
-                            )}
-                        </pre>
-                    </AccordionDetails>
-                </Accordion>
+                {rawError !== null && (
+                    <Accordion expanded={isExpanded} onChange={() => setIsExpanded(!isExpanded)} disableGutters>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            {isExpanded ? 'Hide More Info' : 'Show More Info'}
+                        </AccordionSummary>
+                        <AccordionDetails sx={{ overflow: 'auto', maxHeight: '300px' }}>
+                            <pre>{rawError}</pre>
+                        </AccordionDetails>
+                    </Accordion>
+                )}
             </Stack>
         );
-    }, [isExpanded, latestError]);
+    }, [isExpanded, latestError, rawError, settings.serverUrl]);
 
     if (latestError === null) return <></>;
 
