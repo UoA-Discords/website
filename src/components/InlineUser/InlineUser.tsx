@@ -1,14 +1,14 @@
-import React from 'react';
 import { Link, LinkProps, Typography } from '@mui/material';
+import { FC, memo } from 'react';
+import { AnyDiscordUserReference, useDiscordUserData } from '../../hooks/useDiscordUserData';
 import { InternalLink } from '../Links';
 import { ProfilePicture } from '../ProfilePicture';
-import { AnyDiscordUserReference, useDiscordUserData } from '../../hooks/useDiscordUserData';
 
 export interface InlineUserProps extends LinkProps {
     user: AnyDiscordUserReference;
 }
 
-const _InlineUser: React.FC<InlineUserProps> = ({ user, ...rest }) => {
+const _InlineUser: FC<InlineUserProps> = ({ user, ...rest }) => {
     const { id, username, discriminator } = useDiscordUserData(user);
 
     return (
@@ -28,4 +28,4 @@ const _InlineUser: React.FC<InlineUserProps> = ({ user, ...rest }) => {
     );
 };
 
-export const InlineUser = React.memo(_InlineUser);
+export const InlineUser = memo(_InlineUser);
