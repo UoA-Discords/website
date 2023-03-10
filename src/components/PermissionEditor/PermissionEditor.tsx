@@ -1,3 +1,6 @@
+import CloseIcon from '@mui/icons-material/Close';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import SaveIcon from '@mui/icons-material/Save';
 import {
     Button,
     Checkbox,
@@ -13,17 +16,14 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { api } from '../../api';
 import { MainStateContext, SettingsContext, UserSessionContext } from '../../contexts';
+import { badgeIconMap } from '../../helpers/badgeIconMap';
 import { hasPermissions } from '../../helpers/hasPermissions';
 import { User } from '../../types/User';
 import { UserPermissions } from '../../types/User/UserPermissions';
-import { badgeIconMap, Permission } from '../Permission';
-
-import SaveIcon from '@mui/icons-material/Save';
-import CloseIcon from '@mui/icons-material/Close';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import { Permission } from '../Permission';
 
 export interface PermissionEditorProps {
     targetUser: User<'HideIP' | 'ShowIP'>;
@@ -34,7 +34,7 @@ export interface PermissionEditorProps {
 
 const allPermissions = Object.values(UserPermissions).filter((e): e is UserPermissions => typeof e === 'number');
 
-export const PermissionEditor: React.FC<PermissionEditorProps> = (props) => {
+export const PermissionEditor: FC<PermissionEditorProps> = (props) => {
     const { targetUser, onClose, isOpen, onSuccess } = props;
 
     const { settings } = useContext(SettingsContext);
@@ -85,9 +85,7 @@ export const PermissionEditor: React.FC<PermissionEditorProps> = (props) => {
                 onSuccess(res);
                 setIsSaving(false);
             })
-            .catch((error) => {
-                setLatestError(error);
-            })
+            .catch(setLatestError)
             .finally(() => {
                 setIsSaving(false);
             });

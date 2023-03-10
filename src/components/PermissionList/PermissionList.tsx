@@ -1,5 +1,5 @@
 import { Stack, StackProps, Typography } from '@mui/material';
-import React from 'react';
+import { FC, memo } from 'react';
 import { splitBitfield } from '../../helpers/splitBitfield';
 import { UserPermissions } from '../../types/User/UserPermissions';
 import { Permission } from '../Permission/Permission';
@@ -21,7 +21,7 @@ const permissionsDisplayOrder: UserPermissions[] = [
 
 const hiddenPermissions = new Set<UserPermissions>([UserPermissions.MakeApplications, UserPermissions.Favourite]);
 
-const _PermissionList: React.FC<PermissionListProps> = (props) => {
+const _PermissionList: FC<PermissionListProps> = (props) => {
     const { permissions, showAll, ...rest } = props;
 
     const badgeStackItems = splitBitfield(permissions)
@@ -42,4 +42,4 @@ const _PermissionList: React.FC<PermissionListProps> = (props) => {
     );
 };
 
-export const PermissionList = React.memo(_PermissionList);
+export const PermissionList = memo(_PermissionList);
