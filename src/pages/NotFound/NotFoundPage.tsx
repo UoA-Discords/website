@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from 'react';
-import { Link, Typography } from '@mui/material';
-import { ExternalLink, InternalLink } from '../../components/Links';
-import { LocationDataContext } from '../../contexts/LocationData';
+import { Typography } from '@mui/material';
+import { FC, useContext, useEffect } from 'react';
 import { Page } from '../../Page.styled';
+import { ExternalLinkStyled, InternalLinkStyled } from '../../components/Links';
+import { LocationDataContext } from '../../contexts/LocationData';
 
-export const NotFoundPage: React.FC = () => {
+export const NotFoundPage: FC = () => {
     const { setLocationData } = useContext(LocationDataContext);
 
     useEffect(() => {
@@ -17,21 +17,17 @@ export const NotFoundPage: React.FC = () => {
                 Not Found
             </Typography>
             <Typography textAlign="center">
-                The page you were looking for does not exist,{' '}
-                <InternalLink to="/">
-                    <Link component="span" underline="hover">
-                        click here
-                    </Link>
-                </InternalLink>{' '}
+                The page you were looking for does not exist, <InternalLinkStyled to="/">click here</InternalLinkStyled>{' '}
                 to go back home.
                 <br />
                 <br />
                 Alternatively,{' '}
-                <ExternalLink href="https://www.google.com/search?q=grass&tbm=isch" title="Some grass will do you good">
-                    <Link component="span" underline="hover">
-                        touch grass
-                    </Link>
-                </ExternalLink>
+                <ExternalLinkStyled
+                    href="https://www.google.com/search?q=grass&tbm=isch"
+                    title="Some grass will do you good"
+                >
+                    touch grass
+                </ExternalLinkStyled>
                 .
             </Typography>
         </Page>

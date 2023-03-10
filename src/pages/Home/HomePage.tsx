@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from 'react';
 import { Typography } from '@mui/material';
-import { LocationDataContext } from '../../contexts/LocationData';
+import { FC, useContext, useEffect } from 'react';
 import { Page } from '../../Page.styled';
 import { MainStateContext } from '../../contexts';
+import { LocationDataContext } from '../../contexts/LocationData';
 
-export const HomePage: React.FC = () => {
+export const HomePage: FC = () => {
     const { latestServerResponse } = useContext(MainStateContext);
     const { setLocationData } = useContext(LocationDataContext);
 

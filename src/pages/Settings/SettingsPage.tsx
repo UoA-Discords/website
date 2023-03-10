@@ -1,14 +1,14 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Typography, Grid, useTheme, useMediaQuery, FormControlLabel, Switch, Paper } from '@mui/material';
-import { defaultSettings, MainStateContext, Settings, SettingsContext } from '../../contexts';
+import { CanceledError } from 'axios';
+import React, { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Page } from '../../Page.styled';
+import { api } from '../../api';
+import { PermissionList } from '../../components/PermissionList';
+import { defaultSettings, MainStateContext, Settings, SettingsContext } from '../../contexts';
+import { LocationDataContext } from '../../contexts/LocationData';
+import { UserPermissions } from '../../types/User/UserPermissions';
 import { SettingsCog } from './SettingsCog';
 import { SettingsItem, SettingsItemTestState } from './SettingsItem';
-import { LocationDataContext } from '../../contexts/LocationData';
-import { api } from '../../api';
-import { CanceledError } from 'axios';
-import { UserPermissions } from '../../types/User/UserPermissions';
-import { PermissionList } from '../../components/PermissionList';
 
 type StringValuedKeys = { [k in keyof Settings]: Settings[k] extends string ? k : never }[keyof Settings];
 type NumericValuedKeys = { [k in keyof Settings]: Settings[k] extends number ? k : never }[keyof Settings];
@@ -22,7 +22,7 @@ const allPermissions = Object.values(UserPermissions)
     .filter((e): e is UserPermissions => typeof e === 'number')
     .reduce((a, b) => a + b, 0);
 
-export const SettingsPage: React.FC = () => {
+export const SettingsPage: FC = () => {
     const { setLocationData } = useContext(LocationDataContext);
     const { settings, settingsControllers } = useContext(SettingsContext);
     const { latestServerResponse, setLatestError, setLatestServerResponse } = useContext(MainStateContext);

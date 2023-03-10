@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from 'react';
 import SettingsIcon from '@mui/icons-material/Settings';
+import React, { FC, useCallback, useState } from 'react';
 import './SettingsCog.css';
 
 const CLICK_THRESHOLD = 10;
 
 // nothing special going on here ;)
-export const SettingsCog: React.FC = () => {
+export const SettingsCog: FC = () => {
     const [numTimesClicked, setNumTimesClicked] = useState(0);
 
     const handleClick = useCallback(

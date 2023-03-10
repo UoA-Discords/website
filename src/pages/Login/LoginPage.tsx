@@ -1,12 +1,11 @@
 import { Container, Fade, LinearProgress, Stack, Typography } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { Page } from '../../Page.styled';
 import { HomeButton, LoginButton } from '../../components/Buttons';
+import { ErrorDisplayer } from '../../components/ErrorDisplayer';
 import { MainStateContext, SettingsContext, UserSessionContext } from '../../contexts';
 import { LocationDataContext } from '../../contexts/LocationData';
-import { ErrorDisplayer } from '../../components/ErrorDisplayer';
-import { Page } from '../../Page.styled';
-
 import adios from '../../images/adios.jpg';
 
 enum AuthStage {
@@ -23,7 +22,7 @@ enum AuthStage {
     Exiting,
 }
 
-export const LoginPage: React.FC = () => {
+export const LoginPage: FC = () => {
     const {
         sessionData: { state: localState },
     } = useContext(SettingsContext);

@@ -1,11 +1,14 @@
-import { styled } from '@mui/material/styles';
-import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
-import MuiAccordionSummary, { AccordionSummaryProps } from '@mui/material/AccordionSummary';
-import MuiAccordionDetails from '@mui/material/AccordionDetails';
-
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import {
+    styled,
+    AccordionProps,
+    Accordion,
+    AccordionSummaryProps,
+    AccordionSummary,
+    AccordionDetails,
+} from '@mui/material';
 
-export const ProfileAccordion = styled((props: AccordionProps) => <MuiAccordion disableGutters {...props} />)(
+export const ProfileAccordion = styled((props: AccordionProps) => <Accordion disableGutters {...props} />)(
     ({ theme }) => ({
         border: `1px solid ${theme.palette.divider}`,
         '&:not(:last-child)': {
@@ -18,9 +21,9 @@ export const ProfileAccordion = styled((props: AccordionProps) => <MuiAccordion 
 );
 
 export const ProfileAccordionSummary = styled((props: AccordionSummaryProps) => (
-    <MuiAccordionSummary expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />} {...props} />
+    <AccordionSummary expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />} {...props} />
 ))(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, .05)' : 'rgba(0, 0, 0, .03)',
+    backgroundColor: 'rgba(255, 255, 255, .05)',
     flexDirection: 'row-reverse',
     '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
         transform: 'rotate(90deg)',
@@ -30,7 +33,7 @@ export const ProfileAccordionSummary = styled((props: AccordionSummaryProps) => 
     },
 }));
 
-export const ProfileAccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+export const ProfileAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
     padding: theme.spacing(2),
     borderTop: '1px solid rgba(0, 0, 0, .125)',
 }));

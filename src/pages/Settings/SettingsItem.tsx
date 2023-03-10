@@ -1,4 +1,9 @@
-import React from 'react';
+import TestFailIcon from '@mui/icons-material/Cancel';
+import TestSuccessIcon from '@mui/icons-material/CheckCircle';
+import TestValueIcon from '@mui/icons-material/CheckCircleOutline';
+import ResetToDefaultIcon from '@mui/icons-material/RestartAlt';
+import ShowPasswordIcon from '@mui/icons-material/Visibility';
+import HidePasswordIcon from '@mui/icons-material/VisibilityOff';
 import {
     BaseTextFieldProps,
     Grid,
@@ -9,13 +14,7 @@ import {
     CircularProgress,
     Typography,
 } from '@mui/material';
-
-import ResetToDefaultIcon from '@mui/icons-material/RestartAlt';
-import TestValueIcon from '@mui/icons-material/CheckCircleOutline';
-import TestSuccessIcon from '@mui/icons-material/CheckCircle';
-import TestFailIcon from '@mui/icons-material/Cancel';
-import ShowPasswordIcon from '@mui/icons-material/Visibility';
-import HidePasswordIcon from '@mui/icons-material/VisibilityOff';
+import React, { FC, HTMLAttributes, memo } from 'react';
 
 export enum SettingsItemTestState {
     Available,
@@ -37,12 +36,12 @@ export interface SettingsItemProps {
     handleReset: (e: React.MouseEvent<HTMLButtonElement>) => void;
     title: string;
     isDefault: boolean;
-    inputMode?: React.HTMLAttributes<HTMLInputElement | HTMLTextAreaElement>['inputMode'];
+    inputMode?: HTMLAttributes<HTMLInputElement | HTMLTextAreaElement>['inputMode'];
     test?: SettingsItemTest;
     hide?: { hidden: boolean; setHidden: (newHidden: boolean) => void };
 }
 
-const _SettingsItem: React.FC<SettingsItemProps> = (props) => {
+const _SettingsItem: FC<SettingsItemProps> = (props) => {
     const { label, value, handleChange, handleReset, title, isDefault, inputMode, test, hide } = props;
 
     let color: Exclude<BaseTextFieldProps['color'], undefined>;
@@ -133,4 +132,4 @@ const _SettingsItem: React.FC<SettingsItemProps> = (props) => {
     );
 };
 
-export const SettingsItem = React.memo(_SettingsItem);
+export const SettingsItem = memo(_SettingsItem);

@@ -1,10 +1,15 @@
+import EditIcon from '@mui/icons-material/Edit';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { Button, CircularProgress, Divider, Link, Paper, Stack, Typography } from '@mui/material';
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Page } from '../../Page.styled';
 import { api } from '../../api';
 import { HomeButton } from '../../components/Buttons';
 import { ErrorDisplayer } from '../../components/ErrorDisplayer';
+import { PermissionEditor } from '../../components/PermissionEditor';
 import { PermissionList } from '../../components/PermissionList';
+import { PermissionsLog } from '../../components/PermissionLog';
 import { ProfilePicture } from '../../components/ProfilePicture';
 import { RelativeTimeString } from '../../components/RelativeTimeString';
 import {
@@ -14,23 +19,16 @@ import {
     UserDictionaryContext,
     UserSessionContext,
 } from '../../contexts';
-import { Page } from '../../Page.styled';
+import { useCanEdit } from '../../hooks/useCanEdit';
 import { ServerStatus } from '../../types/Server/ServerStatus';
 import { ServerStatusAction } from '../../types/Server/ServerStatusAction';
 import { User } from '../../types/User';
 import { ProfileAccordion, ProfileAccordionDetails, ProfileAccordionSummary } from './ProfilePage.styled';
-import { hasPermissions } from '../../helpers/hasPermissions';
-import { UserPermissions } from '../../types/User/UserPermissions';
-import { PermissionEditor } from '../../components/PermissionEditor';
 
-import LogoutIcon from '@mui/icons-material/Logout';
-import EditIcon from '@mui/icons-material/Edit';
-import { PermissionsLog } from '../../components/PermissionLog';
-
-const TrueProfilePage: React.FC<{
+const TrueProfilePage: FC<{
     user: User<'HideIP' | 'ShowIP'>;
-    updateUser: (newUser: User<'HideIP' | 'ShowIP'>) => void;
-}> = ({ user, updateUser }) => {
+    onUpdate: (newUser: User<'HideIP' | 'ShowIP'>) => void;
+}> = ({ user, onUpdate }) => {
     const {
         discord: { username, discriminator },
     } = user;
@@ -52,27 +50,7 @@ const TrueProfilePage: React.FC<{
 
     const totalNumActions = useMemo(() => Object.values(user.actions).reduce((a, b) => a + b, 0), [user.actions]);
 
-    const shouldShowPermissionElement = useMemo(() => {
-        // must be logged in to edit permissions
-        if (loggedInUser === null) return false;
-
-        // must have the 'Manage Users' permission to edit permissions
-        if (!hasPermissions(loggedInUser.user.permissions, UserPermissions.ManageUsers)) return false;
-
-        // can always edit your own permissions
-        if (isSelf) return true;
-
-        // can never edit an owner (excluding yourself)
-        if (hasPermissions(user.permissions, UserPermissions.Owner)) return false;
-
-        // only owners can edit admins
-        if (hasPermissions(user.permissions, UserPermissions.ManageUsers)) {
-            return hasPermissions(loggedInUser.user.permissions, UserPermissions.Owner);
-        }
-
-        // otherwise should be valid
-        return true;
-    }, [isSelf, loggedInUser, user.permissions]);
+    const canEdit = useCanEdit(user);
 
     const handleLogout = useCallback(() => {
         requestLogout().catch((error) => {
@@ -189,13 +167,13 @@ const TrueProfilePage: React.FC<{
                     </ProfileAccordion>
                 )}
 
-                {shouldShowPermissionElement && (
+                {canEdit && (
                     <>
                         <PermissionEditor
                             targetUser={user}
                             onClose={() => setIsPermissionEditorOpen(false)}
                             isOpen={isPermissionEditorOpen}
-                            onSuccess={updateUser}
+                            onSuccess={onUpdate}
                         />
                         <Button
                             variant="outlined"
@@ -218,25 +196,26 @@ const TrueProfilePage: React.FC<{
     );
 };
 
-export const ProfilePage: React.FC = () => {
+export const ProfilePage: FC = () => {
     const { settings } = useContext(SettingsContext);
     const { loggedInUser, updateUser } = useContext(UserSessionContext);
     const { latestError, setLatestError, setGlobalErrorDisplayType } = useContext(MainStateContext);
-    const { addIdsToDictionary } = useContext(UserDictionaryContext);
+    const { addIdsToDictionary, updateUserInDictionary } = useContext(UserDictionaryContext);
     const { setLocationData } = useContext(LocationDataContext);
 
     const { id } = useParams();
 
     const [resolvedUser, setResolvedUser] = useState<User<'HideIP' | 'ShowIP'> | null>(null);
 
-    const updateResolvedUser = useCallback(
+    const handleUpdate = useCallback(
         (updatedUser: User<'HideIP' | 'ShowIP'>) => {
             if (updatedUser._id === loggedInUser?.user._id) {
                 updateUser(updatedUser);
             }
             setResolvedUser(updatedUser);
+            updateUserInDictionary(updatedUser);
         },
-        [loggedInUser?.user._id, updateUser],
+        [loggedInUser?.user._id, updateUser, updateUserInDictionary],
     );
 
     useEffect(() => {
@@ -363,5 +342,5 @@ export const ProfilePage: React.FC = () => {
         );
     }
 
-    return <TrueProfilePage user={resolvedUser} updateUser={updateResolvedUser} />;
+    return <TrueProfilePage user={resolvedUser} onUpdate={handleUpdate} />;
 };
