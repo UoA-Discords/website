@@ -1,13 +1,12 @@
-import React, { ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { Fade, Grid, IconButton, Link, ListItemButton, Paper, Stack, Typography } from '@mui/material';
-import { ExternalLink, InternalLink } from '../../components/Links';
-import { SettingsContext } from '../../contexts';
-import { LocationDataContext } from '../../contexts/LocationData';
-import { Page } from '../../Page.styled';
-import { FAQ } from './FAQ';
-
 import LinkIcon from '@mui/icons-material/Link';
 import LinkOffIcon from '@mui/icons-material/LinkOff';
+import { Fade, Grid, IconButton, ListItemButton, Paper, Stack, Typography } from '@mui/material';
+import { FC, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { Page } from '../../Page.styled';
+import { ExternalLinkStyled, InternalLinkStyled } from '../../components/Links';
+import { SettingsContext } from '../../contexts';
+import { LocationDataContext } from '../../contexts/LocationData';
+import { FAQ } from './FAQ';
 
 interface SectionProps {
     title: string;
@@ -17,7 +16,7 @@ interface SectionProps {
     children: ReactNode;
 }
 
-const Section: React.FC<SectionProps> = (props) => {
+const Section: FC<SectionProps> = (props) => {
     const { title, forcedId, focussedId, onLink, children } = props;
 
     const [isHovered, setIsHovered] = useState(false);
@@ -57,7 +56,7 @@ const Section: React.FC<SectionProps> = (props) => {
     );
 };
 
-export const InfoPage: React.FC = () => {
+export const InfoPage: FC = () => {
     const { setLocationData } = useContext(LocationDataContext);
     const { settings } = useContext(SettingsContext);
 
@@ -123,28 +122,19 @@ export const InfoPage: React.FC = () => {
                     <br />
                     <br />
                     The UoA Discords project consists of 2 primary services: our{' '}
-                    <InternalLink to="/">
-                        <Link component="span" underline="hover">
-                            website
-                        </Link>
-                    </InternalLink>{' '}
-                    which interfaces our API, and our{' '}
-                    <ExternalLink href={settings.serverUrl} title="Our server registry API endpoint">
-                        <Link component="span" underline="hover">
-                            server registry API
-                        </Link>
-                    </ExternalLink>{' '}
+                    <InternalLinkStyled to="/">website</InternalLinkStyled> which interfaces our API, and our{' '}
+                    <ExternalLinkStyled href={settings.serverUrl} title="Our server registry API endpoint">
+                        server registry API
+                    </ExternalLinkStyled>{' '}
                     which actually does the storing, searching, and general management of the Discord servers.
                     <br />
                     All of our services are{' '}
-                    <ExternalLink
+                    <ExternalLinkStyled
                         href="https://github.com/orgs/UoA-Discords/repositories"
                         title="Our GitHub repositories"
                     >
-                        <Link component="span" underline="hover">
-                            entirely open source
-                        </Link>
-                    </ExternalLink>
+                        entirely open source
+                    </ExternalLinkStyled>
                     .
                 </Typography>
             </Section>
@@ -156,11 +146,9 @@ export const InfoPage: React.FC = () => {
             <Section title="Site Policy" focussedId={focussedId} onLink={onLink}>
                 <Typography>
                     Please behave responsibly while using our services by following the Discord{' '}
-                    <ExternalLink href="https://discord.com/guidelines" title="Discord community guidelines">
-                        <Link component="span" underline="hover">
-                            community guidelines
-                        </Link>
-                    </ExternalLink>
+                    <ExternalLinkStyled href="https://discord.com/guidelines" title="Discord community guidelines">
+                        community guidelines
+                    </ExternalLinkStyled>
                     . Exploiting or otherwise abusing our services may lead to your IP being ratelimited, having
                     functionality reduced, or being outright banned. These actions may be taken at our own discretion.
                 </Typography>
@@ -169,11 +157,9 @@ export const InfoPage: React.FC = () => {
             <Section title="Contact" focussedId={focussedId} onLink={onLink}>
                 <Typography component="div">
                     Our primary point of contact is through our{' '}
-                    <ExternalLink href="https://discord.gg/XmdRWSCy2U" title="Our Discord server">
-                        <Link component="span" underline="hover">
-                            Discord server
-                        </Link>
-                    </ExternalLink>
+                    <ExternalLinkStyled href="https://discord.gg/XmdRWSCy2U" title="Our Discord server">
+                        Discord server
+                    </ExternalLinkStyled>
                     . We encourage you to do so if you have:
                     <ul>
                         <li>A bug or vulnerability to report.</li>
@@ -182,30 +168,22 @@ export const InfoPage: React.FC = () => {
                         <li>Services to offer, we're always looking to expand our team!</li>
                     </ul>
                     Additionally you can email{' '}
-                    <ExternalLink href="mailto:support@uoa-discords.com" title="Our support email address">
-                        <Link component="span" underline="hover">
-                            support@uoa-discord.com
-                        </Link>
-                    </ExternalLink>{' '}
+                    <ExternalLinkStyled href="mailto:support@uoa-discords.com" title="Our support email address">
+                        support@uoa-discord.com
+                    </ExternalLinkStyled>{' '}
                     and{' '}
-                    <ExternalLink href="mailto:devs@uoa-discords.com" title="Our developer email address">
-                        <Link component="span" underline="hover">
-                            devs@uoa-discord.com
-                        </Link>
-                    </ExternalLink>
+                    <ExternalLinkStyled href="mailto:devs@uoa-discords.com" title="Our developer email address">
+                        devs@uoa-discord.com
+                    </ExternalLinkStyled>
                     .<br />
                     We also have a{' '}
-                    <ExternalLink href="https://www.reddit.com/user/UoA-Discords-Team" title="Our Reddit account">
-                        <Link component="span" underline="hover">
-                            Reddit account
-                        </Link>
-                    </ExternalLink>{' '}
+                    <ExternalLinkStyled href="https://www.reddit.com/user/UoA-Discords-Team" title="Our Reddit account">
+                        Reddit account
+                    </ExternalLinkStyled>{' '}
                     and{' '}
-                    <ExternalLink href="https://github.com/UoA-Discords" title="Our GitHub organization">
-                        <Link component="span" underline="hover">
-                            GitHub organization
-                        </Link>
-                    </ExternalLink>
+                    <ExternalLinkStyled href="https://github.com/UoA-Discords" title="Our GitHub organization">
+                        GitHub organization
+                    </ExternalLinkStyled>
                     .
                 </Typography>
             </Section>
