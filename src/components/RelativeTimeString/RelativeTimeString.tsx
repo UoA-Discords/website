@@ -1,8 +1,8 @@
-import dayjs from 'dayjs';
+import dayjs, { extend } from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { CSSProperties, FC, useEffect, useState } from 'react';
 
-dayjs.extend(relativeTime);
+extend(relativeTime);
 
 export interface RelativeTimeStringProps extends CSSProperties {
     /** The ISO string or timestamp of the time to display relative to now. */
