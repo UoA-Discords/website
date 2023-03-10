@@ -1,10 +1,10 @@
-import React from 'react';
+import HomeIcon from '@mui/icons-material/Home';
 import { Button, ButtonProps } from '@mui/material';
+import { FC } from 'react';
 import { InternalLink } from '../Links';
 
-import HomeIcon from '@mui/icons-material/Home';
-
-export const HomeButton: React.FC<ButtonProps> = (props) => (
+/** A button that internally links to the home page (`/`). */
+export const HomeButton: FC<ButtonProps> = (props) => (
     <InternalLink to="/">
         <Button variant="outlined" startIcon={<HomeIcon />} {...props}>
             Home
