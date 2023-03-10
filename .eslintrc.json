@@ -3,7 +3,19 @@
         "es2022": true,
         "browser": true
     },
-    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "react-app", "prettier"],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:import/recommended",
+        "react-app",
+        "prettier"
+    ],
+    "settings": {
+        "import/resolver": {
+            "typescript": true,
+            "node": true
+        }
+    },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -59,6 +71,15 @@
                 "format": ["PascalCase"]
             }
         ],
-        "@typescript-eslint/no-non-null-assertion": "off"
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "import/order": [
+            "error",
+            {
+                "alphabetize": {
+                    "order": "asc"
+                },
+                "newlines-between": "never"
+            }
+        ]
     }
 }
