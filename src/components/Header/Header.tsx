@@ -1,36 +1,36 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { useTheme, useMediaQuery, Paper, Stack, Typography, Link, Grow, Breadcrumbs } from '@mui/material';
-import { InternalLink } from '../Links';
-import { MainStateContext, SettingsContext, UserSessionContext } from '../../contexts';
-import { LoginButton } from '../Buttons';
-import { ProfilePicture } from '../ProfilePicture';
-import { LocationDataContext } from '../../contexts/LocationData';
-import './Header.css';
-
-import TransparentBirdLogo from '../../images/TransparentBirdLogo.png';
+import { useTheme, useMediaQuery, Typography, Link, Grow, Breadcrumbs } from '@mui/material';
+import { FC, useContext, useEffect, useMemo, useState } from 'react';
 import { api } from '../../api';
+import { MainStateContext, SettingsContext, UserSessionContext } from '../../contexts';
+import { LocationDataContext } from '../../contexts/LocationData';
+import TransparentBirdLogo from '../../images/TransparentBirdLogo.png';
+import { LoginButton } from '../Buttons';
+import { InternalLink } from '../Links';
+import { ProfilePicture } from '../ProfilePicture';
+import './Header.css';
+import { HeaderContainer, HeaderItemList, SiteLogo } from './Header.styled';
 
-export const Header: React.FC = () => {
+export const Header: FC = () => {
     const { loggedInUser } = useContext(UserSessionContext);
     const { title, description } = useContext(LocationDataContext);
-    const { setLatestError, setLatestServerResponse } = useContext(MainStateContext);
+    const { latestError, setLatestError, setLatestServerResponse } = useContext(MainStateContext);
     const { settings } = useContext(SettingsContext);
 
     const theme = useTheme();
 
-    const [hasHoveredOverLogo, setHasHoveredOverLogo] = useState(false);
+    const [logoHovered, setLogoHovered] = useState(false);
 
-    const shouldHideTextLogo = useMediaQuery(theme.breakpoints.down('sm'));
-    const shouldHideLoginOrProfileIcon = useMediaQuery(theme.breakpoints.down('xs'));
+    const siteNameHidden = useMediaQuery(theme.breakpoints.down('sm'));
 
-    const shouldInitiallyHideLogo = useMediaQuery(theme.breakpoints.down(1100));
+    const buttonHidden = useMediaQuery(theme.breakpoints.down('xs'));
 
-    const hideLogo = useMemo(
-        () => hasHoveredOverLogo || shouldInitiallyHideLogo,
-        [hasHoveredOverLogo, shouldInitiallyHideLogo],
-    );
+    const logoInitiallyHidden = useMediaQuery(theme.breakpoints.down(1100));
+
+    const logoHidden = useMemo(() => logoHovered || logoInitiallyHidden, [logoHovered, logoInitiallyHidden]);
 
     useEffect(() => {
+        if (latestError !== null) return;
+
         const controller = new AbortController();
 
         api.postRoot({
@@ -39,18 +39,14 @@ export const Header: React.FC = () => {
             controller,
             rateLimitBypassToken: settings.rateLimitBypassToken,
         })
-            .then((res) => {
-                setLatestServerResponse(res);
-            })
-            .catch((error) => {
-                setLatestError(error);
-            });
-    }, [setLatestError, setLatestServerResponse, settings.rateLimitBypassToken, settings.serverUrl]);
+            .then(setLatestServerResponse)
+            .catch(setLatestError);
+    }, [latestError, setLatestError, setLatestServerResponse, settings.rateLimitBypassToken, settings.serverUrl]);
 
     return (
-        <Paper sx={{ width: '100vw', m: 0, p: '0.5em 0' }} square>
-            <Stack direction="row" alignItems="center" spacing={3} sx={{ ml: '1rem', mr: '1rem', overflowX: 'auto' }}>
-                {!shouldHideTextLogo && (
+        <HeaderContainer square>
+            <HeaderItemList direction="row" alignItems="center" spacing={3}>
+                {!siteNameHidden && (
                     <InternalLink to="/" id="siteName">
                         <Typography>UOA</Typography>
                         <Typography>DISCORDS</Typography>
@@ -73,7 +69,7 @@ export const Header: React.FC = () => {
                         </Breadcrumbs>
                     )}
                 </div>
-                {!shouldHideLoginOrProfileIcon &&
+                {!buttonHidden &&
                     (loggedInUser !== null ? (
                         <InternalLink to={`/users/${loggedInUser.user._id}`} title="Go to your profile page">
                             <ProfilePicture user={loggedInUser.user} />
@@ -81,25 +77,12 @@ export const Header: React.FC = () => {
                     ) : (
                         <LoginButton />
                     ))}
-            </Stack>
-            {!shouldInitiallyHideLogo && (
-                <Grow in={!hideLogo} style={{ justifySelf: 'flex-end' }}>
-                    <img
-                        style={{
-                            height: '165.04',
-                            width: '226px',
-                            position: 'absolute',
-                            right: '12.8rem',
-                            top: '0.4rem',
-                            zIndex: 1,
-                            justifySelf: 'flex-end',
-                        }}
-                        src={TransparentBirdLogo}
-                        alt="Site logo"
-                        onMouseOver={() => setHasHoveredOverLogo(true)}
-                    />
+            </HeaderItemList>
+            {!logoInitiallyHidden && (
+                <Grow in={!logoHidden} style={{ justifySelf: 'flex-end' }}>
+                    <SiteLogo src={TransparentBirdLogo} alt="Site logo" onMouseOver={() => setLogoHovered(true)} />
                 </Grow>
             )}
-        </Paper>
+        </HeaderContainer>
     );
 };
