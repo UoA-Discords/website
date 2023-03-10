@@ -1,12 +1,12 @@
-import React, { ReactNode, useCallback, useContext, useMemo, useState } from 'react';
+import { FC, ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 import { api } from '../../api';
 import { IUserDictionaryContext, SettingsContext, UserDictionaryContext, UserSessionContext } from '../../contexts';
 import { User } from '../../types/User';
 import { DiscordIdString } from '../../types/Utility';
 
-export const UserDictionaryProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const UserDictionaryProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const { settings } = useContext(SettingsContext);
-    const { loggedInUser } = useContext(UserSessionContext);
+    const { loggedInUser, updateUser } = useContext(UserSessionContext);
 
     const [encounteredUsers, setEncounteredUsers] = useState<Record<DiscordIdString, User<'HideIP' | 'ShowIP'>>>({});
 
@@ -16,9 +16,10 @@ export const UserDictionaryProvider: React.FC<{ children: ReactNode }> = ({ chil
 
             for (const id of userIds) {
                 if (encounteredUsers[id] !== undefined) continue;
-                if (loggedInUser?.user._id === id) continue;
                 relevantUserIds.add(id);
             }
+
+            if (loggedInUser?.user._id !== undefined) relevantUserIds.delete(loggedInUser.user._id);
 
             if (relevantUserIds.size === 0) return;
 
@@ -71,6 +72,32 @@ export const UserDictionaryProvider: React.FC<{ children: ReactNode }> = ({ chil
         ],
     );
 
+    const addUsersToDictionary = useCallback<IUserDictionaryContext['addUsersToDictionary']>(
+        (users) => {
+            if (users.every((e) => encounteredUsers[e._id] !== undefined)) return;
+
+            setEncounteredUsers({
+                ...encounteredUsers,
+                ...users.reduce((newDict, user) => ({ ...newDict, [user._id]: user }), {}),
+            });
+        },
+        [encounteredUsers],
+    );
+
+    const updateUserInDictionary = useCallback<IUserDictionaryContext['updateUserInDictionary']>(
+        (updatedUser) => {
+            if (updatedUser._id === loggedInUser?.user._id) {
+                return updateUser(updatedUser);
+            }
+
+            setEncounteredUsers({
+                ...encounteredUsers,
+                [updatedUser._id]: updatedUser,
+            });
+        },
+        [encounteredUsers, loggedInUser?.user._id, updateUser],
+    );
+
     const getUser = useCallback<IUserDictionaryContext['getUser']>(
         (id) => {
             if (id === loggedInUser?.user._id) return loggedInUser.user;
@@ -81,8 +108,8 @@ export const UserDictionaryProvider: React.FC<{ children: ReactNode }> = ({ chil
     );
 
     const finalValue = useMemo<IUserDictionaryContext>(
-        () => ({ addIdsToDictionary, getUser }),
-        [addIdsToDictionary, getUser],
+        () => ({ addIdsToDictionary, addUsersToDictionary, updateUserInDictionary, getUser }),
+        [addIdsToDictionary, addUsersToDictionary, getUser, updateUserInDictionary],
     );
 
     return <UserDictionaryContext.Provider value={finalValue}>{children}</UserDictionaryContext.Provider>;
