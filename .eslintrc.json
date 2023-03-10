@@ -81,6 +81,10 @@
                 },
                 "newlines-between": "never"
             }
-        ]
+        ],
+        "import/no-unresolved": "warn",
+        "import/namespace": "warn",
+        "import/export": "warn",
+        "import/default": "warn"
     }
 }
