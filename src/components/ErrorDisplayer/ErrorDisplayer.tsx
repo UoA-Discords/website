@@ -1,164 +1,50 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Link,
-    Stack,
-    Typography,
-} from '@mui/material';
-import { MainStateContext, SettingsContext } from '../../contexts';
-import { ExternalLink, InternalLink } from '../Links';
+import { Button, Dialog, DialogTitle } from '@mui/material';
+import { useContext, useEffect, useState, FC, useCallback } from 'react';
+import { MainStateContext } from '../../contexts';
+import { ErrorBody } from './ErrorBody';
+import { ErrorDisplayerDialogActions, ErrorDisplayerDialogContent } from './ErrorDisplayer.styled';
+import { ErrorTitle } from './ErrorTitle';
 
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
-export const ErrorDisplayer: React.FC<{ inline?: boolean }> = ({ inline = false }) => {
-    const { settings } = useContext(SettingsContext);
+/**
+ * Displays any errors that have been caught by the {@link MainStateContext}.
+ *
+ * The `inline` option can be provided to display the errors in `<div>` element instead of a dialog.
+ */
+export const ErrorDisplayer: FC<{ inline?: boolean }> = ({ inline = false }) => {
     const { latestError, globalErrorDisplayType } = useContext(MainStateContext);
 
     const [open, setOpen] = useState(false);
-    const [isExpanded, setIsExpanded] = useState(false);
+
+    const handleClose = useCallback(() => {
+        setOpen(false);
+    }, []);
 
     useEffect(() => {
-        if (latestError === null || (globalErrorDisplayType === 'inline' && !inline)) {
-            setOpen(false);
-            setIsExpanded(false);
-        } else setOpen(true);
+        // mark as closed if the latest error doesn't exist (or has been cleared)
+        if (latestError === null) return setOpen(false);
+
+        // mark as closed if we're not supposed to display it
+        if (globalErrorDisplayType === 'inline' && !inline) return setOpen(false);
+
+        // otherwise, the error exists and we're supposed to display it, so mark as open
+        setOpen(true);
     }, [globalErrorDisplayType, inline, latestError]);
-
-    const finalCode = useMemo(() => {
-        if (latestError === null) return null;
-
-        const { recognized, value } = latestError;
-
-        return recognized
-            ? value.statusCode
-            : (value as { response?: { status?: number } })?.response?.status ??
-                  (value as { status?: number })?.status ??
-                  null;
-    }, [latestError]);
-
-    const rawError = useMemo(() => {
-        if (latestError === null) return null;
-
-        const { recognized, value } = latestError;
-
-        if (recognized) {
-            if (value.additionalData === undefined || value.additionalData === null) return null;
-            return JSON.stringify(value.additionalData, undefined, 2).replaceAll(/Bearer.*"/g, 'Bearer [REDACTED]"');
-        }
-
-        if (value === 'Network error') return null;
-
-        try {
-            return JSON.stringify(value, undefined, 2)?.replaceAll(/Bearer.*"/g, 'Bearer [REDACTED]"');
-        } catch (error) {
-            return 'Failed to parse additional data, see console for more details.';
-        }
-    }, [latestError]);
-
-    const titleElement = useMemo(
-        () => (
-            <Typography textAlign="center" variant="h4" color="orange" gutterBottom>
-                {latestError?.value === 'Network error'
-                    ? 'Network Error'
-                    : finalCode !== null
-                    ? `Error ${finalCode}${latestError?.recognized ? ` - ${latestError.value.title}` : ''}`
-                    : 'Unknown Error'}
-            </Typography>
-        ),
-
-        [finalCode, latestError],
-    );
-
-    const bodyElement = useMemo(() => {
-        if (latestError === null) return <></>;
-
-        const { recognized, value } = latestError;
-
-        return (
-            <Stack gap={2}>
-                {recognized ? (
-                    <>
-                        <Typography>{value.description}</Typography>
-                        <Typography color="gray">
-                            If you think this error is a mistake, we encourage you to{' '}
-                            <InternalLink to="/info#contact" onClick={() => setOpen(false)}>
-                                <Link component="span" underline="hover">
-                                    contact us
-                                </Link>
-                            </InternalLink>
-                            .
-                        </Typography>
-                    </>
-                ) : (
-                    <Typography>
-                        {latestError.value === 'Network error' ? (
-                            <>
-                                Failed to make a request, either your internet is down, or our server is down. If you're
-                                100% certain of the latter, please{' '}
-                                <InternalLink to="/info#contact" onClick={() => setOpen(false)}>
-                                    <Link component="span" underline="hover">
-                                        contact us
-                                    </Link>
-                                </InternalLink>
-                                .<br />
-                                <br />
-                                <span style={{ color: 'lightgray' }}>
-                                    The configured server URL is{' '}
-                                    <ExternalLink href={settings.serverUrl} title="Configured server endpoint">
-                                        <Link component="span" underline="hover">
-                                            {settings.serverUrl}
-                                        </Link>
-                                    </ExternalLink>
-                                </span>
-                            </>
-                        ) : (
-                            <>
-                                An unknown error occurred while making a request to our API. We try to plan for all
-                                possible errors, so you should definitely{' '}
-                                <InternalLink to="/info#contact" onClick={() => setOpen(false)}>
-                                    <Link component="span" underline="hover">
-                                        contact us
-                                    </Link>
-                                </InternalLink>
-                                .
-                            </>
-                        )}
-                    </Typography>
-                )}
-                {rawError !== null && (
-                    <Accordion expanded={isExpanded} onChange={() => setIsExpanded(!isExpanded)} disableGutters>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                            {isExpanded ? 'Hide More Info' : 'Show More Info'}
-                        </AccordionSummary>
-                        <AccordionDetails sx={{ overflow: 'auto', maxHeight: '300px' }}>
-                            <pre>{rawError}</pre>
-                        </AccordionDetails>
-                    </Accordion>
-                )}
-            </Stack>
-        );
-    }, [isExpanded, latestError, rawError, settings.serverUrl]);
 
     if (latestError === null) return <></>;
 
     if (inline) {
         return (
             <div>
-                {titleElement}
-                {bodyElement}
+                <ErrorTitle />
+                <ErrorBody onClose={handleClose} />
             </div>
         );
     }
 
     return (
-        <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm">
+        <Dialog open={open} onClose={handleClose} maxWidth="sm">
+            {/* we can't used a style component for the dialog title since the 'component' prop doesn't seem to exist
+            on styled components :( */}
             <DialogTitle
                 component="div"
                 sx={{
@@ -168,29 +54,16 @@ export const ErrorDisplayer: React.FC<{ inline?: boolean }> = ({ inline = false 
                 }}
                 textAlign="center"
             >
-                {titleElement}
+                <ErrorTitle />
             </DialogTitle>
-            <DialogContent
-                sx={{
-                    bgcolor: 'background.paper',
-                    border: '2px solid #333',
-                    borderTop: 'none',
-                    borderBottom: 'none',
-                }}
-            >
-                {bodyElement}
-            </DialogContent>
-            <DialogActions
-                sx={{
-                    bgcolor: 'background.paper',
-                    border: '2px solid #333',
-                    borderTop: 'none',
-                }}
-            >
-                <Button variant="outlined" sx={{ minWidth: '100px' }} onClick={() => setOpen(false)}>
+            <ErrorDisplayerDialogContent>
+                <ErrorBody onClose={handleClose} />
+            </ErrorDisplayerDialogContent>
+            <ErrorDisplayerDialogActions>
+                <Button variant="outlined" sx={{ minWidth: '100px' }} onClick={handleClose}>
                     Close
                 </Button>
-            </DialogActions>
+            </ErrorDisplayerDialogActions>
         </Dialog>
     );
 };
