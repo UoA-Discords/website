@@ -80,6 +80,7 @@
                 },
                 "newlines-between": "never"
             }
-        ]
+        ],
+        "import/no-unresolved": "warn"
     }
 }
