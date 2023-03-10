@@ -11,10 +11,10 @@ type DiscordUserData = {
     avatar: string | null;
 
     /**
-     * This flag is used to signify that this object comes from the {@link useDiscordUserData} hook, differentiating it
-     * from the {@link APIUser} object, which would otherwise have the same properties.
+     * This flag is used to signify whether this object comes from the {@link useDiscordUserData} hook, differentiating
+     * it from the {@link APIUser} object, which would otherwise have the same properties.
      */
-    _converted: true;
+    _converted?: boolean;
 };
 
 /** A Discord user reference that can be used in any context where we need to reference a Discord user. */
@@ -28,7 +28,7 @@ const isFullUser = (user: Exclude<AnyDiscordUserReference, DiscordIdString>): us
     '_id' in user;
 
 const isAlreadyDiscordUserData = (user: Exclude<AnyDiscordUserReference, DiscordIdString>): user is DiscordUserData =>
-    '_converted' in user;
+    '_converted' in user && user['_converted'];
 
 /**
  * Extracts useful Discord user data from a reference to a user.
@@ -45,7 +45,6 @@ export function useDiscordUserData(discordUserReference: AnyDiscordUserReference
                 username: null,
                 discriminator: null,
                 avatar: null,
-                _converted: true,
             };
         }
 
@@ -57,7 +56,6 @@ export function useDiscordUserData(discordUserReference: AnyDiscordUserReference
                 username: discordUserReference.discord.username,
                 discriminator: discordUserReference.discord.discriminator,
                 avatar: discordUserReference.discord.avatar,
-                _converted: true,
             };
         }
 
@@ -66,7 +64,6 @@ export function useDiscordUserData(discordUserReference: AnyDiscordUserReference
             username: discordUserReference.username,
             discriminator: discordUserReference.discriminator,
             avatar: discordUserReference.avatar,
-            _converted: true,
         };
     }, [discordUserReference]);
 
@@ -79,7 +76,7 @@ export function useDiscordUserData(discordUserReference: AnyDiscordUserReference
 
         const encountered = getUser(convertedUser.id);
 
-        if (encountered === null) return convertedUser;
+        if (encountered === null) return { ...convertedUser, _converted: true };
 
         return {
             id: encountered._id,
