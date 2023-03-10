@@ -1,5 +1,5 @@
-import { ServerStatusAction } from './ServerStatusAction';
 import { DiscordIdString, ISOString } from '../Utility';
+import { ServerStatusAction } from './ServerStatusAction';
 
 /** Information about a change in status of a server. */
 export interface ServerChangeRecord {

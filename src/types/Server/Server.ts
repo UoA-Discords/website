@@ -1,8 +1,8 @@
 import { APIUser, GuildVerificationLevel } from 'discord-api-types/v10';
 import { DiscordIdString, ISOString } from '../Utility';
-import { ServerTags } from './ServerTags';
 import { ServerChangeRecord } from './ServerChangeRecord';
 import { ServerStatus } from './ServerStatus';
+import { ServerTags } from './ServerTags';
 
 /** A Discord server in our database. */
 export interface Server {

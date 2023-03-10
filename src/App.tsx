@@ -1,18 +1,19 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, CssBaseline } from '@mui/material';
-import { InfoPage, HomePage, SettingsPage, NotFoundPage, LoginPage, ProfilePage } from './pages';
+import { FC } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ErrorDisplayer } from './components/ErrorDisplayer';
-import { theme } from './theme';
-import { ContextProviders } from './providers';
-import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import { Header } from './components/Header';
+import { InfoPage, HomePage, SettingsPage, NotFoundPage, LoginPage, ProfilePage, UsersPage } from './pages';
+import { ContextProviders } from './providers';
+import { theme } from './theme';
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-export const App: React.FC = () => (
+export const App: FC = () => (
     <BrowserRouter>
         <ThemeProvider theme={theme}>
             <CssBaseline enableColorScheme />
@@ -25,6 +26,7 @@ export const App: React.FC = () => (
                     <Route path="info" element={<InfoPage />} />
                     <Route path="login" element={<LoginPage />} />
                     <Route path="users/:id" element={<ProfilePage />} />
+                    <Route path="users" element={<UsersPage />} />
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
                 <Footer />
