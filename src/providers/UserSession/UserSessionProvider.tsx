@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { FC, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { api } from '../../api';
 import {
     IUserSessionContext,
@@ -9,7 +9,7 @@ import {
 } from '../../contexts';
 import { getLocalUserSession, saveLocalUserSession } from './UserSessionHelpers';
 
-export const UserSessionContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const UserSessionContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const { settings } = useContext(SettingsContext);
     const { setLatestError } = useContext(MainStateContext);
 
@@ -108,8 +108,8 @@ export const UserSessionContextProvider: React.FC<{ children: ReactNode }> = ({ 
         };
     }, [doneInitialRefresh, setLatestError, loggedInUser, settings.rateLimitBypassToken, settings.serverUrl]);
 
-    // scheduling a call to /refresh
     useEffect(() => {
+        // scheduling a call to /refresh
         if (loggedInUser?.discordAuth.expires_in === undefined) return;
 
         /**

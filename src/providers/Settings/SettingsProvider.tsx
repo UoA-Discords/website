@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import {
     defaultSettings,
     ISettingsContext,
@@ -9,7 +9,7 @@ import {
 } from '../../contexts';
 import { generateSessionData, getLocalSettings, saveLocalSettings } from './SettingsHelpers';
 
-export const SettingsContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const SettingsContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const [settings, setSettings] = useState<Settings>(getLocalSettings);
 
     const sessionData = useMemo<SettingsSessionData>(

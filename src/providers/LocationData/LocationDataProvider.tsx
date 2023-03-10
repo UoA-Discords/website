@@ -1,7 +1,7 @@
-import React, { ReactNode, useCallback, useMemo, useState } from 'react';
+import { FC, ReactNode, useCallback, useMemo, useState } from 'react';
 import { ILocationDataContext, LocationDataContext } from '../../contexts';
 
-export const LocationDataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const LocationDataProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const [title, setTitle] = useState<ILocationDataContext['title']>('');
 
     const [description, setDescription] = useState<ILocationDataContext['description']>('');

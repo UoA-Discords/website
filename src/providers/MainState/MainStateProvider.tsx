@@ -1,8 +1,8 @@
-import React, { ReactNode, useCallback, useMemo, useState } from 'react';
+import { FC, ReactNode, useCallback, useMemo, useState } from 'react';
 import { IMainStateContext, MainStateContext } from '../../contexts/MainState';
 import { handleError } from './MainStateHelpers';
 
-export const MainStateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const MainStateProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const [latestError, internalSetLatestError] = useState<IMainStateContext['latestError']>(null);
 
     const [latestServerResponse, setLatestServerResponse] = useState<IMainStateContext['latestServerResponse']>(null);
