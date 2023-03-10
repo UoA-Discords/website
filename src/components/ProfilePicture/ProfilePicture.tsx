@@ -1,15 +1,21 @@
-import React, { useContext, useMemo, useState } from 'react';
-import { DiscordIcon } from '../../images';
+import { CSSProperties, FC, useContext, useMemo, useState } from 'react';
 import { UserSessionContext } from '../../contexts';
 import { AnyDiscordUserReference, useDiscordUserData } from '../../hooks/useDiscordUserData';
+import { DiscordIcon } from '../../images';
 
 export interface ProfilePictureProps {
+    /** The width and height of the `<img />` element, default is 64. */
     size?: number;
-    style?: React.CSSProperties;
+
+    /** Optional additional CSS to give the `<img />` element. */
+    style?: CSSProperties;
+
+    /** The user to display the profile picture of. */
     user: AnyDiscordUserReference;
 }
 
-export const ProfilePicture: React.FC<ProfilePictureProps> = ({ user, size = 64, style }) => {
+/** An inline-image of a Discord user's profile picture. */
+export const ProfilePicture: FC<ProfilePictureProps> = ({ user, size = 64, style }) => {
     const { loggedInUser } = useContext(UserSessionContext);
 
     const [errored, setErrored] = useState(false);
