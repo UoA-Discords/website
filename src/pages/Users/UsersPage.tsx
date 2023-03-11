@@ -1,9 +1,11 @@
 import RefreshIcon from '@mui/icons-material/Refresh';
+import SearchIcon from '@mui/icons-material/Search';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import {
     Button,
     Fade,
+    IconButton,
     Stack,
     Table,
     TableBody,
@@ -12,6 +14,8 @@ import {
     TableHead,
     TablePagination,
     TableRow,
+    TableSortLabel,
+    TextField,
 } from '@mui/material';
 import { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Page } from '../../Page.styled';
@@ -28,6 +32,7 @@ import { WithPagination } from '../../types/Page';
 import { GetAllUsersParams } from '../../types/Searching/GetAllUsersParams';
 import { User } from '../../types/User';
 import { UserPermissions } from '../../types/User/UserPermissions';
+import { UserSortOptions } from '../../types/User/UserSortOptions';
 import { DiscordIdString } from '../../types/Utility';
 import { MissingPermissionsPage, NotLoggedInPage } from '../Common';
 import { UserRow, UserRowSkeleton } from './UserRow';
@@ -41,6 +46,7 @@ const TrueUsersPage: FC = () => {
     const [searchParams, setSearchParams] = useState<GetAllUsersParams>({ page: 0, perPage: 20 });
     const [latestFetchResult, setLatestFetchResult] = useState<WithPagination<User<'HideIP' | 'ShowIP'>>>();
     const [isRevealingIps, setIsRevealingIps] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(false);
 
     const canShowIps = useMemo(
@@ -61,23 +67,41 @@ const TrueUsersPage: FC = () => {
         [latestFetchResult, updateUserInDictionary],
     );
 
+    const searchElement = useMemo(
+        () => (
+            <TextField
+                variant="standard"
+                size="small"
+                placeholder="Search users"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                InputProps={{
+                    endAdornment: (
+                        <IconButton onClick={() => setSearchParams({ ...searchParams, searchTerm })}>
+                            <SearchIcon htmlColor="gray" />
+                        </IconButton>
+                    ),
+                }}
+            />
+        ),
+        [searchParams, searchTerm],
+    );
+
     const paginationElement = useMemo(
         () => (
-            <Fade in={latestFetchResult !== undefined}>
-                <TablePagination
-                    component="div"
-                    sx={{ alignSelf: 'flex-start' }}
-                    labelRowsPerPage="Users per page"
-                    rowsPerPageOptions={[20, 50, 100]}
-                    count={latestFetchResult?.totalItemCount ?? 0}
-                    rowsPerPage={searchParams.perPage}
-                    page={searchParams.page}
-                    onPageChange={(_e, newPage) => setSearchParams({ ...searchParams, page: newPage })}
-                    onRowsPerPageChange={(e) =>
-                        setSearchParams({ ...searchParams, page: 0, perPage: parseInt(e.target.value) })
-                    }
-                />
-            </Fade>
+            <TablePagination
+                component="div"
+                sx={{ alignSelf: 'flex-start', flexGrow: 1 }}
+                labelRowsPerPage="Users per page"
+                rowsPerPageOptions={[20, 50, 100]}
+                count={latestFetchResult?.totalItemCount ?? 0}
+                rowsPerPage={searchParams.perPage}
+                page={searchParams.page}
+                onPageChange={(_e, newPage) => setSearchParams({ ...searchParams, page: newPage })}
+                onRowsPerPageChange={(e) =>
+                    setSearchParams({ ...searchParams, page: 0, perPage: parseInt(e.target.value) })
+                }
+            />
         ),
         [latestFetchResult, searchParams],
     );
@@ -102,6 +126,21 @@ const TrueUsersPage: FC = () => {
                 .finally(() => setLoading(false));
         },
         [loggedInUser?.siteAuth, searchParams, setLatestError, settings.rateLimitBypassToken, settings.serverUrl],
+    );
+
+    const setSortOption = useCallback(
+        (sortOption: UserSortOptions) => {
+            const isAlready =
+                searchParams.sortBy === sortOption ||
+                (searchParams.sortBy === undefined && sortOption === UserSortOptions.Id);
+
+            if (isAlready && (searchParams.sortDirection === 'asc' || searchParams.sortDirection === undefined)) {
+                searchParams.sortDirection = 'desc';
+            } else searchParams.sortDirection = 'asc';
+
+            setSearchParams({ ...searchParams, sortBy: sortOption });
+        },
+        [searchParams],
     );
 
     const controlElement = useMemo(
@@ -153,21 +192,62 @@ const TrueUsersPage: FC = () => {
         };
     }, [fetchUsers]);
 
+    useEffect(() => {
+        if (searchTerm === '' && searchParams.searchTerm !== undefined) {
+            delete searchParams.searchTerm;
+            setSearchParams({ ...searchParams });
+        }
+    }, [searchParams, searchTerm]);
+
     return (
         <Page>
             {controlElement}
 
-            {paginationElement}
+            <Stack
+                direction="row-reverse"
+                justifyContent="flex-start"
+                alignItems="center"
+                sx={{ width: '100%', pl: 1 }}
+            >
+                {paginationElement}
+                {searchElement}
+            </Stack>
 
             <TableContainer>
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>User</TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={
+                                        searchParams.sortBy === UserSortOptions.Id || searchParams.sortBy === undefined
+                                    }
+                                    direction={searchParams.sortDirection === 'desc' ? 'asc' : 'desc'}
+                                    onClick={() => setSortOption(UserSortOptions.Id)}
+                                >
+                                    User
+                                </TableSortLabel>
+                            </TableCell>
                             {isRevealingIps && <TableCell>IP</TableCell>}
                             <TableCell>Permissions</TableCell>
-                            <TableCell>Registered</TableCell>
-                            <TableCell>Last Seen</TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={searchParams.sortBy === UserSortOptions.Registered}
+                                    direction={searchParams.sortDirection === 'desc' ? 'asc' : 'desc'}
+                                    onClick={() => setSortOption(UserSortOptions.Registered)}
+                                >
+                                    Registered
+                                </TableSortLabel>
+                            </TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={searchParams.sortBy === UserSortOptions.LastLoginOrRefresh}
+                                    direction={searchParams.sortDirection === 'desc' ? 'asc' : 'desc'}
+                                    onClick={() => setSortOption(UserSortOptions.LastLoginOrRefresh)}
+                                >
+                                    Last Seen
+                                </TableSortLabel>
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
