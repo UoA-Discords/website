@@ -1,5 +1,6 @@
 import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
+import PublishIcon from '@mui/icons-material/Publish';
 import { Button, CircularProgress, Divider, Link, Paper, Stack, Typography } from '@mui/material';
 import React, { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -12,6 +13,7 @@ import { PermissionList } from '../../components/PermissionList';
 import { PermissionsLog } from '../../components/PermissionLog';
 import { ProfilePicture } from '../../components/ProfilePicture';
 import { RelativeTimeString } from '../../components/RelativeTimeString';
+import { ServerUploader } from '../../components/ServerUploader/ServerUploader';
 import {
     LocationDataContext,
     MainStateContext,
@@ -20,6 +22,7 @@ import {
     UserSessionContext,
 } from '../../contexts';
 import { useCanEdit } from '../../hooks/useCanEdit';
+import { useCanUpload } from '../../hooks/useCanUpload';
 import { ServerStatus } from '../../types/Server/ServerStatus';
 import { ServerStatusAction } from '../../types/Server/ServerStatusAction';
 import { User } from '../../types/User';
@@ -40,6 +43,7 @@ const TrueProfilePage: FC<{
     const [isIpVisible, setIsIpVisible] = useState(false);
 
     const [isPermissionEditorOpen, setIsPermissionEditorOpen] = useState(false);
+    const [isServerUploaderOpen, setIsServerUploaderOpen] = useState(false);
 
     const isSelf = useMemo(() => loggedInUser?.user._id === user._id, [loggedInUser?.user._id, user._id]);
 
@@ -51,6 +55,7 @@ const TrueProfilePage: FC<{
     const totalNumActions = useMemo(() => Object.values(user.actions).reduce((a, b) => a + b, 0), [user.actions]);
 
     const canEdit = useCanEdit(user);
+    const canUpload = useCanUpload();
 
     const handleLogout = useCallback(() => {
         requestLogout().catch((error) => {
@@ -165,6 +170,20 @@ const TrueProfilePage: FC<{
                             <PermissionsLog log={user.permissionsLog} latestPermissions={user.permissions} />
                         </ProfileAccordionDetails>
                     </ProfileAccordion>
+                )}
+
+                {canUpload && (
+                    <>
+                        <ServerUploader onClose={() => setIsServerUploaderOpen(false)} open={isServerUploaderOpen} />
+                        <Button
+                            variant="outlined"
+                            color="success"
+                            startIcon={<PublishIcon />}
+                            onClick={() => setIsServerUploaderOpen(true)}
+                        >
+                            Upload Server
+                        </Button>
+                    </>
                 )}
 
                 {canEdit && (
