@@ -11,15 +11,16 @@ import { ServerTag } from './ServerTag';
 
 export interface ServerTagSelectorProps {
     tags: ServerTags;
-    onTagsChange?: (newTags: ServerTags) => void;
+    onTagsChange: (newTags: ServerTags) => void;
+    fromAll?: boolean;
 }
 
 const allTags = Object.values(ServerTags).filter((e): e is ServerTags => typeof e === 'number');
 
-const _ServerTagSelector: FC<ServerTagSelectorProps> = ({ tags, onTagsChange }) => {
+const _ServerTagSelector: FC<ServerTagSelectorProps> = ({ tags, onTagsChange, fromAll }) => {
     const splitTags = splitBitfield(tags);
 
-    const tagPool = onTagsChange !== undefined ? allTags : splitTags;
+    const tagPool = fromAll ? allTags : splitTags;
 
     const handleClick = (tag: ServerTags) => {
         return () => {
@@ -30,18 +31,13 @@ const _ServerTagSelector: FC<ServerTagSelectorProps> = ({ tags, onTagsChange }) 
     };
 
     return (
-        <ProfileAccordion defaultExpanded>
-            <ProfileAccordionSummary>Edit Tags</ProfileAccordionSummary>
-            <ProfileAccordionDetails sx={{ maxHeight: '200px', overflowY: 'auto' }}>
-                <Grid container spacing={0.5}>
-                    {tagPool.map((e) => (
-                        <Grid item key={e}>
-                            <ServerTag key={e} value={e} selected={splitTags.includes(e)} onClick={handleClick(e)} />
-                        </Grid>
-                    ))}
+        <Grid container spacing={0.5}>
+            {tagPool.map((e) => (
+                <Grid item key={e}>
+                    <ServerTag key={e} value={e} selected={splitTags.includes(e)} onClick={handleClick(e)} />
                 </Grid>
-            </ProfileAccordionDetails>
-        </ProfileAccordion>
+            ))}
+        </Grid>
     );
 };
 
