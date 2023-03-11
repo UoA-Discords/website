@@ -1,0 +1,64 @@
+.featuredServerCard {
+    box-shadow: 0 0 20px 3px rgba(236,208,140,0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.orbiter {
+    box-shadow: 0 0 20px 3px rgba(236,208,140,0.5);
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    z-index: 10;
+    position: absolute;
+}
+
+.orbiter1 {
+    top: 0;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #ECD08C);
+    width: 100%;
+    animation-name: orbitHorizontal;
+}
+
+.orbiter2 {
+    bottom: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(to left, transparent, #ECD08C);
+    width: 100%;
+    animation-name: orbitHorizontal;
+    animation-direction: reverse;
+}
+
+.orbiter3 {
+    animation-delay: 1s;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: linear-gradient(to top, transparent, #ECD08C);
+    width: 2px;
+    animation-name: orbitVertical;
+    animation-direction: reverse;
+}
+
+.orbiter4 {
+    animation-delay: 1s;
+    top: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, #ECD08C);
+    width: 2px;
+    animation-name: orbitVertical;
+}
+
+@keyframes orbitHorizontal {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+}
+
+@keyframes orbitVertical {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(100%); }
+}
