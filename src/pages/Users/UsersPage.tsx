@@ -28,6 +28,7 @@ import {
     UserSessionContext,
 } from '../../contexts';
 import { hasPermissions } from '../../helpers/hasPermissions';
+import { useCanManageUsers } from '../../hooks/useCanManageUsers';
 import { WithPagination } from '../../types/Page';
 import { GetAllUsersParams } from '../../types/Searching/GetAllUsersParams';
 import { User } from '../../types/User';
@@ -67,45 +68,6 @@ const TrueUsersPage: FC = () => {
         [latestFetchResult, updateUserInDictionary],
     );
 
-    const searchElement = useMemo(
-        () => (
-            <TextField
-                variant="standard"
-                size="small"
-                placeholder="Search users"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                InputProps={{
-                    endAdornment: (
-                        <IconButton onClick={() => setSearchParams({ ...searchParams, searchTerm })}>
-                            <SearchIcon htmlColor="gray" />
-                        </IconButton>
-                    ),
-                }}
-            />
-        ),
-        [searchParams, searchTerm],
-    );
-
-    const paginationElement = useMemo(
-        () => (
-            <TablePagination
-                component="div"
-                sx={{ alignSelf: 'flex-start', flexGrow: 1 }}
-                labelRowsPerPage="Users per page"
-                rowsPerPageOptions={[20, 50, 100]}
-                count={latestFetchResult?.totalItemCount ?? 0}
-                rowsPerPage={searchParams.perPage}
-                page={searchParams.page}
-                onPageChange={(_e, newPage) => setSearchParams({ ...searchParams, page: newPage })}
-                onRowsPerPageChange={(e) =>
-                    setSearchParams({ ...searchParams, page: 0, perPage: parseInt(e.target.value) })
-                }
-            />
-        ),
-        [latestFetchResult, searchParams],
-    );
-
     const fetchUsers = useCallback(
         (controller: AbortController) => {
             if (loggedInUser?.siteAuth === undefined) return;
@@ -143,33 +105,6 @@ const TrueUsersPage: FC = () => {
         [searchParams],
     );
 
-    const controlElement = useMemo(
-        () => (
-            <Stack direction="row" alignSelf="flex-end" spacing={1}>
-                <Button
-                    variant="outlined"
-                    onClick={() => fetchUsers(new AbortController())}
-                    disabled={latestFetchResult === undefined}
-                    startIcon={<RefreshIcon />}
-                >
-                    Refresh
-                </Button>
-                {canShowIps && (
-                    <Fade in={latestFetchResult !== undefined}>
-                        <Button
-                            variant="outlined"
-                            onClick={(e) => setIsRevealingIps(!isRevealingIps)}
-                            startIcon={isRevealingIps ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                        >
-                            {isRevealingIps ? 'Hide' : 'Reveal'} IPs
-                        </Button>
-                    </Fade>
-                )}
-            </Stack>
-        ),
-        [canShowIps, fetchUsers, isRevealingIps, latestFetchResult],
-    );
-
     useEffect(() => {
         if (latestFetchResult === undefined) return;
 
@@ -201,7 +136,27 @@ const TrueUsersPage: FC = () => {
 
     return (
         <Page>
-            {controlElement}
+            <Stack direction="row" alignSelf="flex-end" spacing={1}>
+                <Button
+                    variant="outlined"
+                    onClick={() => fetchUsers(new AbortController())}
+                    disabled={latestFetchResult === undefined}
+                    startIcon={<RefreshIcon />}
+                >
+                    Refresh
+                </Button>
+                {canShowIps && (
+                    <Fade in={latestFetchResult !== undefined}>
+                        <Button
+                            variant="outlined"
+                            onClick={(e) => setIsRevealingIps(!isRevealingIps)}
+                            startIcon={isRevealingIps ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                        >
+                            {isRevealingIps ? 'Hide' : 'Reveal'} IPs
+                        </Button>
+                    </Fade>
+                )}
+            </Stack>
 
             <Stack
                 direction="row-reverse"
@@ -209,8 +164,34 @@ const TrueUsersPage: FC = () => {
                 alignItems="center"
                 sx={{ width: '100%', pl: 1 }}
             >
-                {paginationElement}
-                {searchElement}
+                <TablePagination
+                    component="div"
+                    sx={{ alignSelf: 'flex-start', flexGrow: 1 }}
+                    labelRowsPerPage="Users per page"
+                    rowsPerPageOptions={[20, 50, 100]}
+                    count={latestFetchResult?.totalItemCount ?? 0}
+                    rowsPerPage={searchParams.perPage}
+                    page={searchParams.page}
+                    onPageChange={(_e, newPage) => setSearchParams({ ...searchParams, page: newPage })}
+                    onRowsPerPageChange={(e) =>
+                        setSearchParams({ ...searchParams, page: 0, perPage: parseInt(e.target.value) })
+                    }
+                />
+
+                <TextField
+                    variant="standard"
+                    size="small"
+                    placeholder="Search users"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    InputProps={{
+                        endAdornment: (
+                            <IconButton onClick={() => setSearchParams({ ...searchParams, searchTerm })}>
+                                <SearchIcon htmlColor="gray" />
+                            </IconButton>
+                        ),
+                    }}
+                />
             </Stack>
 
             <TableContainer>
@@ -271,7 +252,19 @@ const TrueUsersPage: FC = () => {
                 </Table>
             </TableContainer>
 
-            {paginationElement}
+            <TablePagination
+                component="div"
+                sx={{ alignSelf: 'flex-start', flexGrow: 1 }}
+                labelRowsPerPage="Users per page"
+                rowsPerPageOptions={[20, 50, 100]}
+                count={latestFetchResult?.totalItemCount ?? 0}
+                rowsPerPage={searchParams.perPage}
+                page={searchParams.page}
+                onPageChange={(_e, newPage) => setSearchParams({ ...searchParams, page: newPage })}
+                onRowsPerPageChange={(e) =>
+                    setSearchParams({ ...searchParams, page: 0, perPage: parseInt(e.target.value) })
+                }
+            />
         </Page>
     );
 };
@@ -280,10 +273,7 @@ export const UsersPage: FC = () => {
     const { loggedInUser } = useContext(UserSessionContext);
     const { setLocationData } = useContext(LocationDataContext);
 
-    const canView = useMemo(
-        () => loggedInUser !== null && hasPermissions(loggedInUser.user.permissions, UserPermissions.ManageUsers),
-        [loggedInUser],
-    );
+    const canView = useCanManageUsers();
 
     useEffect(() => {
         setLocationData('Users', [{ to: '/users', text: 'Users' }]);
