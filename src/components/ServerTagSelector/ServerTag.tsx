@@ -14,7 +14,11 @@ export const ServerTag: FC<ServerTagProps> = ({ value, selected, onClick }) => (
         color={selected ? 'primary' : 'default'}
         variant="filled"
         label={serverTagMap[value].displayName}
-        title={selected ? `${serverTagMap[value].description}\nClick to remove` : serverTagMap[value].description}
+        title={
+            selected && onClick !== undefined
+                ? `${serverTagMap[value].description}\nClick to remove`
+                : serverTagMap[value].description
+        }
         style={{
             backgroundColor: selected ? '#7289da' : '#40444b',
             color: selected ? '#fff' : '#bdbec2',
