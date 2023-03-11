@@ -3,6 +3,7 @@ import CodeIcon from '@mui/icons-material/Code';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import GroupsIcon from '@mui/icons-material/Groups';
 import HomeIcon from '@mui/icons-material/Home';
+import ListIcon from '@mui/icons-material/List';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Grid, Typography } from '@mui/material';
 import { FC, useContext, useMemo } from 'react';
@@ -25,14 +26,25 @@ export const Footer: FC = () => {
         [loggedInUser?.user.permissions],
     );
 
+    const canViewServers = useMemo(
+        () =>
+            loggedInUser?.user.permissions !== undefined &&
+            hasPermissions(loggedInUser.user.permissions, UserPermissions.ManageServers),
+        [loggedInUser?.user.permissions],
+    );
+
     return (
         <FooterContainer square>
-            <Grid container spacing={2} sx={{ pb: 2 }} justifyContent="space-around" alignItems="center">
+            <Grid container spacing={2} sx={{ pb: 2 }} justifyContent="center" alignItems="center">
                 <FooterItem type="internal" href="/" icon={<HomeIcon color="disabled" />} label="Home" />
                 <FooterItem type="internal" href="/info" icon={<ArticleIcon color="disabled" />} label="Info" />
 
                 {canViewUsers && (
                     <FooterItem type="internal" href="/users" icon={<GroupsIcon color="disabled" />} label="Users" />
+                )}
+
+                {canViewServers && (
+                    <FooterItem type="internal" href="/servers" icon={<ListIcon color="disabled" />} label="Servers" />
                 )}
 
                 {loggedInUser !== null ? (
