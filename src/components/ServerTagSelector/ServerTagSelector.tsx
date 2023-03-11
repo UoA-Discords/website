@@ -1,11 +1,6 @@
 import { Grid } from '@mui/material';
 import { FC, memo } from 'react';
 import { splitBitfield } from '../../helpers/splitBitfield';
-import {
-    ProfileAccordion,
-    ProfileAccordionDetails,
-    ProfileAccordionSummary,
-} from '../../pages/Profile/ProfilePage.styled';
 import { ServerTags } from '../../types/Server/ServerTags';
 import { ServerTag } from './ServerTag';
 
