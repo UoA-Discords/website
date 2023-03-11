@@ -62,6 +62,7 @@ export async function postRoot(props: BaseRequestProps<true, false>): Promise<{
     receivedRequest: ISOString;
     numUsers: number;
     numServers: number;
+    numPendingServers: number;
 }> {
     const config = makeRequestConfig(props, 'POST');
 

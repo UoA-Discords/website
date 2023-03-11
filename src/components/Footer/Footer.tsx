@@ -5,9 +5,9 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import HomeIcon from '@mui/icons-material/Home';
 import ListIcon from '@mui/icons-material/List';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Grid, Typography } from '@mui/material';
+import { Badge, Grid, Typography } from '@mui/material';
 import { FC, useContext, useMemo } from 'react';
-import { SettingsContext, UserSessionContext } from '../../contexts';
+import { MainStateContext, SettingsContext, UserSessionContext } from '../../contexts';
 import { hasPermissions } from '../../helpers/hasPermissions';
 import { DiscordIcon } from '../../images';
 import { UserPermissions } from '../../types/User/UserPermissions';
@@ -18,6 +18,7 @@ import { FooterItem } from './FooterItem';
 export const Footer: FC = () => {
     const { settings, sessionData } = useContext(SettingsContext);
     const { loggedInUser } = useContext(UserSessionContext);
+    const { latestServerResponse } = useContext(MainStateContext);
 
     const canViewUsers = useMemo(
         () =>
@@ -44,7 +45,25 @@ export const Footer: FC = () => {
                 )}
 
                 {canViewServers && (
-                    <FooterItem type="internal" href="/servers" icon={<ListIcon color="disabled" />} label="Servers" />
+                    <FooterItem
+                        type="internal"
+                        href="/servers"
+                        icon={
+                            latestServerResponse !== null && latestServerResponse?.numPendingServers > 0 ? (
+                                <Badge
+                                    color="secondary"
+                                    overlap="circular"
+                                    variant="dot"
+                                    title={`${latestServerResponse.numPendingServers} Pending servers`}
+                                >
+                                    <ListIcon color="disabled" />
+                                </Badge>
+                            ) : (
+                                <ListIcon color="disabled" />
+                            )
+                        }
+                        label="Servers"
+                    />
                 )}
 
                 {loggedInUser !== null ? (
