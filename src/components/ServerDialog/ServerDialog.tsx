@@ -161,7 +161,7 @@ export const ServerDialog: FC<ServerDialogProps> = ({ open, onClose, server, onC
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Typography color="gray" textAlign="center">
-                                    {server.size.online} Members (
+                                    {server.size.total} Members (
                                     <span style={{ color: 'lightgreen' }}>{server.size.online}</span> Online)
                                     <br />
                                 </Typography>
