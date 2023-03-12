@@ -104,7 +104,11 @@ export const ServerUploader: FC<ServerUploaderProps> = ({ onClose, open }) => {
                             value={inviteCode}
                             InputLabelProps={{ shrink: true }}
                             onChange={(e) =>
-                                setInviteCode(e.target.value.trim().replaceAll(/(https?:\/\/)?discord\.gg\/?/g, ''))
+                                setInviteCode(
+                                    e.target.value
+                                        .trim()
+                                        .replaceAll(/(https?:\/\/)?discord\.(gg|com)\/(invite)?\/?/g, ''),
+                                )
                             }
                         />
 
