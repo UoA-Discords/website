@@ -137,7 +137,7 @@ export async function patchServerStatusById(
     props: BaseRequestProps<true, true>,
     serverId: DiscordIdString,
     newStatus: ServerStatus,
-    reason: string,
+    reason: string | null,
 ): Promise<Server> {
     const config = makeRequestConfig(props, 'PATCH', `/servers/${serverId}/status`, { newStatus, reason });
 
