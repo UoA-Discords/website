@@ -1,0 +1,16 @@
+.refreshIcon {
+    animation: refreshIconSpin 2s linear infinite paused;
+}
+
+.refreshIcon.active {
+    animation-play-state: running;
+}
+
+@keyframes refreshIconSpin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
