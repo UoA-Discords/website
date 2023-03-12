@@ -4,6 +4,7 @@ import { Collapse, Grid, IconButton, Pagination, Stack, TextField, Typography } 
 import { FC, useCallback, useContext, useEffect, useState } from 'react';
 import { Page } from '../../Page.styled';
 import { api } from '../../api';
+import { Announcement } from '../../components/Announcement';
 import { ServerCard, ServerCardSkeleton } from '../../components/ServerCard';
 import { TagFilterer } from '../../components/TagFilterer';
 import { MainStateContext, SettingsContext, UserSessionContext } from '../../contexts';
@@ -104,6 +105,8 @@ export const HomePage: FC = () => {
 
     return (
         <Page maxWidth="xl">
+            <Announcement />
+
             <Stack gap={2} alignItems="center" sx={{ mt: 1 }}>
                 <Stack direction="row" gap={3} sx={{ width: '100%' }} justifyContent="space-between" flexWrap="wrap">
                     <Stack direction="row" alignItems="flex-end" gap={1}>

@@ -3,6 +3,7 @@ import { CanceledError } from 'axios';
 import React, { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Page } from '../../Page.styled';
 import { api } from '../../api';
+import { AnnouncementResetButton } from '../../components/Announcement';
 import { PermissionList } from '../../components/PermissionList';
 import { defaultSettings, MainStateContext, Settings, SettingsContext } from '../../contexts';
 import { LocationDataContext } from '../../contexts/LocationData';
@@ -293,6 +294,9 @@ export const SettingsPage: FC = () => {
                             showAll={settings.showAllPermissions}
                         />
                     </Paper>
+                </Grid>
+                <Grid item xs={12} md={6} sx={{ width: '100%' }}>
+                    <AnnouncementResetButton />
                 </Grid>
             </Grid>
             <div style={{ flexGrow: 1 }} />
