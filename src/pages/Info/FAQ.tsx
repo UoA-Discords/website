@@ -193,7 +193,7 @@ export const FAQ: FC<{ onLink: (id: string) => void }> = ({ onLink }) => {
                             <br />
                             - Be UoA related, exceptions can be made.
                             <br />
-                            - Have at least 80 members.
+                            - Have at least 25 members.
                             <br />
                             - Not have an inappropriate name or icon.
                             <br />
