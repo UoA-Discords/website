@@ -172,7 +172,7 @@ const TrueProfilePage: FC<{
                     </ProfileAccordion>
                 )}
 
-                {canUpload && (
+                {canUpload && isSelf && (
                     <>
                         <ServerUploader onClose={() => setIsServerUploaderOpen(false)} open={isServerUploaderOpen} />
                         <Button
