@@ -53,6 +53,8 @@ export const UserDictionaryProvider: FC<{ children: ReactNode }> = ({ children }
                 numExistingToRemove,
             });
 
+            if (totalItemCount === 0) return;
+
             for (const key of Object.keys(encounteredUsers).slice(0, numExistingToRemove)) {
                 delete encounteredUsers[key];
             }
