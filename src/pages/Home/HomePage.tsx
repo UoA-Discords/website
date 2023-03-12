@@ -5,13 +5,13 @@ import { FC, useContext, useEffect, useMemo, useState } from 'react';
 import { Page } from '../../Page.styled';
 import { api } from '../../api';
 import { ServerCard, ServerCardSkeleton } from '../../components/ServerCard';
+import { TagFilterer } from '../../components/TagFilterer';
 import { MainStateContext, SettingsContext, UserSessionContext } from '../../contexts';
 import { LocationDataContext } from '../../contexts/LocationData';
 import { WithPagination } from '../../types/Page';
 import { GetAllServersParams } from '../../types/Searching/GetAllServersParams';
 import { Server } from '../../types/Server';
 import { ServerStatus } from '../../types/Server/ServerStatus';
-import { TagFilterer } from './TagFilterer';
 
 export const HomePage: FC = () => {
     const { latestServerResponse, setLatestError } = useContext(MainStateContext);
