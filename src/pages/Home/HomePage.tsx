@@ -7,18 +7,20 @@ import { api } from '../../api';
 import { Announcement } from '../../components/Announcement';
 import { ServerCard, ServerCardSkeleton } from '../../components/ServerCard';
 import { TagFilterer } from '../../components/TagFilterer';
-import { MainStateContext, SettingsContext, UserSessionContext } from '../../contexts';
+import { MainStateContext, SettingsContext, UserDictionaryContext, UserSessionContext } from '../../contexts';
 import { LocationDataContext } from '../../contexts/LocationData';
 import { WithPagination } from '../../types/Page';
 import { GetAllServersParams } from '../../types/Searching/GetAllServersParams';
 import { Server } from '../../types/Server';
 import { ServerStatus } from '../../types/Server/ServerStatus';
+import { DiscordIdString } from '../../types/Utility';
 
 export const HomePage: FC = () => {
     const { latestServerResponse, setLatestError } = useContext(MainStateContext);
     const { setLocationData } = useContext(LocationDataContext);
     const { settings } = useContext(SettingsContext);
     const { loggedInUser } = useContext(UserSessionContext);
+    const { addIdsToDictionary } = useContext(UserDictionaryContext);
 
     const [isFetching, setIsFetching] = useState(false);
     const [searchParams, setSearchParams] = useState<GetAllServersParams>({
@@ -80,6 +82,16 @@ export const HomePage: FC = () => {
             .catch(setLatestError)
             .finally(() => setIsFetching(false));
     }, [loggedInUser?.siteAuth, searchParams, setLatestError, settings.rateLimitBypassToken, settings.serverUrl]);
+
+    useEffect(() => {
+        if (serverList === undefined) return;
+        addIdsToDictionary(
+            serverList.items.reduce<DiscordIdString[]>(
+                (acc, cur) => [...acc, cur.created.by, cur.inviteCreatedBy.id, ...cur.statusLog.map((e) => e.by)],
+                [],
+            ),
+        );
+    }, [addIdsToDictionary, serverList]);
 
     // updating header text
     useEffect(() => {
