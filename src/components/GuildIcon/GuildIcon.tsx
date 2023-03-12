@@ -1,4 +1,4 @@
-import { CardMedia, CardMediaProps, Skeleton, SxProps, Theme } from '@mui/material';
+import { CardMedia, Skeleton, SxProps, Theme } from '@mui/material';
 import { FC, useState } from 'react';
 import TransparentBirdLogo from '../../images/TransparentBirdLogo.png';
 import { Server } from '../../types/Server';
@@ -10,11 +10,7 @@ export interface GuildIconProps {
     sx?: SxProps<Theme>;
 }
 
-export const GuildIconSkeleton: FC = () => (
-    <div style={{ padding: '8px' }}>
-        <Skeleton variant="circular" sx={{ width: 120, height: 120 }} />
-    </div>
-);
+export const GuildIconSkeleton: FC = () => <Skeleton variant="circular" sx={{ width: 64, height: 64, p: 1 }} />;
 
 export const GuildIcon: FC<GuildIconProps> = ({ id, icon, sx }) => {
     const [errored, setErrored] = useState(false);
