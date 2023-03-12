@@ -49,7 +49,7 @@ export const FAQ: FC<{ onLink: (id: string) => void }> = ({ onLink }) => {
                                     first however. Before doing so, make sure the server you have in mind follows our
                                     criteria.
                                 </>
-                            ) : canUpload && !true ? (
+                            ) : canUpload ? (
                                 <>
                                     Of course! You can do this from your{' '}
                                     <InternalLinkStyled to={`/users/${loggedInUser.user._id}`}>
