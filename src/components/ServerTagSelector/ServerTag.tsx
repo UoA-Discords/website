@@ -11,7 +11,6 @@ export interface ServerTagProps {
 
 export const ServerTag: FC<ServerTagProps> = ({ value, selected, onClick }) => (
     <Chip
-        color={selected ? 'primary' : 'default'}
         variant="filled"
         label={serverTagMap[value].displayName}
         title={
@@ -20,7 +19,7 @@ export const ServerTag: FC<ServerTagProps> = ({ value, selected, onClick }) => (
                 : serverTagMap[value].description
         }
         style={{
-            backgroundColor: selected ? '#7289da' : '#40444b',
+            backgroundColor: selected ? (value === ServerTags.Partnered ? 'rgb(33, 68, 192)' : '#7289da') : '#40444b',
             color: selected ? '#fff' : '#bdbec2',
             borderRadius: 0.5,
         }}
