@@ -156,7 +156,7 @@ export const HomePage: FC = () => {
                     />
                 </Collapse>
 
-                <Grid container spacing={2}>
+                <Grid container spacing={2} alignItems="center" justifyContent="center">
                     {isFetching || serverList === undefined ? (
                         new Array(searchParams.perPage).fill(0).map((_e, i) => (
                             <Grid item key={i} xs={12} md={6} lg={4} sx={{ zIndex: 1 }}>
@@ -171,7 +171,14 @@ export const HomePage: FC = () => {
                         </Grid>
                     ) : (
                         serverList.items.map((e, i) => (
-                            <Grid item key={i} xs={12} md={6} lg={4} sx={{ zIndex: 1 }}>
+                            <Grid
+                                item
+                                key={i}
+                                xs={12}
+                                md={6}
+                                lg={serverList.items.length >= 3 ? 4 : 6}
+                                sx={{ zIndex: 1 }}
+                            >
                                 <ServerCard server={e} onChange={handleServerChange} />
                             </Grid>
                         ))
