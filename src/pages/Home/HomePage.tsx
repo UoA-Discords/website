@@ -156,7 +156,7 @@ export const HomePage: FC = () => {
                     />
                 </Collapse>
 
-                <Grid container spacing={2} alignItems="center" justifyContent="center">
+                <Grid container spacing={2} alignItems="stretch" justifyContent="center">
                     {isFetching || serverList === undefined ? (
                         new Array(searchParams.perPage).fill(0).map((_e, i) => (
                             <Grid item key={i} xs={12} md={6} lg={4} sx={{ zIndex: 1 }}>
