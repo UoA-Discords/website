@@ -1,7 +1,7 @@
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import SearchIcon from '@mui/icons-material/Search';
 import { Collapse, Grid, IconButton, Pagination, Stack, TextField, Typography } from '@mui/material';
-import { FC, useContext, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useContext, useEffect, useState } from 'react';
 import { Page } from '../../Page.styled';
 import { api } from '../../api';
 import { ServerCard, ServerCardSkeleton } from '../../components/ServerCard';
@@ -29,24 +29,26 @@ export const HomePage: FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterExpanded, setFilterExpanded] = useState(false);
 
-    const sortedServerList = useMemo(() => {
-        if (serverList === undefined) return [];
-
-        if (searchParams.searchTerm !== undefined) return serverList.items;
-
-        if (searchParams.withTags !== undefined) return serverList.items;
-
-        return serverList.items.sort((a, b) => {
-            if (a.status === ServerStatus.Featured && b.status !== ServerStatus.Featured) {
-                return -1;
-            }
-            if (a.status !== ServerStatus.Featured && b.status === ServerStatus.Featured) {
-                return 1;
+    const handleServerChange = useCallback(
+        (updatedServer: Server) => {
+            if (serverList === undefined) {
+                console.error('Cannot update a server when the server list is undefined');
+                return;
             }
 
-            return a._id.localeCompare(b._id);
-        });
-    }, [searchParams.searchTerm, searchParams.withTags, serverList]);
+            const existingIndex = serverList.items.findIndex((s) => s._id === updatedServer._id);
+            if (existingIndex === -1) {
+                console.error('Cannot find index of an server in the server list!', updatedServer);
+                return;
+            }
+
+            const newServers = [...serverList.items];
+            newServers[existingIndex] = updatedServer;
+            setServerList({ ...serverList, items: newServers });
+        },
+        [serverList],
+    );
+
     useEffect(() => {
         const controller = new AbortController();
 
@@ -61,7 +63,19 @@ export const HomePage: FC = () => {
             },
             searchParams,
         )
-            .then(setServerList)
+            .then((res) => {
+                res.items.sort((a, b) => {
+                    if (a.status === ServerStatus.Featured && b.status !== ServerStatus.Featured) {
+                        return -1;
+                    }
+                    if (a.status !== ServerStatus.Featured && b.status === ServerStatus.Featured) {
+                        return 1;
+                    }
+
+                    return a._id.localeCompare(b._id);
+                });
+                setServerList(res);
+            })
             .catch(setLatestError)
             .finally(() => setIsFetching(false));
     }, [loggedInUser?.siteAuth, searchParams, setLatestError, settings.rateLimitBypassToken, settings.serverUrl]);
@@ -140,23 +154,24 @@ export const HomePage: FC = () => {
                 </Collapse>
 
                 <Grid container spacing={2}>
-                    {isFetching
-                        ? new Array(searchParams.perPage).fill(0).map((_e, i) => (
-                              <Grid item key={i} xs={12} md={6} lg={4} sx={{ zIndex: 1 }}>
-                                  <ServerCardSkeleton />
-                              </Grid>
-                          ))
-                        : sortedServerList.map((e, i) => (
-                              <Grid item key={i} xs={12} md={6} lg={4} sx={{ zIndex: 1 }}>
-                                  <ServerCard server={e} />
-                              </Grid>
-                          ))}
-                    {!isFetching && sortedServerList.length === 0 && (
+                    {isFetching || serverList === undefined ? (
+                        new Array(searchParams.perPage).fill(0).map((_e, i) => (
+                            <Grid item key={i} xs={12} md={6} lg={4} sx={{ zIndex: 1 }}>
+                                <ServerCardSkeleton />
+                            </Grid>
+                        ))
+                    ) : serverList.items.length === 0 ? (
                         <Grid item xs={12} sx={{ minHeight: '300px' }}>
                             <Page style={{ height: '100%' }}>
                                 <Typography variant="h6">No servers found</Typography>
                             </Page>
                         </Grid>
+                    ) : (
+                        serverList.items.map((e, i) => (
+                            <Grid item key={i} xs={12} md={6} lg={4} sx={{ zIndex: 1 }}>
+                                <ServerCard server={e} onChange={handleServerChange} />
+                            </Grid>
+                        ))
                     )}
                 </Grid>
 

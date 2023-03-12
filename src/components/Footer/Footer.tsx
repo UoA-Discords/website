@@ -51,7 +51,7 @@ export const Footer: FC = () => {
                         icon={
                             latestServerResponse !== null && latestServerResponse?.numPendingServers > 0 ? (
                                 <Badge
-                                    color="secondary"
+                                    color="error"
                                     overlap="circular"
                                     variant="dot"
                                     title={`${latestServerResponse.numPendingServers} Pending servers`}

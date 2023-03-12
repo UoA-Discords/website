@@ -6,7 +6,7 @@ import { ServerTags } from '../../types/Server/ServerTags';
 export interface ServerTagProps {
     value: ServerTags;
     selected: boolean;
-    onClick?: () => void;
+    onClick: (() => void) | undefined;
 }
 
 export const ServerTag: FC<ServerTagProps> = ({ value, selected, onClick }) => (
@@ -14,8 +14,10 @@ export const ServerTag: FC<ServerTagProps> = ({ value, selected, onClick }) => (
         variant="filled"
         label={serverTagMap[value].displayName}
         title={
-            selected && onClick !== undefined
-                ? `${serverTagMap[value].description}\nClick to remove`
+            onClick !== undefined
+                ? selected
+                    ? `${serverTagMap[value].description}\nClick to remove`
+                    : `${serverTagMap[value].description}\nClick to add`
                 : serverTagMap[value].description
         }
         style={{

@@ -1,7 +1,9 @@
-import { Collapse, Grid, Link, Paper, Typography } from '@mui/material';
+import { Button, Collapse, Grid, Link, Paper, Typography } from '@mui/material';
 import { FC, ReactNode, useContext, useState } from 'react';
-import { ExternalLinkStyled } from '../../components/Links';
+import { ExternalLinkStyled, InternalLinkStyled } from '../../components/Links';
+import { ServerUploader } from '../../components/ServerUploader/ServerUploader';
 import { SettingsContext, UserSessionContext } from '../../contexts';
+import { useCanUpload } from '../../hooks/useCanUpload';
 import DiscordLoginFAQ from '../../images/DiscordLoginFAQ.png';
 
 const Section: FC<{ children: ReactNode }> = ({ children }) => (
@@ -26,7 +28,10 @@ export const FAQ: FC<{ onLink: (id: string) => void }> = ({ onLink }) => {
     const { loggedInUser } = useContext(UserSessionContext);
     const { sessionData } = useContext(SettingsContext);
 
+    const canUpload = useCanUpload();
+
     const [hasExpandedDiscordLoginScreen, setHasExpandedDiscordLoginScreen] = useState(false);
+    const [isServerUploaderOpen, setIsServerUploaderOpen] = useState(false);
 
     return (
         <Grid container spacing={1} alignItems="flex-start">
@@ -35,20 +40,51 @@ export const FAQ: FC<{ onLink: (id: string) => void }> = ({ onLink }) => {
                     <Section>
                         <Question>Can I put a server on here?</Question>
                         <Answer>
-                            Of course!{' '}
                             {loggedInUser === null ? (
                                 <>
-                                    You'll need to be{' '}
+                                    Of course! You'll need to be{' '}
                                     <ExternalLinkStyled href={sessionData.oAuthLink} title="Login with Discord">
                                         logged in
                                     </ExternalLinkStyled>{' '}
                                     first however. Before doing so, make sure the server you have in mind follows our
                                     criteria.
                                 </>
+                            ) : canUpload && !true ? (
+                                <>
+                                    Of course! You can do this from your{' '}
+                                    <InternalLinkStyled to={`/users/${loggedInUser.user._id}`}>
+                                        profile page
+                                    </InternalLinkStyled>
+                                    , or right here by clicking on the button:{' '}
+                                    <ServerUploader
+                                        onClose={() => setIsServerUploaderOpen(false)}
+                                        open={isServerUploaderOpen}
+                                    />
+                                    <Button
+                                        variant="outlined"
+                                        color="success"
+                                        sx={{ textTransform: 'none' }}
+                                        onClick={() => setIsServerUploaderOpen(true)}
+                                    >
+                                        Upload Server
+                                    </Button>
+                                </>
                             ) : (
                                 <>
-                                    Simply click your profile icon at the top right of the page, from there you'll see
-                                    an 'add server' button.
+                                    Normally you can, however it seems you don't have permission to upload servers to
+                                    our site. This is most likely due to you abusing our services, but you can{' '}
+                                    <Link
+                                        component="span"
+                                        underline="hover"
+                                        sx={{ cursor: 'pointer' }}
+                                        onClick={() => {
+                                            document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
+                                            onLink('contact');
+                                        }}
+                                    >
+                                        contact us
+                                    </Link>{' '}
+                                    if you believe this is a mistake.
                                 </>
                             )}
                         </Answer>

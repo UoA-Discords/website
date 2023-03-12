@@ -2,7 +2,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PublishIcon from '@mui/icons-material/Publish';
 import { Button, CircularProgress, Divider, Link, Paper, Stack, Typography } from '@mui/material';
-import React, { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Page } from '../../Page.styled';
 import { api } from '../../api';

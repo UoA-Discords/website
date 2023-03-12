@@ -5,11 +5,13 @@ import { splitBitfield } from '../../helpers/splitBitfield';
 import { Server } from '../../types/Server';
 import { ServerStatus } from '../../types/Server/ServerStatus';
 import { GuildIcon, GuildIconSkeleton } from '../GuildIcon';
+import { ServerDialog } from '../ServerDialog';
 import { ServerTag } from '../ServerTagSelector/ServerTag';
 import './ServerCard.css';
 
 export interface ServerCardProps {
     server: Server;
+    onChange: (updatedServer: Server) => void;
 }
 
 export const ServerCardSkeleton: FC = () => (
@@ -30,8 +32,8 @@ export const ServerCardSkeleton: FC = () => (
     </div>
 );
 
-export const ServerCard: FC<ServerCardProps> = ({ server }) => {
-    const [, setOpen] = useState(false);
+export const ServerCard: FC<ServerCardProps> = ({ server, onChange }) => {
+    const [open, setOpen] = useState(false);
 
     const splitTags = useMemo(
         () =>
@@ -54,6 +56,7 @@ export const ServerCard: FC<ServerCardProps> = ({ server }) => {
                     <span className="orbiter orbiter4" />
                 </>
             )}
+            <ServerDialog open={open} onClose={() => setOpen(false)} server={server} onChange={onChange} />
             <Card sx={{ position: 'relative', height: '100%' }}>
                 <CardActionArea
                     disableRipple
@@ -72,7 +75,7 @@ export const ServerCard: FC<ServerCardProps> = ({ server }) => {
                         <Grid container spacing={0.5}>
                             {splitTags.slice(0, 3).map((e) => (
                                 <Grid item key={e}>
-                                    <ServerTag key={e} value={e} selected />
+                                    <ServerTag key={e} value={e} selected onClick={undefined} />
                                 </Grid>
                             ))}
                             {splitTags.length > 3 && (

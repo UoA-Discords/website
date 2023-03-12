@@ -116,7 +116,7 @@ export const ServerUploader: FC<ServerUploaderProps> = ({ onClose, open }) => {
                 <ProfileAccordion defaultExpanded>
                     <ProfileAccordionSummary>Edit Tags</ProfileAccordionSummary>
                     <ProfileAccordionDetails sx={{ maxHeight: '200px', overflowY: 'auto' }}>
-                        <ServerTagSelector onTagsChange={setTags} tags={tags} fromAll />
+                        <ServerTagSelector onTagsChange={setTags} tags={tags} />
                     </ProfileAccordionDetails>
                 </ProfileAccordion>
             </DialogContent>

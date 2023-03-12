@@ -6,20 +6,19 @@ import { ServerTag } from './ServerTag';
 
 export interface ServerTagSelectorProps {
     tags: ServerTags;
-    onTagsChange: (newTags: ServerTags) => void;
-    fromAll?: boolean;
+    onTagsChange: ((newTags: ServerTags) => void) | undefined;
 }
 
 const allTags = Object.values(ServerTags).filter((e): e is ServerTags => typeof e === 'number');
 
-const _ServerTagSelector: FC<ServerTagSelectorProps> = ({ tags, onTagsChange, fromAll }) => {
+const _ServerTagSelector: FC<ServerTagSelectorProps> = ({ tags, onTagsChange }) => {
     const splitTags = splitBitfield(tags);
 
-    const tagPool = fromAll ? allTags : splitTags;
+    const tagPool = onTagsChange !== undefined ? allTags : splitTags;
 
     const handleClick = (tag: ServerTags) => {
+        if (onTagsChange === undefined) return;
         return () => {
-            if (onTagsChange === undefined) return;
             if (splitTags.includes(tag)) onTagsChange(tags ^ tag);
             else onTagsChange(tags | tag);
         };

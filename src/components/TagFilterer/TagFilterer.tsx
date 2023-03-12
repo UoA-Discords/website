@@ -52,7 +52,7 @@ export const TagFilterer: FC<TagFiltererProps> = ({ onApply, onUnapply }) => {
                 <Typography variant="h6" gutterBottom>
                     Select tags to filter:
                 </Typography>
-                <ServerTagSelector tags={filterTags} onTagsChange={handleTagsChange} fromAll />
+                <ServerTagSelector tags={filterTags} onTagsChange={handleTagsChange} />
 
                 <Stack
                     direction="row"

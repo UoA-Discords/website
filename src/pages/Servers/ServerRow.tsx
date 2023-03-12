@@ -1,8 +1,9 @@
 import { Skeleton, Stack, TableCell, TableRow, Typography } from '@mui/material';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { GuildIcon, GuildIconSkeleton } from '../../components/GuildIcon';
 import { InlineUser } from '../../components/InlineUser';
 import { RelativeTimeString } from '../../components/RelativeTimeString';
+import { ServerDialog } from '../../components/ServerDialog';
 import { Server } from '../../types/Server';
 import { ServerStatus } from '../../types/Server/ServerStatus';
 
@@ -26,9 +27,12 @@ export const ServerRowSkeleton: FC = () => (
 );
 
 export const ServerRow: FC<ServerRowProps> = ({ server, onUpdate }) => {
+    const [open, setOpen] = useState(false);
+
     return (
         <TableRow hover>
-            <TableCell>
+            <ServerDialog open={open} onClose={() => setOpen(false)} server={server} onChange={onUpdate} />
+            <TableCell sx={{ cursor: 'pointer' }} onClick={() => setOpen(true)}>
                 <Stack direction="row" alignItems="center">
                     <GuildIcon icon={server.guildData.icon} id={server._id} sx={{ height: 64, width: 64 }} />
                     {server.guildData.name}
