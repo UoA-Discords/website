@@ -22,7 +22,7 @@ import {
 import { Server } from '../../types/Server';
 import { ServerTags } from '../../types/Server/ServerTags';
 import { InternalLinkStyled } from '../Links';
-import { ServerTagSelector } from '../ServerTagSelector/ServerTagSelector';
+import { ServerTagSelector } from '../ServerTagSelector';
 
 export interface ServerUploaderProps {
     onClose: () => void;

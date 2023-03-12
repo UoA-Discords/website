@@ -1,6 +1,6 @@
 import { Button, Container, Paper, Stack, Switch, Typography } from '@mui/material';
 import { FC, useCallback, useMemo, useState } from 'react';
-import { ServerTagSelector } from '../../components/ServerTagSelector/ServerTagSelector';
+import { ServerTagSelector } from '../../components/ServerTagSelector';
 import { ServerTagSearchOptions } from '../../types/Server/ServerTagSearchOptions';
 import { ServerTags } from '../../types/Server/ServerTags';
 
