@@ -1,10 +1,8 @@
-import RefreshIcon from '@mui/icons-material/Refresh';
 import SearchIcon from '@mui/icons-material/Search';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import {
     Button,
-    Fade,
     IconButton,
     Stack,
     Table,
@@ -12,14 +10,15 @@ import {
     TableCell,
     TableContainer,
     TableHead,
-    TablePagination,
     TableRow,
     TableSortLabel,
     TextField,
 } from '@mui/material';
-import { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Page } from '../../Page.styled';
 import { api } from '../../api';
+import { RefreshButton } from '../../components/Buttons/RefreshButton';
+import { StandardPagination } from '../../components/StandardPagination';
 import {
     LocationDataContext,
     MainStateContext,
@@ -43,6 +42,8 @@ const TrueUsersPage: FC = () => {
     const { setLatestError } = useContext(MainStateContext);
     const { loggedInUser } = useContext(UserSessionContext);
     const { addIdsToDictionary, addUsersToDictionary, updateUserInDictionary } = useContext(UserDictionaryContext);
+
+    const containerRef = useRef(null);
 
     const [searchParams, setSearchParams] = useState<GetAllUsersParams>({ page: 0, perPage: 20 });
     const [latestFetchResult, setLatestFetchResult] = useState<WithPagination<User<'HideIP' | 'ShowIP'>>>();
@@ -136,135 +137,129 @@ const TrueUsersPage: FC = () => {
 
     return (
         <Page>
-            <Stack direction="row" alignSelf="flex-end" spacing={1}>
-                <Button
-                    variant="outlined"
-                    onClick={() => fetchUsers(new AbortController())}
-                    disabled={latestFetchResult === undefined}
-                    startIcon={<RefreshIcon />}
-                >
-                    Refresh
-                </Button>
-                {canShowIps && (
-                    <Fade in={latestFetchResult !== undefined}>
+            <Stack gap={2} sx={{ width: '100%', mt: 1 }} alignItems="center" ref={containerRef}>
+                <Stack direction="row" alignSelf="flex-end" gap={2}>
+                    <RefreshButton
+                        doneInitialFetch={!!latestFetchResult}
+                        active={loading}
+                        onClick={() => fetchUsers(new AbortController())}
+                        containerRef={containerRef}
+                    />
+
+                    {canShowIps && (
                         <Button
                             variant="outlined"
-                            onClick={(e) => setIsRevealingIps(!isRevealingIps)}
+                            color={isRevealingIps ? 'secondary' : 'primary'}
+                            onClick={() => setIsRevealingIps(!isRevealingIps)}
                             startIcon={isRevealingIps ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                            size="small"
+                            sx={{ textTransform: 'none' }}
                         >
                             {isRevealingIps ? 'Hide' : 'Reveal'} IPs
                         </Button>
-                    </Fade>
-                )}
-            </Stack>
+                    )}
+                </Stack>
 
-            <Stack
-                direction="row-reverse"
-                justifyContent="flex-start"
-                alignItems="center"
-                sx={{ width: '100%', pl: 1 }}
-            >
-                <TablePagination
-                    component="div"
-                    sx={{ alignSelf: 'flex-start', flexGrow: 1 }}
-                    labelRowsPerPage="Users per page"
-                    rowsPerPageOptions={[20, 50, 100]}
-                    count={latestFetchResult?.totalItemCount ?? 0}
-                    rowsPerPage={searchParams.perPage}
+                <Stack
+                    direction="row-reverse"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    sx={{ width: '100%', pl: 1 }}
+                    flexWrap="wrap"
+                >
+                    <StandardPagination
+                        page={searchParams.page}
+                        perPage={searchParams.perPage}
+                        totalItemCount={latestFetchResult?.totalItemCount}
+                        onChange={(newPage) => setSearchParams({ ...searchParams, page: newPage })}
+                    />
+
+                    <div style={{ flexGrow: 1 }}>
+                        <TextField
+                            variant="standard"
+                            size="small"
+                            placeholder="Search users"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            InputProps={{
+                                endAdornment: (
+                                    <IconButton onClick={() => setSearchParams({ ...searchParams, searchTerm })}>
+                                        <SearchIcon htmlColor="gray" />
+                                    </IconButton>
+                                ),
+                            }}
+                        />
+                    </div>
+                </Stack>
+
+                <TableContainer>
+                    <Table size="small">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>
+                                    <TableSortLabel
+                                        active={
+                                            searchParams.sortBy === UserSortOptions.Id ||
+                                            searchParams.sortBy === undefined
+                                        }
+                                        direction={searchParams.sortDirection === 'desc' ? 'asc' : 'desc'}
+                                        onClick={() => setSortOption(UserSortOptions.Id)}
+                                    >
+                                        User
+                                    </TableSortLabel>
+                                </TableCell>
+                                {isRevealingIps && <TableCell>IP</TableCell>}
+                                <TableCell>Permissions</TableCell>
+                                <TableCell>
+                                    <TableSortLabel
+                                        active={searchParams.sortBy === UserSortOptions.Registered}
+                                        direction={searchParams.sortDirection === 'desc' ? 'asc' : 'desc'}
+                                        onClick={() => setSortOption(UserSortOptions.Registered)}
+                                    >
+                                        Registered
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                                    <TableSortLabel
+                                        active={searchParams.sortBy === UserSortOptions.LastLoginOrRefresh}
+                                        direction={searchParams.sortDirection === 'desc' ? 'asc' : 'desc'}
+                                        onClick={() => setSortOption(UserSortOptions.LastLoginOrRefresh)}
+                                    >
+                                        Last Seen
+                                    </TableSortLabel>
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {latestFetchResult === undefined || loading ? (
+                                new Array(searchParams.perPage)
+                                    .fill(0)
+                                    .map((_e, i) => <UserRowSkeleton key={i} isRevealingIps={isRevealingIps} />)
+                            ) : (
+                                <>
+                                    {latestFetchResult.items.map((e) => (
+                                        <UserRow
+                                            key={e._id}
+                                            user={e}
+                                            isRevealingIps={isRevealingIps}
+                                            onUpdate={handleUpdate}
+                                        />
+                                    ))}
+                                </>
+                            )}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+
+                <StandardPagination
                     page={searchParams.page}
-                    onPageChange={(_e, newPage) => setSearchParams({ ...searchParams, page: newPage })}
-                    onRowsPerPageChange={(e) =>
-                        setSearchParams({ ...searchParams, page: 0, perPage: parseInt(e.target.value) })
-                    }
-                />
-
-                <TextField
-                    variant="standard"
-                    size="small"
-                    placeholder="Search users"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    InputProps={{
-                        endAdornment: (
-                            <IconButton onClick={() => setSearchParams({ ...searchParams, searchTerm })}>
-                                <SearchIcon htmlColor="gray" />
-                            </IconButton>
-                        ),
-                    }}
+                    perPage={searchParams.perPage}
+                    totalItemCount={latestFetchResult?.totalItemCount}
+                    onChange={(newPage) => setSearchParams({ ...searchParams, page: newPage })}
                 />
             </Stack>
 
-            <TableContainer>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>
-                                <TableSortLabel
-                                    active={
-                                        searchParams.sortBy === UserSortOptions.Id || searchParams.sortBy === undefined
-                                    }
-                                    direction={searchParams.sortDirection === 'desc' ? 'asc' : 'desc'}
-                                    onClick={() => setSortOption(UserSortOptions.Id)}
-                                >
-                                    User
-                                </TableSortLabel>
-                            </TableCell>
-                            {isRevealingIps && <TableCell>IP</TableCell>}
-                            <TableCell>Permissions</TableCell>
-                            <TableCell>
-                                <TableSortLabel
-                                    active={searchParams.sortBy === UserSortOptions.Registered}
-                                    direction={searchParams.sortDirection === 'desc' ? 'asc' : 'desc'}
-                                    onClick={() => setSortOption(UserSortOptions.Registered)}
-                                >
-                                    Registered
-                                </TableSortLabel>
-                            </TableCell>
-                            <TableCell>
-                                <TableSortLabel
-                                    active={searchParams.sortBy === UserSortOptions.LastLoginOrRefresh}
-                                    direction={searchParams.sortDirection === 'desc' ? 'asc' : 'desc'}
-                                    onClick={() => setSortOption(UserSortOptions.LastLoginOrRefresh)}
-                                >
-                                    Last Seen
-                                </TableSortLabel>
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {latestFetchResult === undefined || loading ? (
-                            new Array(searchParams.perPage)
-                                .fill(0)
-                                .map((_e, i) => <UserRowSkeleton key={i} isRevealingIps={isRevealingIps} />)
-                        ) : (
-                            <>
-                                {latestFetchResult.items.map((e) => (
-                                    <UserRow
-                                        key={e._id}
-                                        user={e}
-                                        isRevealingIps={isRevealingIps}
-                                        onUpdate={handleUpdate}
-                                    />
-                                ))}
-                            </>
-                        )}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-
-            <TablePagination
-                component="div"
-                sx={{ alignSelf: 'flex-start', flexGrow: 1 }}
-                labelRowsPerPage="Users per page"
-                rowsPerPageOptions={[20, 50, 100]}
-                count={latestFetchResult?.totalItemCount ?? 0}
-                rowsPerPage={searchParams.perPage}
-                page={searchParams.page}
-                onPageChange={(_e, newPage) => setSearchParams({ ...searchParams, page: newPage })}
-                onRowsPerPageChange={(e) =>
-                    setSearchParams({ ...searchParams, page: 0, perPage: parseInt(e.target.value) })
-                }
-            />
+            <div style={{ flexGrow: 1 }} />
         </Page>
     );
 };

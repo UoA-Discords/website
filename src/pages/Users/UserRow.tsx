@@ -15,7 +15,7 @@ export interface UserRowProps {
 }
 
 export const UserRowSkeleton: FC<Pick<UserRowProps, 'isRevealingIps'>> = ({ isRevealingIps }) => (
-    <TableRow>
+    <TableRow sx={{ height: '60.8px' }}>
         <TableCell>
             <Stack direction="row" spacing={1}>
                 <Skeleton variant="circular" width={24} height={24} />
@@ -28,12 +28,14 @@ export const UserRowSkeleton: FC<Pick<UserRowProps, 'isRevealingIps'>> = ({ isRe
             </TableCell>
         )}
         <TableCell>
+            <Skeleton variant="rectangular" />
+        </TableCell>
+        <TableCell>
+            <Skeleton variant="text" />
             <Skeleton variant="text" />
         </TableCell>
         <TableCell>
             <Skeleton variant="text" />
-        </TableCell>
-        <TableCell>
             <Skeleton variant="text" />
         </TableCell>
     </TableRow>
@@ -68,11 +70,11 @@ export const UserRow: FC<UserRowProps> = ({ user, isRevealingIps, onUpdate }) =>
                             <Button
                                 variant="outlined"
                                 color="info"
-                                startIcon={<CreateIcon />}
+                                sx={{ minWidth: 0 }}
                                 size="small"
                                 onClick={() => setIsPermissionEditorOpen(true)}
                             >
-                                Edit
+                                <CreateIcon />
                             </Button>
                         </>
                     )}
