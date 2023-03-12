@@ -1,5 +1,6 @@
 import { Card, CardActionArea, CardContent, Chip, Grid, Skeleton, Typography } from '@mui/material';
 import { FC, useMemo, useState } from 'react';
+import { serverTagDisplayOrder } from '../../helpers/serverTagDisplayOrder';
 import { splitBitfield } from '../../helpers/splitBitfield';
 import { Server } from '../../types/Server';
 import { ServerStatus } from '../../types/Server/ServerStatus';
@@ -32,7 +33,13 @@ export const ServerCardSkeleton: FC = () => (
 export const ServerCard: FC<ServerCardProps> = ({ server }) => {
     const [, setOpen] = useState(false);
 
-    const splitTags = useMemo(() => splitBitfield(server.serverTags), [server.serverTags]);
+    const splitTags = useMemo(
+        () =>
+            splitBitfield(server.serverTags).sort(
+                (a, b) => serverTagDisplayOrder.indexOf(b) - serverTagDisplayOrder.indexOf(a),
+            ),
+        [server.serverTags],
+    );
 
     return (
         <div
