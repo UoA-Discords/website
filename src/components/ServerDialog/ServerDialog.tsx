@@ -22,6 +22,7 @@ import { SettingsContext, UserSessionContext, MainStateContext } from '../../con
 import { splitBitfield } from '../../helpers/splitBitfield';
 import { useCanFeatureServers } from '../../hooks/useCanFeatureServers';
 import { useCanManageServers } from '../../hooks/useCanManageServers';
+import Question from '../../images/Question.png';
 import { Server } from '../../types/Server';
 import { ServerStatus } from '../../types/Server/ServerStatus';
 import { GuildIcon } from '../GuildIcon';
@@ -169,10 +170,19 @@ export const ServerDialog: FC<ServerDialogProps> = ({ open, onClose, server, onC
                         </Grid>
                     </Grid>
                     {server.guildData.description !== null && (
-                        <Grid item container xs={12} justifyContent="center" sx={{ mt: 1 }}>
+                        <Grid item xs={12} container justifyContent="center" sx={{ mt: 1 }}>
                             <Paper sx={{ p: 2 }} variant="outlined">
                                 {server.guildData.description}
                             </Paper>
+                        </Grid>
+                    )}
+                    {server._id === '965524576119447553' && (
+                        <Grid item xs={12} container justifyContent="center" sx={{ mt: 1 }}>
+                            <img
+                                src={Question}
+                                alt="A silly question"
+                                style={{ maxHeight: '100%', maxWidth: '100%' }}
+                            />
                         </Grid>
                     )}
                     <Grid item container xs={12} md={6} justifyContent="center" spacing={1}>
