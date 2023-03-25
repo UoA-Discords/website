@@ -131,7 +131,9 @@ export const HomePage: FC = () => {
                             onChange={(e) => setSearchTerm(e.target.value)}
                             InputProps={{
                                 endAdornment: (
-                                    <IconButton onClick={() => setSearchParams({ ...searchParams, searchTerm })}>
+                                    <IconButton
+                                        onClick={() => setSearchParams({ ...searchParams, searchTerm, page: 0 })}
+                                    >
                                         <SearchIcon htmlColor="gray" />
                                     </IconButton>
                                 ),
