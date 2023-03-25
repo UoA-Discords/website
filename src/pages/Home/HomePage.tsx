@@ -159,11 +159,11 @@ export const HomePage: FC = () => {
                 <Collapse in={filterExpanded}>
                     <TagFilterer
                         onApply={(searchInfo) => {
-                            setSearchParams({ ...searchParams, withTags: searchInfo });
+                            setSearchParams({ ...searchParams, withTags: searchInfo, page: 0 });
                         }}
                         onUnapply={() => {
                             delete searchParams.withTags;
-                            setSearchParams({ ...searchParams });
+                            setSearchParams({ ...searchParams, page: 0 });
                         }}
                     />
                 </Collapse>
