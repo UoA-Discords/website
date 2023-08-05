@@ -33,7 +33,7 @@
         "dayjs": "^1.11.7",
         "discord-api-types": "^0.37.35",
         "eslint": "^8.35.0",
-        "eslint-config-prettier": "^8.6.0",
+        "eslint-config-prettier": "^9.0.0",
         "eslint-import-resolver-typescript": "^3.5.3",
         "eslint-plugin-import": "^2.27.5",
         "prettier": "^2.8.4",
