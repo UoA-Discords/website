@@ -6,7 +6,7 @@ specifiers:
   '@babel/plugin-transform-react-jsx': ^7.14.9
   '@emotion/react': ^11.10.6
   '@emotion/styled': ^11.10.6
-  '@fontsource/roboto': ^4.5.8
+  '@fontsource/roboto': ^5.0.0
   '@mui/icons-material': ^5.11.11
   '@mui/material': ^5.11.11
   '@types/node': ^18.14.6
@@ -31,7 +31,7 @@ specifiers:
 dependencies:
   '@emotion/react': 11.10.6_pmekkgnqduwlme35zpnqhenc34
   '@emotion/styled': 11.10.6_oouaibmszuch5k64ms7uxp2aia
-  '@fontsource/roboto': 4.5.8
+  '@fontsource/roboto': 5.0.0
   '@mui/icons-material': 5.11.11_h5fh5ntwxtyr677wxvzgewjsma
   '@mui/material': 5.11.11_xqeqsl5kvjjtyxwyi3jhw3yuli
   '@types/node': 18.14.6
@@ -1714,8 +1714,8 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: false
 
-  /@fontsource/roboto/4.5.8:
-    resolution: {integrity: sha512-CnD7zLItIzt86q4Sj3kZUiLcBk1dSk81qcqgMGaZe7SQ1P8hFNxhMl5AZthK1zrDM5m74VVhaOpuMGIL4gagaA==}
+  /@fontsource/roboto/5.0.0:
+    resolution: {integrity: sha512-ZUbU49VQcTGo06+C/SOX77BYuJJ8kBAp1tcxQ/BwQrJEQCXct4913gKrX6b+IMGFaj+FnI9kx0SSe0J2iN2Mug==}
     dev: false
 
   /@humanwhocodes/config-array/0.11.8:
