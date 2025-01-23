@@ -157,7 +157,7 @@ export const InfoPage: FC = () => {
             <Section title="Contact" focussedId={focussedId} onLink={onLink}>
                 <Typography component="div">
                     Our primary point of contact is through our{' '}
-                    <ExternalLinkStyled href="https://discord.gg/XmdRWSCy2U" title="Our Discord server">
+                    <ExternalLinkStyled href="https://discord.gg/VDAr7fEbs9" title="Our Discord server">
                         Discord server
                     </ExternalLinkStyled>
                     . We encourage you to do so if you have:
